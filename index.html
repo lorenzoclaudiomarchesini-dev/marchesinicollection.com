@@ -778,6 +778,289 @@
     </div>
   </div>
 
+  <!-- REVIEWS -->
+  <div id="reviews" style="background:var(--off-white);padding:120px 64px;">
+    <div style="max-width:1300px;margin:0 auto;">
+
+      <!-- HEADER -->
+      <div style="text-align:center;margin-bottom:80px;">
+        <span class="label">Ospiti</span>
+        <h2 style="font-family:var(--serif);font-size:clamp(32px,4vw,52px);font-weight:300;color:var(--dark);margin-bottom:24px;">Cosa dicono di <em>noi</em></h2>
+        <div style="display:inline-flex;align-items:center;gap:24px;">
+          <div style="text-align:center;padding:0 32px;border-right:1px solid var(--warm-gray);">
+            <div style="font-family:var(--serif);font-size:64px;font-weight:300;color:var(--dark);line-height:1;">10</div>
+            <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-top:4px;">Corte Cà Boare</div>
+          </div>
+          <div style="text-align:center;padding:0 32px;">
+            <div style="font-family:var(--serif);font-size:64px;font-weight:300;color:var(--dark);line-height:1;">9.7</div>
+            <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-top:4px;">Casa Albertina · 35 recensioni</div>
+          </div>
+        </div>
+        <div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:16px;">Verificato su Booking.com</div>
+      </div>
+
+      <!-- SCORE BARS CCB -->
+      <div style="margin-bottom:56px;">
+        <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-bottom:16px;">Corte Cà Boare · Valutazioni per categoria</div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:20px;">
+          ${[['Staff','10'],['Pulizia','10'],['Posizione','9.5'],['Servizi','10'],['Comfort','9.5'],['Qualità/Prezzo','10']].map(([l,v])=>`
+          <div>
+            <div style="font-family:var(--sans);font-size:10px;font-weight:300;color:var(--mid);margin-bottom:6px;">${l}</div>
+            <div style="height:1px;background:var(--warm-gray);margin-bottom:5px;"><div style="height:100%;width:${parseFloat(v)/10*100}%;background:var(--dark);"></div></div>
+            <div style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--dark);">${v}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- SCORE BARS CA -->
+      <div style="margin-bottom:72px;">
+        <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-bottom:16px;">Casa Albertina · Valutazioni per categoria</div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:20px;">
+          ${[['Staff','9.9'],['Pulizia','9.9'],['Posizione','9.8'],['Servizi','9.7'],['Comfort','9.8'],['Qualità/Prezzo','9.7']].map(([l,v])=>`
+          <div>
+            <div style="font-family:var(--sans);font-size:10px;font-weight:300;color:var(--mid);margin-bottom:6px;">${l}</div>
+            <div style="height:1px;background:var(--warm-gray);margin-bottom:5px;"><div style="height:100%;width:${parseFloat(v)/10*100}%;background:var(--dark);"></div></div>
+            <div style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--dark);">${v}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- CORTE CÀ BOARE REVIEWS -->
+      <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-bottom:20px;">Corte Cà Boare</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:2px;">
+
+        <div style="background:white;padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Dalle foto era bello, ma non mi aspettavo una casa così ben fatta. Si capisce subito che è stato ristrutturato con cura. La cucina ha tutto quello che serve, compresa la macchina del caffè con le capsule già a disposizione — piccolo dettaglio, grande differenza. Pulizia impeccabile. Ci tornerò senz'altro.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Lorenzo</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Italia · Lug 2026</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:var(--dark);padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:rgba(255,255,255,0.2);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:rgba(255,255,255,0.6);margin-bottom:24px;">Il nostro soggiorno è stato meraviglioso! Un ringraziamento speciale va a Simone e al suo team, persone estremamente gentili, calorose e disponibili. Ci hanno dato tanti consigli preziosi sulla zona e su cosa visitare. Consigliamo questo alloggio a tutti senza alcuna esitazione.</p>
+          <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:white;">Katarzyna</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:rgba(255,255,255,0.35);margin-top:2px;">Polonia · Ago 2026</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:white;">10</div>
+          </div>
+        </div>
+
+        <div style="background:white;padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Viaggiando spesso da sola, tengo molto a sentirmi a mio agio. Qui mi sono sentita subito bene: l'appartamento è incantevole, pulito, curato, silenzioso. Si nota che chi lo ha arredato ci ha messo gusto e attenzione. Simone è stato gentile e presente al punto giusto. Tornerò.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Bakhshi</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Italia · Lug 2026</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:var(--cream);padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Tranquillo, bello, funzionale, cosa chiedere di più? L'appartamento è silenzioso, pulito e arredato con tanto gusto. I bagni sono moderni e spaziosi. Si trova vicino alla città, alle cantine, ai trekking. Valpolicella che scoperta! Rapporto qualità-prezzo decisamente onesto.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Luciomau</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Italia · Lug 2026</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:white;padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Abbiamo passato due giorni fantastici. Pulizia impeccabile e tutto nuovo e curato in ogni dettaglio — si vede che ci tengono tantissimo. La differenza la fanno i proprietari, super gentili e disponibilissimi. Ci hanno fatto sentire a casa. Consigliatissimo al 100%.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Michele</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Italia · Lug 2026</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:var(--cream);padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">La nostra famiglia ha trascorso una settimana in questo splendido appartamento. Simone ci ha dato ottimi suggerimenti. L'alloggio è molto pulito e arredato in stile moderno. Il proprietario è molto gentile e facilmente reperibile.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Jakob</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Germania · Ago 2026</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CASA ALBERTINA REVIEWS -->
+      <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-top:48px;margin-bottom:20px;">Casa Albertina</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;">
+
+        <div style="background:var(--dark);padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:rgba(255,255,255,0.2);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:rgba(255,255,255,0.6);margin-bottom:24px;">I proprietari sono stati incredibilmente gentili e disponibili; ci hanno persino permesso di fare il check-in in anticipo. L'appartamento è perfettamente attrezzato e si trova in una posizione molto tranquilla. La splendida area esterna invita al relax. Ci siamo sentiti completamente a nostro agio!</p>
+          <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:white;">Petre</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:rgba(255,255,255,0.35);margin-top:2px;">Germania · Ago 2026</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:white;">10</div>
+          </div>
+        </div>
+
+        <div style="background:white;padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Un soggiorno perfetto che vi riporterà alla mente bei ricordi. Un caloroso benvenuto. Albertina e la sua famiglia sono molto amichevoli. Casa molto ben attrezzata, pulita e ben posizionata. I piccoli dettagli da parte degli host sono stati molto apprezzati. Niente... tutto era perfetto!</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Daniel</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Canada · Set 2025</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:var(--cream);padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Posizione perfetta per visitare Verona e la sponda veneta del Lago di Garda restando nel relax. Appartamento dotato di tutto, letto molto comodo, cucina fornita, tranquillità massima. Proprietari gentilissimi ma discreti allo stesso tempo.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Alberto</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Italia · Set 2025</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:white;padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Si trova in una splendida zona della Valpolicella, a soli 15 minuti dal centro di Verona. Il luogo ideale per godersi sia la città sia il suo spettacolare paesaggio. I padroni di casa sono stati molto cordiali e disponibili. Tutto è andato benissimo.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Claudia</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Spagna · Set 2025</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:var(--dark);padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:rgba(255,255,255,0.2);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:rgba(255,255,255,0.6);margin-bottom:24px;">Appartamento spazioso e ben attrezzato, cucina fornita con numerosi elettrodomestici, tutto molto pulito e ordinato. Ottima posizione tranquilla. La signora Albertina è stata molto gentile e accogliente, ci siamo sentiti davvero a casa!</p>
+          <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:white;">Marta</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:rgba(255,255,255,0.35);margin-top:2px;">Italia · Ott 2025</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:white;">10</div>
+          </div>
+        </div>
+
+        <div style="background:var(--cream);padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:16px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Casa meravigliosa! Proprietari gentilissimi! L'appartamento su due piani è molto pulito e confortevole, ben attrezzato. Un grande vantaggio è la posizione: una base ideale per esplorare i dintorni. Ci tornerei volentieri!</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+            <div><div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Anna & Iwona</div><div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Polonia · Ago 2026</div></div>
+            <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center;margin-top:48px;">
+        <a href="https://www.booking.com" target="_blank" style="font-family:var(--sans);font-size:10px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);text-decoration:none;border-bottom:1px solid var(--warm-gray);padding-bottom:4px;">Leggi tutte le recensioni su Booking.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+    <div style="max-width:1300px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:72px;">
+        <span class="label">Ospiti</span>
+        <h2 style="font-family:var(--serif);font-size:clamp(32px,4vw,52px);font-weight:300;color:var(--dark);margin-bottom:16px;">Cosa dicono di <em>noi</em></h2>
+        <div style="display:inline-flex;align-items:center;gap:16px;margin-top:8px;">
+          <div style="font-family:var(--serif);font-size:72px;font-weight:300;color:var(--dark);line-height:1;">10</div>
+          <div style="text-align:left;">
+            <div style="font-family:var(--sans);font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">Punteggio medio</div>
+            <div style="font-family:var(--sans);font-size:11px;font-weight:300;color:var(--mid);margin-top:2px;">su Booking.com · verificato</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCORE BAR CCB -->
+      <div style="margin-bottom:64px;">
+        <div style="font-family:var(--sans);font-size:10px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-bottom:20px;">Corte Cà Boare</div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:16px;">
+          ${[['Staff','10'],['Pulizia','10'],['Posizione','9.5'],['Servizi','10'],['Comfort','9.5'],['Qualità/Prezzo','10']].map(([label,val])=>`
+          <div>
+            <div style="font-family:var(--sans);font-size:10px;font-weight:300;color:var(--mid);margin-bottom:6px;letter-spacing:0.5px;">${label}</div>
+            <div style="height:2px;background:var(--warm-gray);border-radius:1px;margin-bottom:4px;"><div style="height:100%;width:${parseFloat(val)/10*100}%;background:var(--dark);border-radius:1px;"></div></div>
+            <div style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--dark);">${val}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- REVIEWS GRID -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;" id="reviewsGrid">
+
+        <div style="background:white;padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:48px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:20px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Dalle foto era bello, ma non mi aspettavo una casa così ben fatta. Si capisce subito che è stato ristrutturato con cura. La cucina ha tutto quello che serve, compresa una macchina del caffè con le capsule già a disposizione — piccolo dettaglio, grande differenza. Pulizia impeccabile. Ci tornerò senz'altro.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:16px;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Lorenzo</div>
+              <div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Italia · Lug 2026</div>
+            </div>
+            <div style="font-family:var(--serif);font-size:24px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:var(--dark);padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:48px;font-weight:300;color:rgba(255,255,255,0.3);line-height:1;margin-bottom:20px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:rgba(255,255,255,0.6);margin-bottom:24px;">Il nostro soggiorno è stato meraviglioso! Un ringraziamento speciale va a Simone e al suo team, persone estremamente gentili, calorose e disponibili. Ci hanno dato tanti consigli preziosi sulla zona e su cosa visitare. Consigliamo questo alloggio a tutti senza alcuna esitazione.</p>
+          <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-family:var(--sans);font-size:12px;font-weight:400;color:white;">Katarzyna</div>
+              <div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:rgba(255,255,255,0.35);margin-top:2px;">Polonia · Ago 2026</div>
+            </div>
+            <div style="font-family:var(--serif);font-size:24px;font-weight:300;color:white;">10</div>
+          </div>
+        </div>
+
+        <div style="background:white;padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:48px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:20px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Viaggiando spesso da sola, tengo molto a sentirmi a mio agio. Qui mi sono sentita subito bene: l'appartamento è incantevole, pulito, curato, silenzioso. Si nota che chi lo ha arredato ci ha messo gusto e attenzione. Simone è stato gentile e presente al punto giusto. Tornerò.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:16px;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Bakhshi</div>
+              <div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Italia · Lug 2026</div>
+            </div>
+            <div style="font-family:var(--serif);font-size:24px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:var(--cream);padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:48px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:20px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Tranquillo, bello, funzionale, cosa chiedere di più? L'appartamento è silenzioso, pulito e arredato con tanto gusto. I bagni sono moderni e spaziosi. Si trova vicino alla città, alle cantine, ai trekking! Valpolicella che scoperta! Rapporto qualità-prezzo decisamente onesto.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:16px;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Luciomau</div>
+              <div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Italia · Lug 2026</div>
+            </div>
+            <div style="font-family:var(--serif);font-size:24px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:white;padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:48px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:20px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">Abbiamo passato due giorni fantastici. Pulizia impeccabile e tutto nuovo e curato in ogni dettaglio, si vede che ci tengono tantissimo. La differenza la fanno i proprietari, super gentili e disponibilissimi per qualsiasi cosa. Ci hanno fatto sentire a casa. Consigliatissimo al 100%.</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:16px;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Michele</div>
+              <div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Italia · Lug 2026</div>
+            </div>
+            <div style="font-family:var(--serif);font-size:24px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+        <div style="background:var(--cream);padding:36px 32px;">
+          <div style="font-family:var(--serif);font-size:48px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:20px;">"</div>
+          <p style="font-family:var(--sans);font-size:13px;font-weight:300;line-height:1.8;color:var(--mid);margin-bottom:24px;">L'appartamento su due piani è molto pulito e confortevole, ben attrezzato. Un grande vantaggio è la posizione: una base ideale per esplorare i dintorni. Consiglio vivamente questo posto e ci tornerei volentieri!</p>
+          <div style="border-top:1px solid var(--warm-gray);padding-top:16px;display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-family:var(--sans);font-size:12px;font-weight:400;color:var(--dark);">Iwona</div>
+              <div style="font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:1px;color:var(--mid);margin-top:2px;">Polonia · Ago 2026</div>
+            </div>
+            <div style="font-family:var(--serif);font-size:24px;font-weight:300;color:var(--dark);">10</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center;margin-top:48px;">
+        <a href="https://www.booking.com" target="_blank" style="font-family:var(--sans);font-size:10px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);text-decoration:none;border-bottom:1px solid var(--warm-gray);padding-bottom:4px;transition:color 0.2s;">Leggi tutte le recensioni su Booking.com</a>
+      </div>
+    </div>
+  </div>
+
   <!-- FEATURES -->
   <div class="features-section">
     <div class="features-header">
