@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Marchesini Collection</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #f5f0e8; --cream2: #ede7d9; --green: #2d4a2d; --green2: #3d6b3d;
+      --gold: #b8965a; --text: #2a2a2a; --text2: #5a5a5a; --text3: #8a8a8a;
+      --red: #dc2626; --radius: 10px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; padding: 0; }
+
+    /* HEADER */
+    .header { background: var(--green); color: white; padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .header h1 { font-size: 16px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .header p { font-size: 11px; opacity: .6; margin-top: 2px; }
+    .save-btn { background: var(--gold); color: white; border: none; padding: 10px 24px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; letter-spacing: 1px; text-transform: uppercase; transition: background .2s; }
+    .save-btn:hover { background: #a07840; }
+    .saved-msg { font-size: 12px; color: #86efac; display: none; margin-left: 12px; }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; }
+
+    /* TABS */
+    .tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid var(--cream2); }
+    .tab { padding: 10px 22px; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; background: none; border-top: none; border-left: none; border-right: none; transition: all .15s; }
+    .tab.active { color: var(--green); border-bottom-color: var(--green); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* SECTION */
+    .section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 14px; }
+
+    /* PRICE CARD */
+    .apt-card { background: white; border: 1px solid var(--cream2); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+    .apt-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .apt-card-name { font-size: 15px; font-weight: 700; color: var(--green); }
+    .apt-card-sub { font-size: 11px; color: var(--text3); }
+    .price-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .price-field { display: flex; flex-direction: column; gap: 5px; }
+    .price-field label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--text2); }
+    .price-field .season-badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-bottom: 4px; }
+    .s-bassa     { background: #eff6ff; color: #2563eb; }
+    .s-media     { background: #fef9c3; color: #854d0e; }
+    .s-alta      { background: #fef2f2; color: #dc2626; }
+    .s-festivita { background: #faf5ff; color: #7c3aed; }
+    .price-input-wrap { position: relative; }
+    .price-input-wrap span { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 13px; }
+    .price-input { width: 100%; padding: 9px 10px 9px 24px; border: 1.5px solid var(--cream2); border-radius: 6px; font-size: 15px; font-weight: 700; color: var(--text); background: var(--cream); outline: none; transition: border-color .15s; }
+    .price-input:focus { border-color: var(--green); background: white; }
+    .ospiti-note { background: var(--cream2); border-radius: 8px; padding: 12px 16px; font-size: 12px; color: var(--text2); margin-top: 16px; display: flex; align-items: center; gap: 8px; }
+
+    /* FESTIVITA */
+    .festivita-list { display: flex; flex-direction: column; gap: 10px; }
+    .festivita-item { background: white; border: 1px solid var(--cream2); border-radius: var(--radius); padding: 16px 20px; display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; align-items: end; }
+    .festivita-item input, .festivita-item select { width: 100%; padding: 8px 10px; border: 1.5px solid var(--cream2); border-radius: 6px; font-size: 13px; color: var(--text); background: var(--cream); outline: none; transition: border-color .15s; }
+    .festivita-item input:focus { border-color: var(--green); background: white; }
+    .festivita-item label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--text3); margin-bottom: 4px; display: block; }
+    .del-btn { width: 32px; height: 32px; border: 1px solid #fecaca; border-radius: 6px; background: #fef2f2; color: var(--red); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+    .del-btn:hover { background: var(--red); color: white; }
+    .add-btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border: 1.5px dashed var(--cream2); border-radius: 6px; background: none; color: var(--text3); font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: all .15s; }
+    .add-btn:hover { border-color: var(--green); color: var(--green); }
+
+    /* STAGIONI */
+    .stagioni-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .stagione-card { background: white; border: 1px solid var(--cream2); border-radius: var(--radius); padding: 18px 20px; }
+    .stagione-card h3 { font-size: 13px; font-weight: 700; color: var(--green); margin-bottom: 12px; }
+    .mesi-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+    .mese-btn { padding: 5px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--cream2); background: var(--cream); color: var(--text2); transition: all .15s; }
+    .mese-btn.selected { border-color: var(--green); background: var(--green); color: white; }
+
+    /* ALERT */
+    .alert { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #15803d; margin-bottom: 20px; display: none; }
+    .alert.show { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div>
+      <h1>Marchesini Collection · Admin Prezzi</h1>
+      <p>Modifica i prezzi e le stagioni — le modifiche si riflettono immediatamente sul sito</p>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;">
+    <button class="save-btn" onclick="savePrezzi()">💾 Salva modifiche</button>
+    <span class="saved-msg" id="savedMsg">✓ Salvato!</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="alert" id="alertMsg"></div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('prezzi')">Prezzi per notte</button>
+    <button class="tab" onclick="switchTab('festivita')">Festività & Eventi</button>
+    <button class="tab" onclick="switchTab('stagioni')">Stagioni</button>
+  </div>
+
+  <!-- ── PREZZI ── -->
+  <div id="tab-prezzi" class="tab-content active">
+    <div id="prezziContainer"></div>
+    <div class="ospiti-note">
+      ℹ️ I prezzi sopra sono per <strong>1–2 ospiti</strong>. Dal 3° ospite in su viene applicato automaticamente un <strong>+10% per persona aggiuntiva</strong>.
+    </div>
+  </div>
+
+  <!-- ── FESTIVITA ── -->
+  <div id="tab-festivita" class="tab-content">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6;">Definisci periodi speciali (Natale, Pasqua, eventi locali, ecc.). Durante questi periodi viene applicato il prezzo <strong>Festività</strong> impostato sopra, ignorando la stagione normale.</p>
+    <div class="festivita-list" id="festivitaList"></div>
+    <button class="add-btn" onclick="addFestivita()">+ Aggiungi periodo speciale</button>
+  </div>
+
+  <!-- ── STAGIONI ── -->
+  <div id="tab-stagioni" class="tab-content">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6;">Clicca sui mesi per assegnarli a ciascuna stagione. Un mese può appartenere a una sola stagione.</p>
+    <div class="stagioni-grid" id="stagioniGrid"></div>
+  </div>
+</div>
+
+<script>
+  const MESI = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+  let data = null;
+
+  // ── CARICA PREZZI ──────────────────────────────────────────────────────────
+  async function loadPrezzi() {
+    try {
+      const r = await fetch('prezzi.json?t=' + Date.now());
+      data = await r.json();
+    } catch(e) {
+      showAlert('Errore caricamento prezzi.json — assicurati che il file esista.', 'red');
+      return;
+    }
+    renderPrezzi();
+    renderFestivita();
+    renderStagioni();
+  }
+
+  // ── RENDER PREZZI ──────────────────────────────────────────────────────────
+  function renderPrezzi() {
+    const container = document.getElementById('prezziContainer');
+    const stagioni = ['bassa','media','alta','festivita'];
+    const stagLabels = { bassa:'Bassa', media:'Media', alta:'Alta', festivita:'Festività' };
+
+    container.innerHTML = Object.entries(data.prezzi).map(([key, apt]) => `
+      <div class="apt-card">
+        <div class="apt-card-header">
+          <div>
+            <div class="apt-card-name">${apt.nome}</div>
+            <div class="apt-card-sub">${apt.posti} posti</div>
+          </div>
+        </div>
+        <div class="price-grid">
+          ${stagioni.map(s => `
+            <div class="price-field">
+              <span class="season-badge s-${s}">${stagLabels[s]}</span>
+              <label>€ / notte (1–2 pers.)</label>
+              <div class="price-input-wrap">
+                <span>€</span>
+                <input type="number" class="price-input" data-apt="${key}" data-stagione="${s}"
+                  value="${apt[s]}" min="0" step="5"
+                  oninput="updatePrezzo('${key}','${s}',this.value)">
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>`).join('');
+  }
+
+  function updatePrezzo(apt, stagione, val) {
+    data.prezzi[apt][stagione] = parseFloat(val) || 0;
+  }
+
+  // ── RENDER FESTIVITA ───────────────────────────────────────────────────────
+  function renderFestivita() {
+    const list = document.getElementById('festivitaList');
+    list.innerHTML = data.festivita.map((f, i) => `
+      <div class="festivita-item">
+        <div>
+          <label>Nome evento</label>
+          <input type="text" value="${f.label}" oninput="data.festivita[${i}].label=this.value" placeholder="es. Vinitaly">
+        </div>
+        <div>
+          <label>Dal</label>
+          <input type="date" value="${f.dal}" oninput="data.festivita[${i}].dal=this.value">
+        </div>
+        <div>
+          <label>Al</label>
+          <input type="date" value="${f.al}" oninput="data.festivita[${i}].al=this.value">
+        </div>
+        <button class="del-btn" onclick="removeFestivita(${i})">✕</button>
+      </div>`).join('');
+  }
+
+  function addFestivita() {
+    const today = new Date().toISOString().split('T')[0];
+    data.festivita.push({ label: 'Nuovo evento', dal: today, al: today });
+    renderFestivita();
+  }
+
+  function removeFestivita(i) {
+    data.festivita.splice(i, 1);
+    renderFestivita();
+  }
+
+  // ── RENDER STAGIONI ────────────────────────────────────────────────────────
+  function renderStagioni() {
+    const grid = document.getElementById('stagioniGrid');
+    const stagioni = { bassa:'Bassa Stagione', media:'Media Stagione', alta:'Alta Stagione', festivita:'Festività (automatico)' };
+    grid.innerHTML = Object.entries(stagioni).map(([key, label]) => `
+      <div class="stagione-card">
+        <h3><span class="season-badge s-${key}" style="margin-right:6px;">${label}</span></h3>
+        <div class="mesi-grid">
+          ${MESI.map((m, i) => {
+            const mNum = i + 1;
+            const sel = (data.stagioni[key]?.mesi || []).includes(mNum);
+            return `<button class="mese-btn ${sel?'selected':''}" onclick="toggleMese('${key}',${mNum},this)">${m}</button>`;
+          }).join('')}
+        </div>
+      </div>`).join('');
+  }
+
+  function toggleMese(stagione, mese, btn) {
+    // Rimuovi da tutte le stagioni
+    ['bassa','media','alta'].forEach(s => {
+      data.stagioni[s].mesi = (data.stagioni[s].mesi || []).filter(m => m !== mese);
+    });
+    // Aggiungi alla stagione selezionata
+    if (!btn.classList.contains('selected')) {
+      data.stagioni[stagione].mesi.push(mese);
+      data.stagioni[stagione].mesi.sort((a,b)=>a-b);
+    }
+    renderStagioni();
+  }
+
+  // ── SALVA ──────────────────────────────────────────────────────────────────
+  async function savePrezzi() {
+    try {
+      const r = await fetch('/api/admin/prezzi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (r.ok) {
+        const msg = document.getElementById('savedMsg');
+        msg.style.display = 'inline';
+        setTimeout(() => msg.style.display = 'none', 3000);
+      } else {
+        // Fallback: download del file JSON
+        downloadJson();
+      }
+    } catch(e) {
+      // Backend non raggiungibile — scarica il file
+      downloadJson();
+    }
+  }
+
+  function downloadJson() {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'prezzi.json';
+    a.click();
+    showAlert('Backend offline — il file prezzi.json è stato scaricato. Sostituiscilo nella cartella marchesini-collection.', 'green');
+  }
+
+  function showAlert(msg, color) {
+    const el = document.getElementById('alertMsg');
+    el.textContent = msg;
+    el.style.background = color === 'red' ? '#fef2f2' : '#f0fdf4';
+    el.style.borderColor = color === 'red' ? '#fecaca' : '#86efac';
+    el.style.color = color === 'red' ? '#dc2626' : '#15803d';
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 5000);
+  }
+
+  function switchTab(id) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-'+id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  loadPrezzi();
+</script>
+</body>
+</html>

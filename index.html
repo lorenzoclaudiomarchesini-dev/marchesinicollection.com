@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marchesini Collection · Arbizzano di Negrar, Verona</title>
+  <meta name="description" content="Marchesini Collection — Appartamenti di charme ad Arbizzano, Verona.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #f5f0e8; --cream2: #ede7d9; --green: #2d4a2d; --green2: #3d6b3d;
+      --green-light: #e8efe8; --gold: #b8965a; --text: #2a2a2a; --text2: #5a5a5a;
+      --text3: #8a8a8a; --radius: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Georgia', serif; background: var(--cream); color: var(--text); line-height: 1.6; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: var(--cream2); border-radius: 3px; }
+
+    /* Logo blend — rimuove sfondo bianco su sfondi chiari */
+    .logo { mix-blend-mode: multiply; object-fit: contain; display: block; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(245,240,232,0.96); backdrop-filter: blur(10px); border-bottom: 1px solid var(--cream2); padding: 0 48px; height: 70px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; }
+    .nav-logo-name { font-size: 15px; font-weight: 700; color: var(--green); letter-spacing: 2px; text-transform: uppercase; line-height: 1.2; }
+    .nav-logo-sub { font-size: 10px; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { text-decoration: none; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); transition: color .2s; font-family: -apple-system, sans-serif; cursor: pointer; }
+    .nav-links a:hover { color: var(--green); }
+    .nav-book { background: var(--green); color: white !important; padding: 10px 22px; border-radius: 4px; }
+    .nav-book:hover { background: var(--green2) !important; }
+
+    /* HERO */
+    .hero { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; padding-top: 70px; }
+    .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #e8efe8 0%, var(--cream) 40%, var(--cream2) 100%); }
+    .hero-pattern { position: absolute; inset: 0; opacity: .04; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232d4a2d'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E"); }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-logos { display: flex; gap: 32px; justify-content: center; align-items: center; margin-bottom: 32px; }
+    .hero-eyebrow { font-family: -apple-system, sans-serif; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .hero-title { font-size: clamp(36px, 6vw, 68px); font-weight: 400; color: var(--green); letter-spacing: -1px; line-height: 1.1; margin-bottom: 14px; }
+    .hero-title em { font-style: italic; }
+    .hero-sub { font-size: 15px; color: var(--text2); margin-bottom: 36px; font-family: -apple-system, sans-serif; }
+    .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--green); color: white; padding: 14px 36px; border-radius: 4px; font-family: -apple-system, sans-serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: all .2s; display: inline-block; cursor: pointer; border: none; text-decoration: none; }
+    .btn-primary:hover { background: var(--green2); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--green); padding: 14px 36px; border-radius: 4px; font-family: -apple-system, sans-serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; border: 1.5px solid var(--green); transition: all .2s; display: inline-block; cursor: pointer; }
+    .btn-outline:hover { background: var(--green); color: white; transform: translateY(-1px); }
+    .hero-scroll { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--text3); font-family: -apple-system, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; animation: bounce 2s infinite; }
+    .hero-scroll-line { width: 1px; height: 36px; background: var(--gold); }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)} }
+
+    /* SECTIONS */
+    .section { padding: 80px 48px; max-width: 1400px; margin: 0 auto; }
+    .section-eyebrow { font-family: -apple-system, sans-serif; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; text-align: center; }
+    .section-title { font-size: clamp(28px, 4vw, 46px); font-weight: 400; color: var(--green); text-align: center; margin-bottom: 14px; line-height: 1.2; }
+    .section-sub { font-size: 14px; color: var(--text2); text-align: center; max-width: 560px; margin: 0 auto 56px; font-family: -apple-system, sans-serif; line-height: 1.7; }
+    .divider { width: 60px; height: 1px; background: var(--gold); margin: 14px auto; }
+
+    /* PROPERTY CARDS */
+    .properties { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--cream2); }
+    .property-card { background: var(--cream); overflow: hidden; cursor: pointer; }
+    .property-card:hover .prop-img { transform: scale(1.03); }
+    .prop-img-wrap { height: 520px; overflow: hidden; position: relative; }
+    .prop-img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+    .prop-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(45,74,45,.88) 0%, transparent 55%); }
+    .prop-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 32px 36px; color: white; }
+    .prop-badge { display: inline-block; background: rgba(255,255,255,.15); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,.2); padding: 3px 12px; border-radius: 2px; font-family: -apple-system, sans-serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+    .prop-name { font-size: 30px; font-weight: 400; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .prop-address { font-family: -apple-system, sans-serif; font-size: 12px; opacity: .7; margin-bottom: 18px; }
+    .prop-cta { display: inline-block; background: white; color: var(--green); padding: 9px 24px; border-radius: 3px; font-family: -apple-system, sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; transition: all .2s; }
+    .prop-cta:hover { background: var(--cream); }
+
+    /* COMING SOON */
+    .coming-soon { background: var(--cream2); padding: 40px 48px; text-align: center; position: relative; }
+    .coming-badge { position: absolute; top: 16px; right: 24px; background: var(--gold); color: white; padding: 5px 16px; border-radius: 2px; font-family: -apple-system, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+
+    /* FEATURES */
+    .features-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 32px; }
+    .feature { text-align: center; }
+    .feature-icon { font-size: 34px; margin-bottom: 14px; }
+    .feature-title { font-size: 14px; font-weight: 600; color: var(--green); margin-bottom: 7px; font-family: -apple-system, sans-serif; }
+    .feature-text { font-size: 13px; color: var(--text2); font-family: -apple-system, sans-serif; line-height: 1.6; }
+
+    /* GALLERY */
+    .gallery-strip { display: grid; grid-template-columns: repeat(5,1fr); gap: 3px; }
+    .gallery-item { aspect-ratio: 1; overflow: hidden; cursor: pointer; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    /* BOOKING */
+    .booking-section { background: var(--green); color: white; padding: 100px 48px; text-align: center; }
+    .booking-section .section-title { color: white; }
+    .booking-section .section-sub { color: rgba(255,255,255,.65); }
+    .booking-section .divider { background: var(--gold); }
+    .booking-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 860px; margin: 0 auto 48px; text-align: left; }
+    .booking-card { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: var(--radius); padding: 24px; }
+    .booking-card h3 { font-size: 18px; color: white; margin-bottom: 2px; }
+    .bc-sub { font-family: -apple-system, sans-serif; font-size: 11px; color: rgba(255,255,255,.45); margin-bottom: 8px; }
+    .booking-card p { font-family: -apple-system, sans-serif; font-size: 13px; color: rgba(255,255,255,.6); margin-bottom: 18px; line-height: 1.6; }
+    .btn-white { display: inline-block; background: white; color: var(--green); padding: 10px 22px; border-radius: 4px; font-family: -apple-system, sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; transition: all .2s; cursor: pointer; border: none; }
+    .btn-white:hover { background: var(--cream); transform: translateY(-1px); }
+
+    /* FORM */
+    .form-wrap { max-width: 660px; margin: 0 auto; }
+    .form-title { font-size: 20px; color: white; text-align: center; margin-bottom: 5px; }
+    .form-sub { font-family: -apple-system, sans-serif; font-size: 13px; color: rgba(255,255,255,.55); text-align: center; margin-bottom: 26px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-bottom: 11px; }
+    .form-field { display: flex; flex-direction: column; gap: 4px; }
+    .form-field label { font-family: -apple-system, sans-serif; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.5); }
+    .form-field input, .form-field select, .form-field textarea { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 6px; padding: 10px 13px; color: white; font-family: -apple-system, sans-serif; font-size: 13px; outline: none; transition: border-color .2s; width: 100%; }
+    .form-field input::placeholder, .form-field textarea::placeholder { color: rgba(255,255,255,.3); }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--gold); }
+    .form-field select option { background: var(--green); color: white; }
+    .form-field textarea { resize: vertical; min-height: 88px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-submit { width: 100%; background: var(--gold); color: white; border: none; padding: 14px; border-radius: 6px; font-family: -apple-system, sans-serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-weight: 600; transition: background .2s; margin-top: 5px; }
+    .form-submit:hover { background: #a07840; }
+    .form-success { display: none; text-align: center; padding: 32px; background: rgba(255,255,255,.1); border-radius: var(--radius); color: white; }
+
+    /* LOCATION */
+    .location-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .location-text h2 { font-size: 34px; color: var(--green); margin-bottom: 14px; }
+    .location-text p { font-family: -apple-system, sans-serif; font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 14px; }
+    .location-items { display: flex; flex-direction: column; gap: 9px; margin-top: 18px; }
+    .location-item { display: flex; align-items: center; gap: 11px; font-family: -apple-system, sans-serif; font-size: 13px; color: var(--text2); }
+    .location-icon { width: 32px; height: 32px; background: var(--green-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .map-wrap { background: var(--green-light); border-radius: var(--radius); aspect-ratio: 4/3; overflow: hidden; }
+    .map-wrap iframe { width: 100%; height: 100%; border: none; }
+
+    /* PAGES */
+    .page { display: none; }
+    .page.active { display: block; }
+    .prop-hero { height: 65vh; position: relative; overflow: hidden; margin-top: 70px; }
+    .prop-hero img { width: 100%; height: 100%; object-fit: cover; }
+    .prop-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(45,74,45,.82) 0%, transparent 50%); }
+    .prop-hero-content { position: absolute; bottom: 44px; left: 48px; color: white; }
+    .prop-hero-content h1 { font-size: clamp(30px, 5vw, 52px); font-weight: 400; margin-bottom: 6px; }
+    .back-btn { display: inline-flex; align-items: center; gap: 7px; font-family: -apple-system, sans-serif; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); margin-bottom: 32px; cursor: pointer; background: none; border: none; padding: 0; transition: gap .2s; }
+    .back-btn:hover { gap: 11px; }
+
+    /* APT TABS */
+    .apt-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--cream2); margin-bottom: 36px; }
+    .apt-tab { padding: 13px 26px; font-family: -apple-system, sans-serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .2s; background: none; border-top: none; border-left: none; border-right: none; }
+    .apt-tab.active { color: var(--green); border-bottom-color: var(--green); font-weight: 600; }
+    .apt-content { display: none; }
+    .apt-content.active { display: grid; grid-template-columns: 2fr 1fr; gap: 44px; align-items: start; }
+
+    /* APT GALLERY */
+    .apt-gallery { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; border-radius: var(--radius); overflow: hidden; margin-bottom: 8px; }
+    .apt-gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; cursor: pointer; transition: opacity .2s; }
+    .apt-gallery img:hover { opacity: .9; }
+    .apt-gallery img:first-child { grid-column: 1 / -1; aspect-ratio: 21/5; }
+
+    /* SIDEBAR */
+    .apt-sidebar { position: sticky; top: 90px; }
+    .info-card { background: white; border: 1px solid var(--cream2); border-radius: var(--radius); padding: 22px; margin-bottom: 13px; box-shadow: 0 4px 20px rgba(0,0,0,.05); }
+    .info-card h3 { font-size: 15px; color: var(--green); margin-bottom: 13px; }
+    .amenity-list { display: flex; flex-direction: column; }
+    .amenity { display: flex; align-items: center; gap: 12px; font-family: -apple-system, sans-serif; font-size: 13px; color: var(--text2); padding: 9px 0; border-bottom: 1px solid var(--cream2); line-height: 1.4; }
+    .amenity:last-child { border-bottom: none; }
+    .amenity-icon { font-size: 17px; width: 26px; text-align: center; flex-shrink: 0; }
+    .amenity-cat { font-family: -apple-system, sans-serif; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 6px; margin-top: 14px; }
+    .amenity-cat:first-child { margin-top: 0; }
+    .book-card { background: var(--green); border-radius: var(--radius); padding: 22px; }
+    .book-card h3 { font-size: 16px; color: white; margin-bottom: 3px; }
+    .book-card p { font-family: -apple-system, sans-serif; font-size: 12px; color: rgba(255,255,255,.6); margin-bottom: 18px; line-height: 1.6; }
+    .book-form { display: flex; flex-direction: column; gap: 8px; }
+    .book-form input, .book-form select { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 6px; padding: 10px 12px; color: white; font-family: -apple-system, sans-serif; font-size: 13px; outline: none; transition: border-color .2s; }
+    .book-form input::placeholder { color: rgba(255,255,255,.4); }
+    .book-form input:focus, .book-form select:focus { border-color: var(--gold); }
+    .book-form select option { background: var(--green); }
+    .book-submit { background: var(--gold); color: white; border: none; padding: 12px; border-radius: 6px; font-family: -apple-system, sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; font-weight: 600; transition: background .2s; }
+    .book-submit:hover { background: #a07840; }
+
+    /* FOOTER */
+    footer { background: #1a2e1a; color: white; padding: 56px 48px 26px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 56px; margin-bottom: 36px; }
+    .footer-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 13px; }
+    .footer-brand-name { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: white; }
+    .footer-brand-sub { font-size: 9px; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; }
+    .footer-desc { font-family: -apple-system, sans-serif; font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.7; max-width: 270px; }
+    .footer-col h4 { font-family: -apple-system, sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 13px; }
+    .footer-col a, .footer-col p { display: block; font-family: -apple-system, sans-serif; font-size: 13px; color: rgba(255,255,255,.45); text-decoration: none; margin-bottom: 7px; line-height: 1.6; cursor: pointer; transition: color .2s; }
+    .footer-col a:hover { color: white; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,.07); padding-top: 20px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-copy { font-family: -apple-system, sans-serif; font-size: 11px; color: rgba(255,255,255,.25); }
+    .footer-ig { display: flex; align-items: center; gap: 7px; text-decoration: none; color: rgba(255,255,255,.45); font-family: -apple-system, sans-serif; font-size: 12px; transition: color .2s; }
+    .footer-ig:hover { color: white; }
+
+    /* CALENDARIO */
+    .cal-wrap { margin-bottom: 14px; }
+    .cal-label { font-family:-apple-system,sans-serif; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,.5); margin-bottom:6px; display:block; }
+    .cal-loading { font-family:-apple-system,sans-serif; font-size:11px; color:rgba(255,255,255,.4); padding:8px 0; }
+    .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-top:6px; }
+    .cal-header { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-bottom:3px; }
+    .cal-day-name { font-family:-apple-system,sans-serif; font-size:9px; text-align:center; color:rgba(255,255,255,.35); text-transform:uppercase; padding:2px 0; }
+    .cal-day { font-family:-apple-system,sans-serif; font-size:11px; text-align:center; padding:5px 2px; border-radius:4px; cursor:pointer; transition:all .15s; background:rgba(255,255,255,.08); color:rgba(255,255,255,.7); border:1px solid transparent; }
+    .cal-day:hover:not(.booked):not(.past) { background:rgba(255,255,255,.2); color:white; }
+    .cal-day.booked { background:rgba(239,68,68,.25); color:rgba(255,255,255,.35); cursor:not-allowed; text-decoration:line-through; }
+    .cal-day.past { background:transparent; color:rgba(255,255,255,.2); cursor:not-allowed; }
+    .cal-day.empty { background:transparent; cursor:default; }
+    .cal-day.selected { background:var(--gold); color:white; border-color:var(--gold); }
+    .cal-day.in-range { background:rgba(184,150,90,.3); color:white; }
+    .cal-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+    .cal-nav-btn { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); border-radius:4px; color:rgba(255,255,255,.7); font-size:14px; width:28px; height:28px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .15s; }
+    .cal-nav-btn:hover { background:rgba(255,255,255,.2); color:white; }
+    .cal-month-label { font-family:-apple-system,sans-serif; font-size:12px; font-weight:600; color:white; text-transform:capitalize; }
+    .cal-legend { display:flex; gap:10px; margin-top:6px; }
+    .cal-legend-item { display:flex; align-items:center; gap:4px; font-family:-apple-system,sans-serif; font-size:10px; color:rgba(255,255,255,.45); }
+    .cal-legend-dot { width:8px; height:8px; border-radius:2px; }
+    .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.93); z-index: 1000; display: none; align-items: center; justify-content: center; }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 4px; }
+    .lb-close { position: fixed; top: 22px; right: 28px; font-size: 26px; color: white; cursor: pointer; background: none; border: none; opacity: .7; }
+    .lb-close:hover { opacity: 1; }
+    .lb-prev, .lb-next { position: fixed; top: 50%; transform: translateY(-50%); font-size: 36px; color: white; cursor: pointer; background: none; border: none; opacity: .45; padding: 18px; }
+    .lb-prev { left: 4px; } .lb-next { right: 4px; }
+    .lb-prev:hover, .lb-next:hover { opacity: 1; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 0 18px; } .nav-links { display: none; }
+      .section { padding: 52px 18px; }
+      .properties { grid-template-columns: 1fr; }
+      .prop-img-wrap { height: 380px; }
+      .features-grid { grid-template-columns: 1fr 1fr; gap: 18px; }
+      .gallery-strip { grid-template-columns: repeat(3,1fr); }
+      .booking-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .location-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+      .apt-content.active { grid-template-columns: 1fr; }
+      .apt-sidebar { position: static; }
+      .booking-section { padding: 56px 18px; }
+      footer { padding: 36px 18px 22px; }
+      .prop-hero-content { left: 18px; bottom: 24px; }
+      .hero-logos { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">
+    <img src="Corte Cà Boare cerchiato.JPG" alt="CCB" class="logo" style="width:40px;height:40px;">
+    <img src="Casa Albertina.PNG" alt="CA" class="logo" style="width:40px;height:40px;">
+    <img src="Casa Elisabetta.JPG" alt="CE" class="logo" style="width:40px;height:40px;opacity:.6;">
+    <div style="margin-left:6px;">
+      <div class="nav-logo-name">Marchesini</div>
+      <div class="nav-logo-sub">Collection</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a onclick="showPage('home');doScroll('strutture')">Le Strutture</a>
+    <a onclick="showPage('home');doScroll('gallery')">Galleria</a>
+    <a onclick="showPage('home');doScroll('dove')">Dove Siamo</a>
+    <a href="https://www.instagram.com" target="_blank">Instagram</a>
+    <a onclick="showPage('home');doScroll('prenota')" class="nav-book">Prenota</a>
+  </div>
+</nav>
+
+<!-- ════════════════ HOME ════════════════ -->
+<div id="home" class="page active">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-pattern"></div>
+    <div class="hero-content">
+      <div class="hero-logos">
+        <div style="display:flex;gap:0;align-items:center;background:rgba(245,240,232,0.75);backdrop-filter:blur(8px);border:1.5px solid rgba(45,74,45,0.15);border-radius:24px;padding:28px 48px;box-shadow:0 12px 60px rgba(45,74,45,0.12);">
+          <div style="text-align:center;padding:0 36px;border-right:1px solid rgba(45,74,45,0.1);">
+            <div style="width:260px;height:260px;display:flex;align-items:center;justify-content:center;">
+              <img src="Corte Cà Boare cerchiato.JPG" alt="Corte Cà Boare" class="logo" style="width:260px;height:260px;object-fit:contain;">
+            </div>
+            <div style="font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-top:10px;opacity:.65;">Corte Cà Boare</div>
+          </div>
+          <div style="text-align:center;padding:0 36px;border-right:1px solid rgba(45,74,45,0.1);">
+            <div style="width:260px;height:260px;display:flex;align-items:center;justify-content:center;">
+              <img src="Casa Albertina.PNG" alt="Casa Albertina" class="logo" style="width:260px;height:260px;object-fit:contain;">
+            </div>
+            <div style="font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-top:10px;opacity:.65;">Casa Albertina</div>
+          </div>
+          <div style="text-align:center;padding:0 36px;opacity:.5;">
+            <div style="width:260px;height:260px;display:flex;align-items:center;justify-content:center;">
+              <img src="Casa Elisabetta.JPG" alt="Casa Elisabetta" class="logo" style="width:260px;height:260px;object-fit:contain;">
+            </div>
+            <div style="font-family:-apple-system,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-top:10px;opacity:.65;">Casa Elisabetta</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-eyebrow">Arbizzano · Valpolicella · Verona</div>
+      <h1 class="hero-title">Marchesini <em>Collection</em></h1>
+      <p class="hero-sub">Appartamenti di charme nel cuore della Valpolicella</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="doScroll('strutture')">Scopri le strutture</button>
+        <button class="btn-outline" onclick="doScroll('prenota')">Richiedi disponibilità</button>
+      </div>
+    </div>
+    <div class="hero-scroll"><div class="hero-scroll-line"></div>Scopri</div>
+  </div>
+
+  <!-- STRUTTURE -->
+  <div id="strutture">
+    <div class="section" style="padding-bottom:22px;">
+      <div class="section-eyebrow">Le nostre strutture</div>
+      <h2 class="section-title">Due dimore, <em>un'unica cura</em></h2>
+      <div class="divider"></div>
+      <p class="section-sub">Ogni proprietà è curata nei minimi dettagli per offrirti un soggiorno autentico nella campagna veronese.</p>
+    </div>
+    <div class="properties">
+      <!-- CCB -->
+      <div class="property-card" onclick="showPage('caboare')">
+        <div class="prop-img-wrap">
+          <img src="CCB-A/IMG_2299.jpeg" alt="Corte Cà Boare" class="prop-img">
+          <div class="prop-overlay"></div>
+          <div class="prop-content">
+            <img src="Corte Cà Boare cerchiato.JPG" alt="" class="logo" style="width:90px;height:90px;margin-bottom:10px;">
+            <span class="prop-badge">2 Appartamenti · 4–5 posti</span>
+            <h3 class="prop-name">Corte Cà Boare</h3>
+            <p class="prop-address">Via S. Maria 13, Arbizzano S. Maria, Verona</p>
+            <span class="prop-cta">Scopri e prenota →</span>
+          </div>
+        </div>
+      </div>
+      <!-- Casa Albertina -->
+      <div class="property-card" onclick="showPage('albertina')">
+        <div class="prop-img-wrap">
+          <img src="Casa Albertina 2/IMG_8633.jpeg" alt="Casa Albertina" class="prop-img">
+          <div class="prop-overlay"></div>
+          <div class="prop-content">
+            <img src="Casa Albertina.PNG" alt="" class="logo" style="width:90px;height:90px;margin-bottom:10px;">
+            <span class="prop-badge">Casa indipendente · 4 posti</span>
+            <h3 class="prop-name">Casa Albertina</h3>
+            <p class="prop-address">Via S. Maria 3/A, Arbizzano S. Maria, Verona</p>
+            <span class="prop-cta">Scopri e prenota →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Casa Elisabetta -->
+    <div class="coming-soon">
+      <div class="coming-badge">In arrivo</div>
+      <img src="Casa Elisabetta.JPG" alt="Casa Elisabetta" class="logo" style="width:120px;height:120px;margin:0 auto 12px;">
+      <div style="font-family:-apple-system,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Prossimamente</div>
+      <h3 style="font-size:24px;color:var(--green);font-weight:400;margin-bottom:4px;">Casa Elisabetta</h3>
+      <p style="font-family:-apple-system,sans-serif;font-size:13px;color:var(--text2);">Via S. Maria 5, Arbizzano S. Maria, 37024 Verona</p>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section">
+    <div class="section-eyebrow">Perché sceglierci</div>
+    <h2 class="section-title"><em>L'esperienza</em> Marchesini</h2>
+    <div class="divider"></div>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="14" r="5" stroke="#2d4a2d" stroke-width="1.5" fill="none"/>
+            <circle cx="14" cy="22" r="5" stroke="#2d4a2d" stroke-width="1.5" fill="none"/>
+            <circle cx="34" cy="22" r="5" stroke="#2d4a2d" stroke-width="1.5" fill="none"/>
+            <circle cx="19" cy="31" r="5" stroke="#2d4a2d" stroke-width="1.5" fill="none"/>
+            <circle cx="29" cy="31" r="5" stroke="#2d4a2d" stroke-width="1.5" fill="none"/>
+            <circle cx="24" cy="40" r="5" stroke="#2d4a2d" stroke-width="1.5" fill="none"/>
+            <line x1="24" y1="8" x2="24" y2="2" stroke="#2d4a2d" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M24 2 Q28 4 30 1" stroke="#2d4a2d" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="feature-title">Cuore del Valpolicella</div>
+        <div class="feature-text">A pochi minuti dalle più rinomate cantine di Amarone e dai colli veronesi.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="20" width="36" height="24" rx="1" stroke="#2d4a2d" stroke-width="1.5" fill="none"/>
+            <path d="M2 22 L24 6 L46 22" stroke="#2d4a2d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <rect x="18" y="30" width="12" height="14" rx="1" stroke="#2d4a2d" stroke-width="1.5" fill="none"/>
+            <rect x="10" y="26" width="8" height="8" rx="1" stroke="#2d4a2d" stroke-width="1.3" fill="none"/>
+            <rect x="30" y="26" width="8" height="8" rx="1" stroke="#2d4a2d" stroke-width="1.3" fill="none"/>
+            <line x1="24" y1="6" x2="24" y2="2" stroke="#2d4a2d" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="feature-title">Spazi autentici</div>
+        <div class="feature-text">Appartamenti arredati con cura, comfort moderno e fascino rurale veneto.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 4C16.268 4 10 10.268 10 18C10 28 24 44 24 44C24 44 38 28 38 18C38 10.268 31.732 4 24 4Z" stroke="#2d4a2d" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+            <circle cx="24" cy="18" r="5" stroke="#2d4a2d" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <div class="feature-title">Posizione strategica</div>
+        <div class="feature-text">A 10 minuti da Verona, vicino al Lago di Garda e alle Dolomiti.</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 34 Q16 28 24 34 Q32 40 40 34" stroke="#2d4a2d" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M8 26 Q16 20 24 26 Q32 32 40 26" stroke="#2d4a2d" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M8 18 Q16 12 24 18 Q32 24 40 18" stroke="#2d4a2d" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <line x1="24" y1="4" x2="24" y2="44" stroke="#2d4a2d" stroke-width="1" stroke-dasharray="2 3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="feature-title">Prenotazione diretta</div>
+        <div class="feature-text">Senza commissioni di piattaforma. Massima flessibilità e tariffe migliori.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div id="gallery">
+    <div class="section" style="padding-bottom:22px;">
+      <div class="section-eyebrow">Galleria</div>
+      <h2 class="section-title">Scorci di <em>Marchesini Collection</em></h2>
+      <div class="divider"></div>
+    </div>
+    <div class="gallery-strip">
+      <div class="gallery-item" onclick="openLB('home',0)"><img src="CCB-A/IMG_2299.jpeg" alt=""></div>
+      <div class="gallery-item" onclick="openLB('home',1)"><img src="CCB-A/IMG_2293.jpeg" alt=""></div>
+      <div class="gallery-item" onclick="openLB('home',2)"><img src="CCB-A/IMG_2300.jpeg" alt=""></div>
+      <div class="gallery-item" onclick="openLB('home',3)"><img src="CCB-B/IMG_2321.jpeg" alt=""></div>
+      <div class="gallery-item" onclick="openLB('home',4)"><img src="CCB-B/IMG_2325.jpeg" alt=""></div>
+      <div class="gallery-item" onclick="openLB('home',5)"><img src="Casa Albertina/633817889.jpg" alt=""></div>
+      <div class="gallery-item" onclick="openLB('home',6)"><img src="Casa Albertina/685609069.jpg" alt=""></div>
+      <div class="gallery-item" onclick="openLB('home',7)"><img src="Casa Albertina/685630441.jpg" alt=""></div>
+      <div class="gallery-item" onclick="openLB('home',8)"><img src="Casa Albertina/685636389.jpg" alt=""></div>
+      <div class="gallery-item" onclick="openLB('home',9)"><img src="Casa Albertina/895656078.jpg" alt=""></div>
+    </div>
+  </div>
+
+  <!-- DOVE SIAMO -->
+  <div id="dove" style="background:white;padding:80px 0;">
+    <div class="section" style="padding-top:0;padding-bottom:0;">
+      <div class="location-grid">
+        <div class="location-text">
+          <div style="font-family:-apple-system,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:9px;">Dove siamo</div>
+          <h2>Arbizzano <em>di Negrar</em><br>nel cuore della Valpolicella</h2>
+          <div class="divider" style="margin:16px 0;"></div>
+          <p>Immerso nelle dolci colline della Valpolicella, a soli 10 minuti dal centro di Verona e dalla sua Arena. Un punto di partenza ideale per esplorare il Lago di Garda, le cantine dell'Amarone e le meraviglie del Nordest italiano.</p>
+          <div class="location-items">
+            <div class="location-item"><div class="location-icon">🏛️</div><span><strong>10 min</strong> · Centro storico di Verona</span></div>
+            <div class="location-item"><div class="location-icon">🏖️</div><span><strong>30 min</strong> · Lago di Garda</span></div>
+            <div class="location-item"><div class="location-icon">🍷</div><span><strong>5 min</strong> · Cantine Valpolicella & Amarone</span></div>
+            <div class="location-item"><div class="location-icon">✈️</div><span><strong>15 min</strong> · Aeroporto Verona Villafranca</span></div>
+            <div class="location-item"><div class="location-icon">🏔️</div><span><strong>60 min</strong> · Dolomiti UNESCO</span></div>
+          </div>
+        </div>
+        <div class="map-wrap">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11190!2d10.9404!3d45.5267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477f5f3b2a7a6c0b%3A0x0!2sArbizzano%2C+37024+Verona!5e0!3m2!1sit!2sit!4v1" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRENOTA -->
+  <div class="booking-section" id="prenota">
+    <div class="section-eyebrow" style="color:var(--gold);">Prenota ora</div>
+    <h2 class="section-title">Richiedi disponibilità</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Contattaci direttamente per le migliori tariffe, senza commissioni.</p>
+    <div class="booking-grid">
+      <div class="booking-card">
+        <h3>Corte Cà Boare — Apt A</h3>
+        <div class="bc-sub">4 posti · Via S. Maria 13, Arbizzano</div>
+        <p>Appartamento nel rustico veronese ristrutturato con gusto.</p>
+        <button class="btn-white" onclick="setForm('Corte Cà Boare — Appartamento A')">Richiedi disponibilità</button>
+      </div>
+      <div class="booking-card">
+        <h3>Corte Cà Boare — Apt B</h3>
+        <div class="bc-sub">5 posti · Via S. Maria 13, Arbizzano</div>
+        <p>Spazioso appartamento con accesso alla corte interna.</p>
+        <button class="btn-white" onclick="setForm('Corte Cà Boare — Appartamento B')">Richiedi disponibilità</button>
+      </div>
+      <div class="booking-card">
+        <h3>Casa Albertina</h3>
+        <div class="bc-sub">4 posti · Via S. Maria 3/A, Arbizzano</div>
+        <p>Casa indipendente con giardino privato e atmosfera familiare.</p>
+        <button class="btn-white" onclick="setForm('Casa Albertina')">Richiedi disponibilità</button>
+      </div>
+      <div class="booking-card" style="opacity:.55;pointer-events:none;">
+        <h3>Casa Elisabetta</h3>
+        <div class="bc-sub">In arrivo · Via S. Maria 5, Arbizzano</div>
+        <p>Prossimamente disponibile. Contattaci per essere avvisato.</p>
+        <button class="btn-white" disabled>In arrivo</button>
+      </div>
+    </div>
+    <div class="form-wrap" id="form-anchor">
+      <h3 class="form-title">Modulo di richiesta</h3>
+      <p class="form-sub">Ti risponderemo entro 24 ore con disponibilità e preventivo.</p>
+      <form id="bookingForm" onsubmit="submitForm(event)">
+        <div class="form-grid">
+          <div class="form-field"><label>Nome e Cognome</label><input type="text" placeholder="Mario Rossi" required></div>
+          <div class="form-field"><label>Email</label><input type="email" placeholder="mario@email.com" required></div>
+          <div class="form-field"><label>Telefono</label><input type="tel" placeholder="+39 000 0000000"></div>
+          <div class="form-field"><label>Struttura</label>
+            <select id="formStruttura" required>
+              <option value="">Seleziona</option>
+              <option>Corte Cà Boare — Appartamento A</option>
+              <option>Corte Cà Boare — Appartamento B</option>
+              <option>Casa Albertina</option>
+            </select>
+          </div>
+          <div class="form-field"><label>Data di arrivo</label><input type="date" required></div>
+          <div class="form-field"><label>Data di partenza</label><input type="date" required></div>
+          <div class="form-field"><label>N° ospiti</label>
+            <select><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option></select>
+          </div>
+          <div class="form-field"><label>Come ci hai trovato</label>
+            <select><option>Instagram</option><option>Booking.com</option><option>Airbnb</option><option>Passaparola</option><option>Google</option><option>Altro</option></select>
+          </div>
+          <div class="form-field full"><label>Note o richieste speciali</label><textarea placeholder="Animali domestici, allergie, esigenze particolari…"></textarea></div>
+        </div>
+        <button type="submit" class="form-submit">Invia richiesta</button>
+      </form>
+      <div class="form-success" id="formSuccess">
+        <div style="font-size:36px;margin-bottom:12px;">✓</div>
+        <h3 style="margin-bottom:8px;">Richiesta inviata!</h3>
+        <p style="font-family:-apple-system,sans-serif;font-size:13px;opacity:.65;">Ti risponderemo entro 24 ore all'indirizzo email indicato.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /home -->
+
+<!-- ════════════════ CORTE CÀ BOARE ════════════════ -->
+<div id="caboare" class="page">
+  <div class="prop-hero">
+    <img src="CCB-A/IMG_2299.jpeg" alt="Corte Cà Boare">
+    <div class="prop-hero-overlay"></div>
+    <div class="prop-hero-content">
+      <p style="font-family:-apple-system,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.65;margin-bottom:6px;">Arbizzano · Verona</p>
+      <h1>Corte Cà Boare</h1>
+      <p style="font-family:-apple-system,sans-serif;font-size:13px;opacity:.75;">Via S. Maria 13 · Due appartamenti · 4 e 5 posti</p>
+    </div>
+  </div>
+  <div class="section">
+    <button class="back-btn" onclick="showPage('home')">← Torna alle strutture</button>
+    <div style="text-align:center;margin-bottom:32px;">
+      <img src="Corte Cà Boare cerchiato.JPG" alt="Corte Cà Boare" class="logo" style="width:160px;height:160px;margin:0 auto;">
+    </div>
+    <p style="font-family:-apple-system,sans-serif;font-size:14px;color:var(--text2);line-height:1.8;max-width:700px;margin:0 auto 40px;">Corte Cà Boare è un antico rustico veronese sapientemente ristrutturato, che conserva l'anima autentica della campagna veneta pur offrendo tutti i comfort moderni. La corte interna, i soffitti con travi a vista e i materiali naturali creano un'atmosfera unica nel cuore della Valpolicella.</p>
+    <div class="apt-tabs">
+      <button class="apt-tab active" onclick="switchApt(event,'apt-a')">Appartamento A · 4 posti</button>
+      <button class="apt-tab" onclick="switchApt(event,'apt-b')">Appartamento B · 5 posti</button>
+    </div>
+    <!-- APT A -->
+    <div id="apt-a" class="apt-content active">
+      <div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;border-radius:var(--radius);overflow:hidden;margin-bottom:8px;">
+<img src="CCB-A/IMG_2290.jpeg" onclick="openLB('A',0)" style="grid-column:1/-1;width:100%;aspect-ratio:21/5;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2291.jpeg" onclick="openLB('A',1)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2293.jpeg" onclick="openLB('A',2)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2294.jpeg" onclick="openLB('A',3)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2295.jpeg" onclick="openLB('A',4)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2296.jpeg" onclick="openLB('A',5)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2298.jpeg" onclick="openLB('A',6)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2299.jpeg" onclick="openLB('A',7)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2300.jpeg" onclick="openLB('A',8)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2301.jpeg" onclick="openLB('A',9)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2302.jpeg" onclick="openLB('A',10)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2303.jpeg" onclick="openLB('A',11)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2304.jpeg" onclick="openLB('A',12)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2305.jpeg" onclick="openLB('A',13)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2306.jpeg" onclick="openLB('A',14)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2307.jpeg" onclick="openLB('A',15)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2308.jpeg" onclick="openLB('A',16)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2309.jpeg" onclick="openLB('A',17)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_2311.jpeg" onclick="openLB('A',18)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4639.jpeg" onclick="openLB('A',19)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4640.jpeg" onclick="openLB('A',20)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4641.jpeg" onclick="openLB('A',21)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4642.jpeg" onclick="openLB('A',22)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4645.jpeg" onclick="openLB('A',23)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4646.jpeg" onclick="openLB('A',24)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4647.jpeg" onclick="openLB('A',25)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4654.jpeg" onclick="openLB('A',26)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4810.jpeg" onclick="openLB('A',27)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4811.jpeg" onclick="openLB('A',28)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4812.jpeg" onclick="openLB('A',29)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4813.jpeg" onclick="openLB('A',30)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4814.jpeg" onclick="openLB('A',31)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4815.jpeg" onclick="openLB('A',32)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4816.jpeg" onclick="openLB('A',33)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4817.jpeg" onclick="openLB('A',34)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4818.jpeg" onclick="openLB('A',35)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4819.jpeg" onclick="openLB('A',36)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4820.jpeg" onclick="openLB('A',37)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4821.jpeg" onclick="openLB('A',38)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4823.jpeg" onclick="openLB('A',39)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4824.jpeg" onclick="openLB('A',40)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4825.jpeg" onclick="openLB('A',41)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-A/IMG_4826.jpeg" onclick="openLB('A',42)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+</div>
+<div style="font-family:-apple-system,sans-serif;font-size:11px;color:var(--text3);text-align:center;margin-bottom:28px;">43 foto · clicca per ingrandire</div>
+      </div>
+      <div class="apt-sidebar">
+                <div class="info-card">
+          <h3>Appartamento A · 4 posti</h3>
+          <div class="amenity-list">
+            <div class="amenity"><span class="amenity-icon">🛏️</span><span>Camera da letto · Letto King Size 210×180 cm</span></div>
+<div class="amenity"><span class="amenity-icon">🛋️</span><span>Salotto · Divano letto con cucina attrezzata</span></div>
+<div class="amenity"><span class="amenity-icon">🛁</span><span>2 bagni privati</span></div>
+<div class="amenity"><span class="amenity-icon">❄️</span><span>Casa Clima · Raffrescamento RRI a induzione parete/soffitto</span></div>
+<div class="amenity"><span class="amenity-icon">🔇</span><span>Altissima insonorizzazione</span></div>
+<div class="amenity"><span class="amenity-icon">⚡</span><span>Classe energetica A++</span></div>
+<div class="amenity"><span class="amenity-icon">📶</span><span>Wi-Fi fibra</span></div>
+<div class="amenity"><span class="amenity-icon">🧺</span><span>Lavatrice</span></div>
+<div class="amenity"><span class="amenity-icon">☕</span><span>Macchina Nespresso · cialde incluse</span></div>
+<div class="amenity"><span class="amenity-icon">🫖</span><span>Bollitore e tostapane</span></div>
+<div class="amenity"><span class="amenity-icon">🅿️</span><span>Parcheggio privato esterno</span></div>
+
+          </div>
+        </div>
+        </div>
+        <div class="book-card">
+          <h3>Prenota Apt A</h3>
+          <p>4 posti · Prenotazione diretta, senza commissioni.</p>
+          <div id="cal-ccb-a"></div>
+          <div class="book-form" id="form-ccb-a" style="display:none;">
+            <input type="text" placeholder="Nome e Cognome" id="fa-nome">
+            <input type="email" placeholder="Email" id="fa-email">
+            <input type="tel" placeholder="Telefono" id="fa-tel">
+            <input type="text" id="fa-arrivo" placeholder="Arrivo" readonly style="cursor:pointer;">
+            <input type="text" id="fa-partenza" placeholder="Partenza" readonly style="cursor:pointer;">
+            <select id="fa-ospiti" onchange="mostraPrezzo('CCB-A','fa-arrivo','fa-partenza','fa-ospiti','prezzo-ccb-a')">
+              <option value="1">1 ospite</option><option value="2" selected>2 ospiti</option>
+              <option value="3">3 ospiti</option><option value="4">4 ospiti</option>
+            </select>
+            <div id="prezzo-ccb-a"></div>
+            <button class="book-submit" onclick="submitQuick(event,'Corte Cà Boare — Apt A')">Invia richiesta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- APT B -->
+    <div id="apt-b" class="apt-content">
+      <div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;border-radius:var(--radius);overflow:hidden;margin-bottom:8px;">
+<img src="CCB-B/IMG_2314.jpeg" onclick="openLB('B',0)" style="grid-column:1/-1;width:100%;aspect-ratio:21/5;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2316.jpeg" onclick="openLB('B',1)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2319.jpeg" onclick="openLB('B',2)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2320.jpeg" onclick="openLB('B',3)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2321.jpeg" onclick="openLB('B',4)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2322.jpeg" onclick="openLB('B',5)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2323.jpeg" onclick="openLB('B',6)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2324.jpeg" onclick="openLB('B',7)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2325.jpeg" onclick="openLB('B',8)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2327.jpeg" onclick="openLB('B',9)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2329.jpeg" onclick="openLB('B',10)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2330.jpeg" onclick="openLB('B',11)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2331.jpeg" onclick="openLB('B',12)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2332.jpeg" onclick="openLB('B',13)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2334.jpeg" onclick="openLB('B',14)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2335.jpeg" onclick="openLB('B',15)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2336.jpeg" onclick="openLB('B',16)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_2338.jpeg" onclick="openLB('B',17)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="CCB-B/IMG_4828.jpeg" onclick="openLB('B',18)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+</div>
+<div style="font-family:-apple-system,sans-serif;font-size:11px;color:var(--text3);text-align:center;margin-bottom:28px;">19 foto · clicca per ingrandire</div>
+      </div>
+      <div class="apt-sidebar">
+                <div class="info-card">
+          <h3>Appartamento B · 5 posti</h3>
+          <div class="amenity-list">
+            <div class="amenity"><span class="amenity-icon">🛏️</span><span>Camera da letto · Letto Queen Size 200×160 cm</span></div>
+<div class="amenity"><span class="amenity-icon">🛋️</span><span>Salotto · Divano letto con cucina attrezzata</span></div>
+<div class="amenity"><span class="amenity-icon">🛁</span><span>2 bagni privati</span></div>
+<div class="amenity"><span class="amenity-icon">❄️</span><span>Casa Clima · Raffrescamento RRI a induzione parete/soffitto</span></div>
+<div class="amenity"><span class="amenity-icon">🔇</span><span>Altissima insonorizzazione</span></div>
+<div class="amenity"><span class="amenity-icon">⚡</span><span>Classe energetica A++</span></div>
+<div class="amenity"><span class="amenity-icon">📶</span><span>Wi-Fi fibra</span></div>
+<div class="amenity"><span class="amenity-icon">🧺</span><span>Lavatrice</span></div>
+<div class="amenity"><span class="amenity-icon">☕</span><span>Macchina Nespresso · cialde incluse</span></div>
+<div class="amenity"><span class="amenity-icon">🫖</span><span>Bollitore e tostapane</span></div>
+<div class="amenity"><span class="amenity-icon">🅿️</span><span>Parcheggio privato esterno</span></div>
+
+          </div>
+        </div>
+        </div>
+        <div class="book-card">
+          <h3>Prenota Apt B</h3>
+          <p>5 posti · Prenotazione diretta, senza commissioni.</p>
+          <div id="cal-ccb-b"></div>
+          <div class="book-form" id="form-ccb-b" style="display:none;">
+            <input type="text" placeholder="Nome e Cognome">
+            <input type="email" placeholder="Email">
+            <input type="tel" placeholder="Telefono">
+            <input type="text" id="fb-arrivo" placeholder="Arrivo" readonly style="cursor:pointer;">
+            <input type="text" id="fb-partenza" placeholder="Partenza" readonly style="cursor:pointer;">
+            <select id="fb-ospiti" onchange="mostraPrezzo('CCB-B','fb-arrivo','fb-partenza','fb-ospiti','prezzo-ccb-b')">
+              <option value="1">1</option><option value="2" selected>2</option>
+              <option value="3">3</option><option value="4">4</option><option value="5">5 ospiti</option>
+            </select>
+            <div id="prezzo-ccb-b"></div>
+            <button class="book-submit" onclick="submitQuick(event,'Corte Cà Boare — Apt B')">Invia richiesta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ CASA ALBERTINA ════════════════ -->
+<div id="albertina" class="page">
+  <div class="prop-hero" style="background:linear-gradient(135deg,#e8efe8,#c4d4c4);margin-top:70px;display:flex;align-items:center;justify-content:center;">
+    <img src="Casa Albertina 2/IMG_8633.jpeg" alt="Casa Albertina" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+    <div class="prop-hero-overlay"></div>
+    <div class="prop-hero-content">
+      <p style="font-family:-apple-system,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.65;margin-bottom:6px;">Arbizzano · Verona</p>
+      <h1>Casa Albertina</h1>
+      <p style="font-family:-apple-system,sans-serif;font-size:13px;opacity:.75;">Via S. Maria 3/A · Casa indipendente · 4 posti</p>
+    </div>
+  </div>
+  <div class="section">
+    <button class="back-btn" onclick="showPage('home')">← Torna alle strutture</button>
+    <div style="text-align:center;margin-bottom:32px;">
+      <img src="Casa Albertina.PNG" alt="Casa Albertina" class="logo" style="width:160px;height:160px;margin:0 auto;">
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:44px;align-items:start;">
+      <div>
+        <p style="font-family:-apple-system,sans-serif;font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:20px;">Casa Albertina è una dimora indipendente immersa nel verde di Arbizzano, con giardino privato e atmosfera raccolta. Ideale per famiglie e coppie che cercano privacy, tranquillità e il calore di una casa vera.</p>
+        <p style="font-family:-apple-system,sans-serif;font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:28px;">A pochi passi da Corte Cà Boare, condivide la stessa cura artigianale e la stessa posizione privilegiata nel cuore della Valpolicella, a 10 minuti da Verona.</p>
+        <!-- GALLERY -->
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;border-radius:var(--radius);overflow:hidden;margin-bottom:8px;">
+<img src="Casa Albertina 2/IMG_8633.jpeg" onclick="openLB('CA',0)" style="grid-column:1/-1;width:100%;aspect-ratio:21/5;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/IMG_0017.jpeg" onclick="openLB('CA',1)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/IMG_0018.jpeg" onclick="openLB('CA',2)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/IMG_0022.jpeg" onclick="openLB('CA',3)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/IMG_0023.jpeg" onclick="openLB('CA',4)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/IMG_0025.jpeg" onclick="openLB('CA',5)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/IMG_0033.jpeg" onclick="openLB('CA',6)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/IMG_2261.jpeg" onclick="openLB('CA',7)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/IMG_2288.jpeg" onclick="openLB('CA',8)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/IMG_2292.jpeg" onclick="openLB('CA',9)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/IMG_4183.heic" onclick="openLB('CA',10)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/e54f7ab6-a252-486a-981f-64c12ad8754a.JPG" onclick="openLB('CA',11)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+<img src="Casa Albertina 2/ece7da03-9f20-464e-9f9f-755093968845.JPG" onclick="openLB('CA',12)" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+</div>
+<div style="font-family:-apple-system,sans-serif;font-size:11px;color:var(--text3);text-align:center;margin-bottom:0;">13 foto · clicca per ingrandire</div>
+      </div>
+      <div>
+                <div class="info-card">
+          <h3>Casa Albertina · 4 posti</h3>
+          <div class="amenity-list">
+            <div class="amenity"><span class="amenity-icon">🛏️</span><span>Camera matrimoniale · Letto Queen Size 200×160 cm</span></div>
+<div class="amenity"><span class="amenity-icon">🛋️</span><span>Divano letto · Materasso 14 cm con topper</span></div>
+<div class="amenity"><span class="amenity-icon">🛁</span><span>1 bagno privato</span></div>
+<div class="amenity"><span class="amenity-icon">❄️</span><span>Climatizzazione a pavimento</span></div>
+<div class="amenity"><span class="amenity-icon">🌳</span><span>Giardino privato</span></div>
+<div class="amenity"><span class="amenity-icon">🔇</span><span>Altissima insonorizzazione</span></div>
+<div class="amenity"><span class="amenity-icon">⚡</span><span>Classe energetica A++</span></div>
+<div class="amenity"><span class="amenity-icon">📶</span><span>Wi-Fi fibra</span></div>
+<div class="amenity"><span class="amenity-icon">🧺</span><span>Lavatrice</span></div>
+<div class="amenity"><span class="amenity-icon">☕</span><span>Macchina Nespresso · cialde incluse</span></div>
+<div class="amenity"><span class="amenity-icon">🫖</span><span>Bollitore e tostapane</span></div>
+<div class="amenity"><span class="amenity-icon">🅿️</span><span>Parcheggio privato esterno</span></div>
+<div class="amenity"><span class="amenity-icon">🚗</span><span>Garage privato · supplemento €10/notte</span></div>
+
+          </div>
+        </div>
+        </div>
+        <div class="book-card">
+          <h3>Prenota Casa Albertina</h3>
+          <p>4 posti · Casa con giardino privato.</p>
+          <div id="cal-ca"></div>
+          <div class="book-form" id="form-ca" style="display:none;">
+            <input type="text" placeholder="Nome e Cognome">
+            <input type="email" placeholder="Email">
+            <input type="tel" placeholder="Telefono">
+            <input type="text" id="fc-arrivo" placeholder="Arrivo" readonly style="cursor:pointer;">
+            <input type="text" id="fc-partenza" placeholder="Partenza" readonly style="cursor:pointer;">
+            <select><option>1</option><option>2</option><option>3</option><option>4 ospiti</option></select>
+            <button class="book-submit" onclick="submitQuick(event,'Casa Albertina')">Invia richiesta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <img src="Corte Cà Boare cerchiato.JPG" alt="" class="logo" style="width:46px;height:46px;">
+        <img src="Casa Albertina.PNG" alt="" class="logo" style="width:46px;height:46px;">
+        <img src="Casa Elisabetta.JPG" alt="" class="logo" style="width:46px;height:46px;opacity:.55;">
+        <div style="margin-left:8px;">
+          <div class="footer-brand-name">Marchesini Collection</div>
+          <div class="footer-brand-sub">Arbizzano · Verona</div>
+        </div>
+      </div>
+      <p class="footer-desc">Appartamenti di charme nel cuore della Valpolicella, a pochi minuti da Verona, dal Lago di Garda e dalle cantine dell'Amarone.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Le strutture</h4>
+      <a onclick="showPage('caboare')">Corte Cà Boare — Apt A</a>
+      <a onclick="showPage('caboare');switchAptById('apt-b')">Corte Cà Boare — Apt B</a>
+      <a onclick="showPage('albertina')">Casa Albertina</a>
+      <p style="color:rgba(255,255,255,.2);cursor:default;">Casa Elisabetta · In arrivo</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contatti</h4>
+      <p>Via S. Maria, Arbizzano S. Maria<br>37024 Verona (VR)</p>
+      <a href="mailto:info@marchesinicollection.it">info@marchesinicollection.it</a>
+      <a href="https://www.instagram.com" target="_blank">@marchesinicollection</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Marchesini Collection · Tutti i diritti riservati</div>
+    <a href="https://www.instagram.com" target="_blank" class="footer-ig">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      Seguici su Instagram
+    </a>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLB()">
+  <button class="lb-close" onclick="closeLB()">✕</button>
+  <button class="lb-prev" onclick="lbNav(-1)">‹</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-next" onclick="lbNav(1)">›</button>
+</div>
+
+<script>
+  const sets = {
+    home: ['CCB-A/IMG_2290.jpeg','CCB-A/IMG_2293.jpeg','CCB-A/IMG_2295.jpeg','CCB-A/IMG_2298.jpeg','CCB-A/IMG_2300.jpeg','CCB-B/IMG_2314.jpeg','CCB-B/IMG_2319.jpeg','CCB-B/IMG_2321.jpeg','CCB-B/IMG_2323.jpeg','CCB-B/IMG_2325.jpeg'],
+    CA: ['Casa Albertina 2/IMG_8633.jpeg','Casa Albertina 2/IMG_0017.jpeg','Casa Albertina 2/IMG_0018.jpeg','Casa Albertina 2/IMG_0022.jpeg','Casa Albertina 2/IMG_0023.jpeg','Casa Albertina 2/IMG_0025.jpeg','Casa Albertina 2/IMG_0033.jpeg','Casa Albertina 2/IMG_2261.jpeg','Casa Albertina 2/IMG_2288.jpeg','Casa Albertina 2/IMG_2292.jpeg','Casa Albertina 2/IMG_4183.heic','Casa Albertina 2/e54f7ab6-a252-486a-981f-64c12ad8754a.JPG','Casa Albertina 2/ece7da03-9f20-464e-9f9f-755093968845.JPG'],
+    A: ['CCB-A/IMG_2290.jpeg','CCB-A/IMG_2291.jpeg','CCB-A/IMG_2293.jpeg','CCB-A/IMG_2294.jpeg','CCB-A/IMG_2295.jpeg','CCB-A/IMG_2296.jpeg','CCB-A/IMG_2298.jpeg','CCB-A/IMG_2299.jpeg','CCB-A/IMG_2300.jpeg','CCB-A/IMG_2301.jpeg','CCB-A/IMG_2302.jpeg','CCB-A/IMG_2303.jpeg','CCB-A/IMG_2304.jpeg','CCB-A/IMG_2305.jpeg','CCB-A/IMG_2306.jpeg','CCB-A/IMG_2307.jpeg','CCB-A/IMG_2308.jpeg','CCB-A/IMG_2309.jpeg','CCB-A/IMG_2311.jpeg','CCB-A/IMG_4639.jpeg','CCB-A/IMG_4640.jpeg','CCB-A/IMG_4641.jpeg','CCB-A/IMG_4642.jpeg','CCB-A/IMG_4645.jpeg','CCB-A/IMG_4646.jpeg','CCB-A/IMG_4647.jpeg','CCB-A/IMG_4654.jpeg','CCB-A/IMG_4810.jpeg','CCB-A/IMG_4811.jpeg','CCB-A/IMG_4812.jpeg','CCB-A/IMG_4813.jpeg','CCB-A/IMG_4814.jpeg','CCB-A/IMG_4815.jpeg','CCB-A/IMG_4816.jpeg','CCB-A/IMG_4817.jpeg','CCB-A/IMG_4818.jpeg','CCB-A/IMG_4819.jpeg','CCB-A/IMG_4820.jpeg','CCB-A/IMG_4821.jpeg','CCB-A/IMG_4823.jpeg','CCB-A/IMG_4824.jpeg','CCB-A/IMG_4825.jpeg','CCB-A/IMG_4826.jpeg'],
+    B: ['CCB-B/IMG_2314.jpeg','CCB-B/IMG_2316.jpeg','CCB-B/IMG_2319.jpeg','CCB-B/IMG_2320.jpeg','CCB-B/IMG_2321.jpeg','CCB-B/IMG_2322.jpeg','CCB-B/IMG_2323.jpeg','CCB-B/IMG_2324.jpeg','CCB-B/IMG_2325.jpeg','CCB-B/IMG_2327.jpeg','CCB-B/IMG_2329.jpeg','CCB-B/IMG_2330.jpeg','CCB-B/IMG_2331.jpeg','CCB-B/IMG_2332.jpeg','CCB-B/IMG_2334.jpeg','CCB-B/IMG_2335.jpeg','CCB-B/IMG_2336.jpeg','CCB-B/IMG_2338.jpeg','CCB-B/IMG_4828.jpeg'],
+  };
+  let lbSet = [], lbIdx = 0;
+
+  function openLB(set, idx) {
+    lbSet = sets[set] || sets.home;
+    lbIdx = idx;
+    document.getElementById('lbImg').src = lbSet[lbIdx];
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLB() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; }
+  function lbNav(d) { lbIdx = (lbIdx + d + lbSet.length) % lbSet.length; document.getElementById('lbImg').src = lbSet[lbIdx]; }
+  document.addEventListener('keydown', e => { if(e.key==='Escape')closeLB(); if(e.key==='ArrowLeft')lbNav(-1); if(e.key==='ArrowRight')lbNav(1); });
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  function doScroll(id) { setTimeout(() => { const el = document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); }, 100); }
+
+  function switchApt(e, id) {
+    document.querySelectorAll('.apt-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.apt-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    e.target.classList.add('active');
+  }
+  function switchAptById(id) {
+    document.querySelectorAll('.apt-content').forEach(c => c.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function setForm(v) { document.getElementById('formStruttura').value = v; showPage('home'); doScroll('form-anchor'); }
+  function submitForm(e) { e.preventDefault(); document.getElementById('bookingForm').style.display='none'; document.getElementById('formSuccess').style.display='block'; }
+  function submitQuick(e, s) { e.preventDefault(); alert('✓ Richiesta inviata per ' + s + '!\n\nTi risponderemo entro 24 ore.'); }
+
+  // ── PREZZI ────────────────────────────────────────────────────────────────
+  let prezziData = null;
+
+  async function loadPrezziData() {
+    try {
+      const r = await fetch('prezzi.json?t=' + Date.now());
+      prezziData = await r.json();
+    } catch(e) { prezziData = null; }
+  }
+
+  function getStagione(dateStr) {
+    if (!prezziData) return 'alta';
+    const date = new Date(dateStr);
+    // Controlla festività prima
+    for (const f of prezziData.festivita) {
+      const dal = new Date(f.dal);
+      const al  = new Date(f.al);
+      if (date >= dal && date <= al) return 'festivita';
+    }
+    const mese = date.getMonth() + 1;
+    for (const [key, val] of Object.entries(prezziData.stagioni)) {
+      if (key === 'festivita') continue;
+      if ((val.mesi || []).includes(mese)) return key;
+    }
+    return 'alta';
+  }
+
+  function calcolaPrezzo(aptKey, checkIn, checkOut, ospiti) {
+    if (!prezziData || !checkIn || !checkOut) return null;
+    const apt = prezziData.prezzi[aptKey];
+    if (!apt) return null;
+
+    let totale = 0;
+    let notti = 0;
+    const start = new Date(checkIn);
+    const end   = new Date(checkOut);
+
+    for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+      const stagione = getStagione(d.toISOString().split('T')[0]);
+      let prezzo = apt[stagione] || apt.alta;
+
+      // Supplemento ospiti dal 3° in su
+      const base = prezziData.supplemento_ospiti.base_persone;
+      const pct  = prezziData.supplemento_ospiti.incremento_pct / 100;
+      if (ospiti > base) {
+        prezzo = prezzo * (1 + (ospiti - base) * pct);
+      }
+      totale += prezzo;
+      notti++;
+    }
+    return { totale: Math.round(totale), notti, mediaNotteBase: Math.round(totale / notti) };
+  }
+
+  function mostraPrezzo(aptKey, arrivoId, partenzaId, ospitiSelId, outputId) {
+    const arrivo   = document.getElementById(arrivoId)?.value;
+    const partenza = document.getElementById(partenzaId)?.value;
+    if (!arrivo || !partenza) return;
+
+    // Converti dd/mm/yyyy → yyyy-mm-dd
+    const toISO = s => { const [d,m,y] = s.split('/'); return `${y}-${m}-${d}`; };
+    const ospiti = parseInt(document.getElementById(ospitiSelId)?.value) || 2;
+    const res = calcolaPrezzo(aptKey, toISO(arrivo), toISO(partenza), ospiti);
+    if (!res) return;
+
+    const el = document.getElementById(outputId);
+    if (el) el.innerHTML = `
+      <div style="background:rgba(184,150,90,.15);border:1px solid rgba(184,150,90,.3);border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.5);margin-bottom:3px;">Stima preventivo</div>
+        <div style="font-size:22px;font-weight:800;color:var(--gold);">€${res.totale}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;">${res.notti} notti · €${res.mediaNotteBase}/notte · ${ospiti} ospiti</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;">* Stima indicativa. Il prezzo definitivo sarà confermato nella risposta.</div>
+      </div>`;
+  }
+  const API = 'http://localhost:8000';
+  const calState = {};
+
+  async function initCalendar(aptKey, containerId, arrivoId, partenzaId, formId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '<div class="cal-loading">Caricamento disponibilità…</div>';
+    let booked = [];
+    try {
+      const r = await fetch(`${API}/api/calendar/${aptKey}`);
+      if (r.ok) {
+        const data = await r.json();
+        booked = data.booked_dates || [];
+      }
+    } catch(e) { /* backend offline — mostra calendario vuoto */ }
+
+    calState[aptKey] = {
+      booked,
+      year: new Date().getFullYear(),
+      month: new Date().getMonth(),
+      checkIn: null,
+      checkOut: null,
+      arrivoId,
+      partenzaId,
+      formId,
+      containerId
+    };
+    renderCalendar(aptKey);
+  }
+
+  function renderCalendar(aptKey) {
+    const st = calState[aptKey];
+    const container = document.getElementById(st.containerId);
+    const today = new Date(); today.setHours(0,0,0,0);
+    const firstDay = new Date(st.year, st.month, 1);
+    const daysInMonth = new Date(st.year, st.month + 1, 0).getDate();
+    const startDow = (firstDay.getDay() + 6) % 7; // Lunedi=0
+    const monthNames = ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+    const dayNames = ['Lu','Ma','Me','Gi','Ve','Sa','Do'];
+
+    let html = `
+      <div class="cal-nav">
+        <button class="cal-nav-btn" onclick="calNav('${aptKey}',-1)">‹</button>
+        <span class="cal-month-label">${monthNames[st.month]} ${st.year}</span>
+        <button class="cal-nav-btn" onclick="calNav('${aptKey}',1)">›</button>
+      </div>
+      <div class="cal-header">${dayNames.map(d=>`<div class="cal-day-name">${d}</div>`).join('')}</div>
+      <div class="cal-grid">`;
+
+    for (let i = 0; i < startDow; i++) html += `<div class="cal-day empty"></div>`;
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(st.year, st.month, d);
+      const dateStr = date.toISOString().split('T')[0];
+      const isPast = date < today;
+      const isBooked = st.booked.includes(dateStr);
+      const isCheckIn = st.checkIn === dateStr;
+      const isCheckOut = st.checkOut === dateStr;
+      const inRange = st.checkIn && st.checkOut && dateStr > st.checkIn && dateStr < st.checkOut;
+
+      let cls = 'cal-day';
+      if (isPast) cls += ' past';
+      else if (isBooked) cls += ' booked';
+      else if (isCheckIn || isCheckOut) cls += ' selected';
+      else if (inRange) cls += ' in-range';
+
+      const click = (!isPast && !isBooked) ? `onclick="calSelect('${aptKey}','${dateStr}')"` : '';
+      html += `<div class="${cls}" ${click}>${d}</div>`;
+    }
+
+    html += `</div>
+      <div class="cal-legend">
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--gold)"></div>Selezionato</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(239,68,68,.4)"></div>Occupato</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(255,255,255,.08)"></div>Disponibile</div>
+      </div>`;
+
+    container.innerHTML = html;
+  }
+
+  function calNav(aptKey, dir) {
+    const st = calState[aptKey];
+    st.month += dir;
+    if (st.month > 11) { st.month = 0; st.year++; }
+    if (st.month < 0)  { st.month = 11; st.year--; }
+    renderCalendar(aptKey);
+  }
+
+  function calSelect(aptKey, dateStr) {
+    const st = calState[aptKey];
+    if (!st.checkIn || (st.checkIn && st.checkOut)) {
+      st.checkIn = dateStr; st.checkOut = null;
+    } else if (dateStr > st.checkIn) {
+      // Verifica che non ci siano date occupate nell'intervallo
+      const start = new Date(st.checkIn);
+      const end = new Date(dateStr);
+      let hasBooked = false;
+      for (let d = new Date(start); d < end; d.setDate(d.getDate()+1)) {
+        if (st.booked.includes(d.toISOString().split('T')[0])) { hasBooked = true; break; }
+      }
+      if (hasBooked) { st.checkIn = dateStr; st.checkOut = null; }
+      else { st.checkOut = dateStr; }
+    } else {
+      st.checkIn = dateStr; st.checkOut = null;
+    }
+
+    // Aggiorna campi form
+    if (st.arrivoId) {
+      const el = document.getElementById(st.arrivoId);
+      if (el) el.value = st.checkIn ? formatDate(st.checkIn) : '';
+    }
+    if (st.partenzaId) {
+      const el = document.getElementById(st.partenzaId);
+      if (el) el.value = st.checkOut ? formatDate(st.checkOut) : '';
+    }
+
+    // Mostra form quando entrambe le date sono selezionate
+    if (st.checkIn && st.checkOut && st.formId) {
+      const form = document.getElementById(st.formId);
+      if (form) form.style.display = 'flex';
+    }
+    renderCalendar(aptKey);
+  }
+
+  function formatDate(str) {
+    const [y,m,d] = str.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  // Inizializza calendari quando la pagina è pronta
+  document.addEventListener('DOMContentLoaded', () => {
+    initCalendar('CCB-A', 'cal-ccb-a', 'fa-arrivo', 'fa-partenza', 'form-ccb-a');
+    initCalendar('CCB-B', 'cal-ccb-b', 'fb-arrivo', 'fb-partenza', 'form-ccb-b');
+    initCalendar('CA',    'cal-ca',    'fc-arrivo', 'fc-partenza', 'form-ca');
+  });
+</script>
+</body>
+</html>

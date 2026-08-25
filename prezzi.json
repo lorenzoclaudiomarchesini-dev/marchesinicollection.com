@@ -1,0 +1,46 @@
+{
+  "stagioni": {
+    "bassa":     { "mesi": [11, 12, 1, 2, 3], "label": "Bassa Stagione" },
+    "media":     { "mesi": [4, 5, 10],         "label": "Media Stagione" },
+    "alta":      { "mesi": [6, 7, 8, 9],        "label": "Alta Stagione" },
+    "festivita": { "mesi": [],                   "label": "Festività" }
+  },
+  "festivita": [
+    { "label": "Natale",    "dal": "2024-12-23", "al": "2025-01-06" },
+    { "label": "Pasqua",    "dal": "2025-04-17", "al": "2025-04-22" },
+    { "label": "Vinitaly",  "dal": "2025-04-11", "al": "2025-04-13" },
+    { "label": "Ferragosto","dal": "2025-08-10", "al": "2025-08-18" },
+    { "label": "Natale",    "dal": "2025-12-23", "al": "2026-01-06" }
+  ],
+  "prezzi": {
+    "CCB-A": {
+      "nome": "Corte Cà Boare — Apt A",
+      "posti": 4,
+      "bassa":     100,
+      "media":     120,
+      "alta":      140,
+      "festivita": 168
+    },
+    "CCB-B": {
+      "nome": "Corte Cà Boare — Apt B",
+      "posti": 5,
+      "bassa":     100,
+      "media":     120,
+      "alta":      140,
+      "festivita": 168
+    },
+    "CA": {
+      "nome": "Casa Albertina",
+      "posti": 4,
+      "bassa":     90,
+      "media":     110,
+      "alta":      130,
+      "festivita": 156
+    }
+  },
+  "supplemento_ospiti": {
+    "note": "Prezzi base per 1-2 persone. Dal 3° ospite: +10% a persona.",
+    "base_persone": 2,
+    "incremento_pct": 10
+  }
+}
