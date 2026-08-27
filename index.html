@@ -562,7 +562,30 @@
     .footer-ig { display: flex; align-items: center; gap: 8px; text-decoration: none; color: rgba(255,255,255,0.3); font-family: var(--sans); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; transition: color 0.2s; }
     .footer-ig:hover { color: var(--white); }
 
-    /* LIGHTBOX */
+    /* REVIEWS MOBILE */
+    @media (max-width: 768px) {
+      .reviews-grid {
+        display: flex !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 2px;
+        scrollbar-width: none;
+        padding-bottom: 8px;
+      }
+      .reviews-grid::-webkit-scrollbar { display: none; }
+      .reviews-grid > div {
+        min-width: 85vw !important;
+        scroll-snap-align: start;
+        flex-shrink: 0;
+      }
+      .reviews-nav {
+        display: flex !important;
+      }
+      .score-bars-grid {
+        grid-template-columns: repeat(3,1fr) !important;
+      }
+    }
     .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: none; align-items: center; justify-content: center; }
     .lightbox.open { display: flex; }
     .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
@@ -828,7 +851,7 @@
 
       <!-- CORTE CÀ BOARE REVIEWS -->
       <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-bottom:20px;">Corte Cà Boare</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:2px;">
+      <div class="reviews-grid" id="grid-ccb" style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:2px;">
 
         <div style="background:white;padding:36px 32px;">
           <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--dark);line-height:1;margin-bottom:16px;">"</div>
@@ -887,8 +910,14 @@
       </div>
 
       <!-- CASA ALBERTINA REVIEWS -->
+      
+<div class="reviews-nav" style="display:none;justify-content:center;gap:12px;margin-top:12px;align-items:center;">
+  <button onclick="scrollReviews('grid-ccb',-1)" style="background:none;border:1px solid var(--warm-gray);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;color:var(--mid);display:flex;align-items:center;justify-content:center;">‹</button>
+  <span style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--mid);text-transform:uppercase;">Scorri</span>
+  <button onclick="scrollReviews('grid-ccb',1)" style="background:none;border:1px solid var(--warm-gray);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;color:var(--mid);display:flex;align-items:center;justify-content:center;">›</button>
+</div>
       <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-top:48px;margin-bottom:20px;">Casa Albertina</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;">
+      <div class="reviews-grid" id="grid-ca" style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;">
 
         <div style="background:var(--dark);padding:36px 32px;">
           <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:rgba(255,255,255,0.2);line-height:1;margin-bottom:16px;">"</div>
@@ -946,6 +975,12 @@
 
       </div>
 
+      
+<div class="reviews-nav" style="display:none;justify-content:center;gap:12px;margin-top:12px;align-items:center;">
+  <button onclick="scrollReviews('grid-ca',-1)" style="background:none;border:1px solid var(--warm-gray);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;color:var(--mid);display:flex;align-items:center;justify-content:center;">‹</button>
+  <span style="font-family:var(--sans);font-size:10px;letter-spacing:2px;color:var(--mid);text-transform:uppercase;">Scorri</span>
+  <button onclick="scrollReviews('grid-ca',1)" style="background:none;border:1px solid var(--warm-gray);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;color:var(--mid);display:flex;align-items:center;justify-content:center;">›</button>
+</div>
       <div style="text-align:center;margin-top:48px;">
         <a href="https://www.booking.com" target="_blank" style="font-family:var(--sans);font-size:10px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);text-decoration:none;border-bottom:1px solid var(--warm-gray);padding-bottom:4px;">Leggi tutte le recensioni su Booking.com</a>
       </div>
@@ -1516,6 +1551,13 @@
     renderCalendar(aptKey);
   }
   function formatDate(str){const[y,m,d]=str.split('-');return`${d}/${m}/${y}`;}
+
+  function scrollReviews(gridId, dir) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    const cardWidth = grid.querySelector('div')?.offsetWidth || 300;
+    grid.scrollBy({ left: dir * (cardWidth + 2), behavior: 'smooth' });
+  }
 
   // ── INIT ────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
