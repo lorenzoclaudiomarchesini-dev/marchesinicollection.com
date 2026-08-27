@@ -1077,11 +1077,11 @@
     <div class="booking-form-wrap" id="form-anchor">
       <h3 class="form-title">Modulo di <em>richiesta</em></h3>
       <p class="form-sub">Ti risponderemo entro 24 ore con disponibilità e preventivo personalizzato</p>
-      <form id="bookingForm" onsubmit="submitForm(event)">
+      <form id="bookingForm" action="https://formspree.io/f/mbgjraka" method="POST" onsubmit="submitForm(event)">
         <div class="form-grid">
-          <div class="form-field"><label>Nome e Cognome</label><input type="text" placeholder="Mario Rossi" required></div>
-          <div class="form-field"><label>Email</label><input type="email" placeholder="mario@email.com" required></div>
-          <div class="form-field"><label>Telefono</label><input type="tel" placeholder="+39 000 0000000"></div>
+          <div class="form-field"><label>Nome e Cognome</label><input type="text" name="nome" placeholder="Mario Rossi" required></div>
+          <div class="form-field"><label>Email</label><input type="email" name="email" placeholder="mario@email.com" required></div>
+          <div class="form-field"><label>Telefono</label><input type="tel" name="telefono" placeholder="+39 000 0000000"></div>
           <div class="form-field"><label>Struttura</label>
             <select id="formStruttura" required>
               <option value="">Seleziona</option>
@@ -1331,7 +1331,7 @@
     <div class="footer-col">
       <h4>Contatti</h4>
       <p>Via S. Maria, Arbizzano S. Maria<br>37024 Verona (VR)</p>
-      <a href="mailto:lorenzoclaudio.marchesini@gmail.com">lorenzoclaudio.marchesini@gmail.com</a>
+      <a href="mailto:info@marchesinicollection.com">info@marchesinicollection.com</a>
       <a href="https://www.instagram.com" target="_blank">@marchesinicollection</a>
     </div>
   </div>
@@ -1400,7 +1400,25 @@
   // ── FORMS ───────────────────────────────────────────────────
   function setForm(v) { document.getElementById('formStruttura').value=v; showPage('home'); doScroll('form-anchor'); }
   function submitForm(e) { e.preventDefault(); document.getElementById('bookingForm').style.display='none'; document.getElementById('formSuccess').style.display='block'; }
-  function submitQuick(e, s) { e.preventDefault(); alert('✓ Richiesta inviata per '+s+'!\n\nTi risponderemo entro 24 ore.'); }
+  async function submitQuick(e, struttura) {
+    e.preventDefault();
+    const btn = e.target;
+    btn.textContent = 'Invio in corso…';
+    btn.disabled = true;
+    const form = btn.closest('.book-form, .apt-book-form, .bc-btn').parentElement;
+    const inputs = form ? form.querySelectorAll('input, select') : [];
+    const data = new FormData();
+    data.append('struttura', struttura);
+    inputs.forEach(i => { if(i.placeholder || i.tagName === 'SELECT') data.append(i.placeholder || 'ospiti', i.value); });
+    try {
+      await fetch('https://formspree.io/f/mbgjraka', {
+        method: 'POST', body: data, headers: { 'Accept': 'application/json' }
+      });
+    } catch(e) {}
+    btn.textContent = '✓ Richiesta inviata';
+    btn.style.background = 'rgba(255,255,255,0.2)';
+    setTimeout(() => { btn.textContent = 'Invia richiesta'; btn.disabled = false; btn.style.background = ''; }, 4000);
+  }
 
   // ── PREZZI ──────────────────────────────────────────────────
   let prezziData = null;
