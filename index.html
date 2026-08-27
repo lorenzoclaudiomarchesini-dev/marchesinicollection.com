@@ -1042,7 +1042,13 @@
         </div>
       </div>
       <div class="map-wrap">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11190!2d10.9404!3d45.5267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477f5f3b2a7a6c0b%3A0x0!2sArbizzano%2C+37024+Verona!5e0!3m2!1sit!2sit!4v1" allowfullscreen loading="lazy"></iframe>
+        <div style="width:100%;height:100%;display:flex;flex-direction:column;gap:12px;">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2797!2d10.9404!3d45.5267!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477f5f3b2a7a6c0b%3A0x0!2sArbizzano%2C+37024+Verona!5e0!3m2!1sit!2sit!4v1" allowfullscreen loading="lazy" style="width:100%;flex:1;border:none;"></iframe>
+          <a href="https://maps.app.goo.gl/DybJa12xnu6rtxem7" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1px solid var(--warm-gray);background:white;font-family:var(--sans);font-size:11px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--dark);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='var(--dark)';this.style.color='white'" onmouseout="this.style.background='white';this.style.color='var(--dark)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            Apri su Google Maps
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -1558,6 +1564,34 @@
     const cardWidth = grid.querySelector('div')?.offsetWidth || 300;
     grid.scrollBy({ left: dir * (cardWidth + 2), behavior: 'smooth' });
   }
+
+
+  // ── MOBILE REVIEWS CAROUSEL ─────────────────────────────────────────────
+  function initMobileReviews() {
+    if (window.innerWidth > 768) return;
+    ['grid-ccb', 'grid-ca'].forEach(id => {
+      const grid = document.getElementById(id);
+      if (!grid) return;
+      grid.style.display = 'flex';
+      grid.style.overflowX = 'auto';
+      grid.style.scrollSnapType = 'x mandatory';
+      grid.style.webkitOverflowScrolling = 'touch';
+      grid.style.scrollbarWidth = 'none';
+      grid.querySelectorAll(':scope > div').forEach(card => {
+        card.style.minWidth = '88vw';
+        card.style.flexShrink = '0';
+        card.style.scrollSnapAlign = 'start';
+      });
+    });
+    document.querySelectorAll('.reviews-nav').forEach(nav => {
+      nav.style.display = 'flex';
+    });
+    document.querySelectorAll('.score-bars-grid').forEach(el => {
+      el.style.gridTemplateColumns = 'repeat(3,1fr)';
+    });
+  }
+  document.addEventListener('DOMContentLoaded', initMobileReviews);
+  window.addEventListener('resize', initMobileReviews);
 
   // ── INIT ────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
