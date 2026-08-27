@@ -1442,7 +1442,7 @@
   }
 
   // ── CALENDARIO ──────────────────────────────────────────────
-  const API = 'http://localhost:8000';
+  const API = window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
   const calState = {};
   async function initCalendar(aptKey, containerId, arrivoId, partenzaId, formId) {
     const container=document.getElementById(containerId); if(!container) return;
