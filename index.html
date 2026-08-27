@@ -666,8 +666,13 @@
     <a onclick="showPage('home');doScroll('gallery')">Galleria</a>
     <a onclick="showPage('home');doScroll('reviews')">Recensioni</a>
     <a onclick="showPage('home');doScroll('dove')">Dove Siamo</a>
-    <a href="https://www.instagram.com" target="_blank">Instagram</a>
+    <a href="https://www.instagram.com/marchesini_collection" target="_blank">Instagram</a>
     <a onclick="showPage('home');doScroll('prenota')" class="nav-book">Prenota</a>
+  </div>
+  <div class="lang-switch">
+    <button class="lang-btn active" id="lang-it" onclick="setLang('it')" title="Italiano">🇮🇹</button>
+    <button class="lang-btn" id="lang-en" onclick="setLang('en')" title="English">🇬🇧</button>
+    <button class="lang-btn" id="lang-de" onclick="setLang('de')" title="Deutsch">🇩🇪</button>
   </div>
   <div class="hamburger" onclick="openMobileMenu()">
     <span></span><span></span><span></span>
@@ -1067,6 +1072,31 @@
         <div class="bc-name">Corte Cà Boare</div>
         <div class="bc-sub">Appartamento A · 4 posti</div>
         <p class="bc-desc">King Size 210×180 · 2 bagni · Corte interna · Casa Clima RRI</p>
+        <div style="margin-bottom:16px;">
+          <table style="width:100%;border-collapse:collapse;font-family:var(--sans);font-size:11px;">
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
+              <td style="padding:7px 0;color:rgba(255,255,255,0.35);font-size:9px;letter-spacing:1px;text-transform:uppercase;">Stagione</td>
+              <td style="padding:7px 0;color:rgba(255,255,255,0.35);font-size:9px;letter-spacing:1px;text-transform:uppercase;text-align:right;">Apt A</td>
+              <td style="padding:7px 0;color:rgba(255,255,255,0.35);font-size:9px;letter-spacing:1px;text-transform:uppercase;text-align:right;">Apt B</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+              <td style="padding:7px 0;color:rgba(255,255,255,0.5);">Bassa · Nov–Mar</td>
+              <td style="padding:7px 0;color:white;text-align:right;font-weight:500;">€100</td>
+              <td style="padding:7px 0;color:white;text-align:right;font-weight:500;">€100</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+              <td style="padding:7px 0;color:rgba(255,255,255,0.5);">Media · Apr, Mag, Ott</td>
+              <td style="padding:7px 0;color:white;text-align:right;font-weight:500;">€120</td>
+              <td style="padding:7px 0;color:white;text-align:right;font-weight:500;">€120</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+              <td style="padding:7px 0;color:rgba(255,255,255,0.5);">Alta · Giu–Set</td>
+              <td style="padding:7px 0;color:white;text-align:right;font-weight:500;">€140</td>
+              <td style="padding:7px 0;color:white;text-align:right;font-weight:500;">€140</td>
+            </tr>
+          </table>
+          <div style="font-family:var(--sans);font-size:9px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:0.5px;">Prezzi per notte · 1–2 ospiti · +10% per ogni ospite aggiuntivo</div>
+        </div>
         <div id="cal-ccb-a"></div>
         <div id="form-ccb-a" style="display:none;">
           <input type="text" placeholder="Nome e Cognome" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);padding:10px 14px;color:var(--white);font-family:var(--sans);font-size:12px;width:100%;margin-bottom:1px;outline:none;">
@@ -1101,6 +1131,27 @@
         <div class="bc-name">Casa Albertina</div>
         <div class="bc-sub">Casa indipendente · 4 posti</div>
         <p class="bc-desc">Queen Size 200×160 · 1 bagno · Giardino privato · Clima a pavimento</p>
+        <div style="margin-bottom:16px;">
+          <table style="width:100%;border-collapse:collapse;font-family:var(--sans);font-size:11px;">
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
+              <td style="padding:7px 0;color:rgba(255,255,255,0.35);font-size:9px;letter-spacing:1px;text-transform:uppercase;">Stagione</td>
+              <td style="padding:7px 0;color:rgba(255,255,255,0.35);font-size:9px;letter-spacing:1px;text-transform:uppercase;text-align:right;">Prezzo/notte</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+              <td style="padding:7px 0;color:rgba(255,255,255,0.5);">Bassa · Nov–Mar</td>
+              <td style="padding:7px 0;color:white;text-align:right;font-weight:500;">€90</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+              <td style="padding:7px 0;color:rgba(255,255,255,0.5);">Media · Apr, Mag, Ott</td>
+              <td style="padding:7px 0;color:white;text-align:right;font-weight:500;">€110</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+              <td style="padding:7px 0;color:rgba(255,255,255,0.5);">Alta · Giu–Set</td>
+              <td style="padding:7px 0;color:white;text-align:right;font-weight:500;">€130</td>
+            </tr>
+          </table>
+          <div style="font-family:var(--sans);font-size:9px;color:rgba(255,255,255,0.3);margin-top:8px;letter-spacing:0.5px;">Prezzi per notte · 1–2 ospiti · +10% per ogni ospite aggiuntivo · Garage +€10/notte</div>
+        </div>
         <div id="cal-ca"></div>
         <div id="form-ca" style="display:none;">
           <input type="text" placeholder="Nome e Cognome" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);padding:10px 14px;color:var(--white);font-family:var(--sans);font-size:12px;width:100%;margin-bottom:1px;outline:none;">
@@ -1215,6 +1266,7 @@
         </div>
         <div class="apt-book-card">
           <h3>Prenota<br><em style="font-family:var(--serif);font-weight:300;font-style:italic;">Appartamento A</em></h3>
+          <div style="margin:12px 0;"><table style="width:100%;border-collapse:collapse;font-family:var(--sans);font-size:11px;"><tr><td style="padding:5px 0;color:rgba(255,255,255,0.4);font-size:9px;text-transform:uppercase;letter-spacing:1px;">Bassa</td><td style="padding:5px 0;color:white;text-align:right;">€100/notte</td></tr><tr><td style="padding:5px 0;color:rgba(255,255,255,0.4);font-size:9px;text-transform:uppercase;letter-spacing:1px;">Media</td><td style="padding:5px 0;color:white;text-align:right;">€120/notte</td></tr><tr><td style="padding:5px 0;color:rgba(255,255,255,0.4);font-size:9px;text-transform:uppercase;letter-spacing:1px;">Alta</td><td style="padding:5px 0;color:white;text-align:right;">€140/notte</td></tr></table><div style="font-family:var(--sans);font-size:9px;color:rgba(255,255,255,0.25);margin-top:6px;">1–2 ospiti · +10% per ospite aggiuntivo</div></div>
           <p>Prenotazione diretta · nessuna commissione</p>
           <div class="apt-book-form">
             <input type="text" placeholder="Nome e Cognome">
@@ -1262,6 +1314,7 @@
         </div>
         <div class="apt-book-card">
           <h3>Prenota<br><em style="font-family:var(--serif);font-weight:300;font-style:italic;">Appartamento B</em></h3>
+          <div style="margin:12px 0;"><table style="width:100%;border-collapse:collapse;font-family:var(--sans);font-size:11px;"><tr><td style="padding:5px 0;color:rgba(255,255,255,0.4);font-size:9px;text-transform:uppercase;letter-spacing:1px;">Bassa</td><td style="padding:5px 0;color:white;text-align:right;">€100/notte</td></tr><tr><td style="padding:5px 0;color:rgba(255,255,255,0.4);font-size:9px;text-transform:uppercase;letter-spacing:1px;">Media</td><td style="padding:5px 0;color:white;text-align:right;">€120/notte</td></tr><tr><td style="padding:5px 0;color:rgba(255,255,255,0.4);font-size:9px;text-transform:uppercase;letter-spacing:1px;">Alta</td><td style="padding:5px 0;color:white;text-align:right;">€140/notte</td></tr></table><div style="font-family:var(--sans);font-size:9px;color:rgba(255,255,255,0.25);margin-top:6px;">1–2 ospiti · +10% per ospite aggiuntivo</div></div>
           <p>Prenotazione diretta · nessuna commissione</p>
           <div class="apt-book-form">
             <input type="text" placeholder="Nome e Cognome">
@@ -1333,6 +1386,7 @@
         </div>
         <div class="apt-book-card">
           <h3>Prenota<br><em style="font-family:var(--serif);font-weight:300;font-style:italic;">Casa Albertina</em></h3>
+          <div style="margin:12px 0;"><table style="width:100%;border-collapse:collapse;font-family:var(--sans);font-size:11px;"><tr><td style="padding:5px 0;color:rgba(255,255,255,0.4);font-size:9px;text-transform:uppercase;letter-spacing:1px;">Bassa</td><td style="padding:5px 0;color:white;text-align:right;">€90/notte</td></tr><tr><td style="padding:5px 0;color:rgba(255,255,255,0.4);font-size:9px;text-transform:uppercase;letter-spacing:1px;">Media</td><td style="padding:5px 0;color:white;text-align:right;">€110/notte</td></tr><tr><td style="padding:5px 0;color:rgba(255,255,255,0.4);font-size:9px;text-transform:uppercase;letter-spacing:1px;">Alta</td><td style="padding:5px 0;color:white;text-align:right;">€130/notte</td></tr></table><div style="font-family:var(--sans);font-size:9px;color:rgba(255,255,255,0.25);margin-top:6px;">1–2 ospiti · +10% per ospite aggiuntivo · Garage +€10/notte</div></div>
           <p>Prenotazione diretta · nessuna commissione</p>
           <div class="apt-book-form">
             <input type="text" placeholder="Nome e Cognome">
@@ -1373,12 +1427,12 @@
       <h4>Contatti</h4>
       <p>Via S. Maria, Arbizzano S. Maria<br>37024 Verona (VR)</p>
       <a href="mailto:info@marchesinicollection.com">info@marchesinicollection.com</a>
-      <a href="https://www.instagram.com" target="_blank">@marchesinicollection</a>
+      <a href="https://www.instagram.com/marchesini_collection" target="_blank">@marchesini_collection</a>
     </div>
   </div>
   <div class="footer-bottom">
     <div class="footer-copy">© 2025 Marchesini Collection · Tutti i diritti riservati</div>
-    <a href="https://www.instagram.com" target="_blank" class="footer-ig">
+    <a href="https://www.instagram.com/marchesini_collection" target="_blank" class="footer-ig">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
       Instagram
     </a>
@@ -1593,8 +1647,112 @@
   document.addEventListener('DOMContentLoaded', initMobileReviews);
   window.addEventListener('resize', initMobileReviews);
 
+
+  // ── LINGUA ──────────────────────────────────────────────────────────────
+  const TRANSLATIONS = {
+    it: {
+      nav_strutture: 'Le Strutture', nav_galleria: 'Galleria', nav_recensioni: 'Recensioni',
+      nav_dove: 'Dove Siamo', nav_instagram: 'Instagram', nav_prenota: 'Prenota',
+      hero_location: 'Arbizzano di Negrar · Valpolicella · Verona',
+      hero_title: 'Marchesini<br><em>Collection</em>',
+      hero_sub: 'Appartamenti di charme nel cuore della Valpolicella',
+      btn_scopri: 'Scopri le strutture', btn_prenota: 'Prenota ora',
+      intro_label: 'La nostra storia',
+      intro_title: 'Dimore di charme<br>nel cuore della <em>Valpolicella</em>',
+      intro_text: 'Tre proprietà curate nei minimi dettagli, immerse nella campagna veronese. Un'ospitalità autentica che coniuga il comfort contemporaneo con l'anima rurale del territorio.',
+      booking_title: 'Richiedi <em>disponibilità</em>',
+      booking_sub: 'Tariffe migliori · Nessuna commissione · Risposta entro 24 ore',
+    },
+    en: {
+      nav_strutture: 'Our Properties', nav_galleria: 'Gallery', nav_recensioni: 'Reviews',
+      nav_dove: 'Location', nav_instagram: 'Instagram', nav_prenota: 'Book Now',
+      hero_location: 'Arbizzano di Negrar · Valpolicella · Verona',
+      hero_title: 'Marchesini<br><em>Collection</em>',
+      hero_sub: 'Charming apartments in the heart of Valpolicella',
+      btn_scopri: 'Discover our properties', btn_prenota: 'Book now',
+      intro_label: 'Our story',
+      intro_title: 'Charming residences<br>in the heart of <em>Valpolicella</em>',
+      intro_text: 'Three properties cared for in every detail, nestled in the Veronese countryside. Authentic hospitality blending contemporary comfort with the rural soul of the territory.',
+      booking_title: 'Check <em>availability</em>',
+      booking_sub: 'Best rates · No commission · Reply within 24 hours',
+    },
+    de: {
+      nav_strutture: 'Unterkünfte', nav_galleria: 'Galerie', nav_recensioni: 'Bewertungen',
+      nav_dove: 'Lage', nav_instagram: 'Instagram', nav_prenota: 'Buchen',
+      hero_location: 'Arbizzano di Negrar · Valpolicella · Verona',
+      hero_title: 'Marchesini<br><em>Collection</em>',
+      hero_sub: 'Charmante Apartments im Herzen der Valpolicella',
+      btn_scopri: 'Unterkünfte entdecken', btn_prenota: 'Jetzt buchen',
+      intro_label: 'Unsere Geschichte',
+      intro_title: 'Charmante Residenzen<br>im Herzen der <em>Valpolicella</em>',
+      intro_text: 'Drei sorgfältig gepflegte Immobilien inmitten der Weinberge bei Verona. Authentische Gastfreundschaft, die modernen Komfort mit der ländlichen Seele des Gebiets verbindet.',
+      booking_title: 'Verfügbarkeit <em>anfragen</em>',
+      booking_sub: 'Beste Preise · Keine Provision · Antwort innerhalb 24 Stunden',
+    }
+  };
+
+  let currentLang = 'it';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('lang-'+lang)?.classList.add('active');
+    const t = TRANSLATIONS[lang];
+    if (!t) return;
+    // Navbar
+    const navLinks = document.querySelectorAll('.nav-links a');
+    if (navLinks[0]) navLinks[0].textContent = t.nav_strutture;
+    if (navLinks[1]) navLinks[1].textContent = t.nav_galleria;
+    if (navLinks[2]) navLinks[2].textContent = t.nav_recensioni;
+    if (navLinks[3]) navLinks[3].textContent = t.nav_dove;
+    if (navLinks[4]) navLinks[4].textContent = t.nav_instagram;
+    if (navLinks[5]) navLinks[5].textContent = t.nav_prenota;
+    // Hero
+    const heroLoc = document.querySelector('.hero-location');
+    if (heroLoc) heroLoc.textContent = t.hero_location;
+    const heroTitle = document.querySelector('.hero-title');
+    if (heroTitle) heroTitle.innerHTML = t.hero_title;
+    const heroSub = document.querySelector('.hero-sub');
+    if (heroSub) heroSub.textContent = t.hero_sub;
+    const heroCtas = document.querySelectorAll('.hero-ctas .btn-light');
+    if (heroCtas[0]) heroCtas[0].textContent = t.btn_scopri;
+    if (heroCtas[1]) heroCtas[1].textContent = t.btn_prenota;
+    // Booking
+    const bookTitle = document.querySelector('.booking-header h2');
+    if (bookTitle) bookTitle.innerHTML = t.booking_title;
+    const bookSub = document.querySelector('.booking-header p');
+    if (bookSub) bookSub.textContent = t.booking_sub;
+  }
+
+  // ── MOBILE REVIEWS CAROUSEL ──────────────────────────────────────────────
+  function initMobileReviews() {
+    if (window.innerWidth > 768) return;
+    ['grid-ccb', 'grid-ca'].forEach(id => {
+      const grid = document.getElementById(id);
+      if (!grid) return;
+      grid.style.display = 'flex';
+      grid.style.overflowX = 'auto';
+      grid.style.scrollSnapType = 'x mandatory';
+      grid.style.webkitOverflowScrolling = 'touch';
+      grid.querySelectorAll(':scope > div').forEach(card => {
+        card.style.minWidth = '88vw';
+        card.style.flexShrink = '0';
+        card.style.scrollSnapAlign = 'start';
+      });
+    });
+    document.querySelectorAll('.reviews-nav').forEach(nav => nav.style.display = 'flex');
+  }
+
+  function scrollReviews(gridId, dir) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    const cardWidth = grid.querySelector('div')?.offsetWidth || 300;
+    grid.scrollBy({ left: dir * (cardWidth + 2), behavior: 'smooth' });
+  }
+
   // ── INIT ────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
+    initMobileReviews();
     loadPrezziData();
     initCalendar('CCB-A','cal-ccb-a','fa-arrivo','fa-partenza','form-ccb-a');
     initCalendar('CCB-B','cal-ccb-b','fb-arrivo','fb-partenza','form-ccb-b');
