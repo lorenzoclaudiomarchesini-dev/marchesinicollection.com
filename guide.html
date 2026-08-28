@@ -235,12 +235,29 @@
       text-transform: uppercase;
       font-weight: 400;
       color: var(--mid);
+      margin-bottom: 8px;
     }
 
     .hero-location svg {
       width: 12px;
       height: 12px;
       stroke: var(--gold);
+    }
+
+    /* WEATHER BADGE */
+    .weather-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--warm-border);
+      border-radius: var(--radius-pill);
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--dark-soft);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
 
     /* GRID DI CARD TATTILI */
@@ -719,6 +736,12 @@
         </svg>
         <span id="propAddressShort">Arbizzano · Valpolicella</span>
       </div>
+      
+      <!-- WEATHER LIVE WIDGET -->
+      <div class="weather-pill" id="weatherWidget">
+        <span id="weatherIcon">🌤️</span>
+        <span id="weatherTemp">Valpolicella</span>
+      </div>
     </section>
 
     <!-- QUICK WIFI BANNER -->
@@ -996,12 +1019,19 @@
         emergency: "Emergenze",
         modals: {
           checkin: {
-            eyebrow: "Accesso & Orari",
-            title: "Check-in & Check-out",
-            from: "Orario Check-in:",
+            eyebrow: "Accoglienza & Orari",
+            title: "Check-in & Partenza",
+            from: "Check-in in Presenza:",
+            fromInfo: "Accoglienza di persona all'arrivo",
             to: "Orario Check-out:",
-            smartlock: "Codice Smart Lock / Tastierino:",
-            inst: "Istruzioni di Accesso:"
+            toInfo: "Entro le ore 10:00",
+            departureTitle: "Promemoria prima di partire:",
+            departureItems: [
+              "Spegnere tutte le luci, condizionatori o riscaldamento",
+              "Portare i rifiuti differenziati nei contenitori esterni",
+              "Chiudere bene le finestre e le porte d'accesso",
+              "Riconsegnare le chiavi a Simone o lasciarle sul tavolo d'ingresso"
+            ]
           },
           amenities: {
             eyebrow: "Dotazioni & Servizi",
@@ -1070,11 +1100,18 @@
         modals: {
           checkin: {
             eyebrow: "Access & Times",
-            title: "Check-in & Check-out",
-            from: "Check-in time:",
-            to: "Check-out time:",
-            smartlock: "Smart Lock / Keypad Code:",
-            inst: "Access Instructions:"
+            title: "Check-in & Departure",
+            from: "In-Person Check-in:",
+            fromInfo: "Personal greeting on arrival",
+            to: "Check-out Time:",
+            toInfo: "By 10:00 AM",
+            departureTitle: "Check-out checklist:",
+            departureItems: [
+              "Turn off all lights, A/C or heating",
+              "Take sorted trash to the outside eco-bins",
+              "Close all windows and doors securely",
+              "Hand keys to Simone or leave them on the table"
+            ]
           },
           amenities: {
             eyebrow: "Amenities & Comfort",
@@ -1133,7 +1170,7 @@
         }
       },
       fr: {
-        welcome: "Guide de Bienvenue",
+        welcome: "Bienvenue à",
         quickWifi: "Wi-Fi Fibre Rapide",
         quickWifiSub: "Touchez pour copier le mot de passe",
         copy: "Copier",
@@ -1374,6 +1411,29 @@
       
       updateLangUI();
       updatePropUI();
+      loadLiveWeather();
+    }
+
+    async function loadLiveWeather() {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=45.5034&longitude=10.9632&current_weather=true');
+        const data = await res.json();
+        if (data && data.current_weather) {
+          const temp = Math.round(data.current_weather.temperature);
+          const code = data.current_weather.weathercode;
+          let icon = '☀️';
+          if ([1, 2, 3].includes(code)) icon = '⛅';
+          else if ([45, 48].includes(code)) icon = '🌫️';
+          else if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) icon = '🌧️';
+          else if ([71, 73, 75, 85, 86].includes(code)) icon = '🌨️';
+          else if ([95, 96, 99].includes(code)) icon = '⛈️';
+          
+          document.getElementById('weatherIcon').textContent = icon;
+          document.getElementById('weatherTemp').textContent = `${temp}°C · Valpolicella`;
+        }
+      } catch (e) {
+        // Fallback discreto
+      }
     }
 
     function setLanguage(lang) {
@@ -1454,31 +1514,30 @@
         html = `
           <div class="list-steps">
             <div class="step-item">
-              <div class="step-num">1</div>
+              <div class="step-num">🔑</div>
               <div class="step-text">
                 <h4>${lang.from}</h4>
-                <p><strong>${prop.checkin.checkin_from}</strong> - ${prop.checkin.checkin_to}</p>
+                <p><strong>${prop.checkin.checkin_from} - ${prop.checkin.checkin_to}</strong> · ${lang.fromInfo}</p>
               </div>
             </div>
             <div class="step-item">
-              <div class="step-num">2</div>
-              <div class="step-text">
-                <h4>${lang.smartlock}</h4>
-                <div class="copy-box" style="margin:8px 0 0; padding:10px 14px;">
-                  <span class="copy-val" style="font-size:18px; letter-spacing:2px;">${prop.checkin.smartlock_code}</span>
-                  <button class="btn-action-sm" onclick="copyText('${prop.checkin.smartlock_code}')">Copia</button>
-                </div>
-              </div>
-            </div>
-            <div class="step-item">
-              <div class="step-num">3</div>
+              <div class="step-num">⏰</div>
               <div class="step-text">
                 <h4>${lang.to}</h4>
-                <p>Entro le <strong>${prop.checkin.checkout}</strong></p>
+                <p><strong>${lang.toInfo}</strong></p>
+              </div>
+            </div>
+            <div class="step-item" style="border-left: 3px solid var(--gold); flex-direction:column; align-items:flex-start;">
+              <span class="tag-badge">📋 ${lang.departureTitle}</span>
+              <div style="display:flex; flex-direction:column; gap:8px; width:100%; margin-top:8px;">
+                ${lang.departureItems.map(item => `
+                  <div style="display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--dark-soft);">
+                    <span style="color:var(--gold); font-weight:bold;">✓</span> ${item}
+                  </div>
+                `).join('')}
               </div>
             </div>
           </div>
-          <p style="margin-top:16px; font-size:13px; color:var(--mid);">${prop.checkin.keybox_info}</p>
         `;
       } else if (type === 'wifi') {
         html = `
