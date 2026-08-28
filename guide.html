@@ -405,40 +405,45 @@
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      width: calc(100% - 40px);
+      width: calc(100% - 32px);
       max-width: 440px;
       z-index: 90;
-      display: flex;
-      gap: 10px;
-      background: rgba(255, 255, 255, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: 8px;
-      border-radius: 9999px;
-    }
-
-    .bottom-btn {
-      flex: 1;
-      height: 48px;
-      border-radius: 9999px;
-      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 6px;
+      border-radius: 9999px;
+    }
+
+    .bottom-btn {
+      height: 48px;
+      border-radius: 9999px;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 8px;
       font-family: var(--sans);
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.8px;
+      font-size: clamp(10px, 2.7vw, 12px);
+      font-weight: 600;
+      letter-spacing: 0.6px;
       text-transform: uppercase;
       text-decoration: none;
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 0 16px;
+      white-space: nowrap;
     }
 
     .bottom-btn.primary {
+      flex: 1.8;
       background: #25D366;
       color: var(--white);
       box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
@@ -449,6 +454,7 @@
     }
 
     .bottom-btn.secondary {
+      flex: 1;
       background: var(--dark);
       color: var(--white);
     }
@@ -1008,7 +1014,7 @@
       }
     };
 
-    const I18N = {
+        const I18N = {
       it: {
         welcome: "Benvenuti a",
         quickWifi: "Wi-Fi Fibra Veloce",
@@ -1017,6 +1023,17 @@
         copied: "Copiato negli appunti!",
         writeHost: "Scrivi a Simone",
         emergency: "Emergenze",
+        cards: {
+          checkin: "Check-in / Out",
+          amenities: "Servizi & Casa",
+          wifi: "Wi-Fi Fibra",
+          arrival: "Come Arrivare",
+          parking: "Parcheggio",
+          climate: "Clima & A/C",
+          waste: "Rifiuti & Eco",
+          rules: "Regole Casa",
+          guide: "Esperienze"
+        },
         modals: {
           checkin: {
             eyebrow: "Accoglienza & Orari",
@@ -1075,10 +1092,12 @@
           },
           guide: {
             eyebrow: "Valpolicella & Dintorni",
-            title: "I Consigli di Lorenzo",
-            vigneti: "Cantine dell'Amarone consigliate: Masi Tenuta Canova, Bertani, Allegrini.",
-            ristoranti: "Ristoranti tipici: Trattoria Caprini (Torbe), Osteria n.8 (Arbizzano), Locanda '800.",
-            verona: "Verona Centro Storico dista solo 10 minuti di auto. Il Lago di Garda è a 20 minuti."
+            title: "Esperienze & Consigli",
+            catCantine: "🍷 Cantine & Degustazioni Amarone",
+            catRistoranti: "🍽️ Ristoranti & Trattorie Selezionate",
+            catAttrazioni: "🏛️ Borghi, Parchi & Attrazioni",
+            btnStradaVino: "🍇 Strada del Vino Valpolicella →",
+            btnInfoValpo: "🗺️ Portale InfoValpolicella →"
           },
           emergency: {
             eyebrow: "Numeri Utili",
@@ -1097,6 +1116,17 @@
         copied: "Copied to clipboard!",
         writeHost: "Message Simone",
         emergency: "Emergency",
+        cards: {
+          checkin: "Check-in / Out",
+          amenities: "Amenities",
+          wifi: "Fiber Wi-Fi",
+          arrival: "Directions",
+          parking: "Parking",
+          climate: "Climate & A/C",
+          waste: "Recycling",
+          rules: "House Rules",
+          guide: "Experiences"
+        },
         modals: {
           checkin: {
             eyebrow: "Access & Times",
@@ -1107,7 +1137,7 @@
             toInfo: "By 10:00 AM",
             departureTitle: "Check-out checklist:",
             departureItems: [
-              "Turn off all lights, A/C or heating",
+              "Turn off all indoor lights",
               "Take sorted trash to the outside eco-bins",
               "Close all windows and doors securely",
               "Hand keys to Simone or leave them on the table"
@@ -1117,7 +1147,7 @@
             eyebrow: "Amenities & Comfort",
             title: "Inside the House",
             desc: "All the comforts to feel at home:",
-            items: ["Ultra-fast Fiber Wi-Fi", "Fully equipped induction kitchen", "Espresso machine with complimentary pods", "Luxury linens & courtesy set", "Smart TV with Netflix / Prime Video", "Washing machine & iron"]
+            items: ["Ultra-fast Fiber Wi-Fi", "Fully equipped induction kitchen", "Espresso machine with complimentary pods", "Luxury linens & courtesy set", "Smart TV with streaming apps", "Washing machine & iron"]
           },
           wifi: {
             eyebrow: "Internet Access",
@@ -1155,10 +1185,12 @@
           },
           guide: {
             eyebrow: "Valpolicella & Surroundings",
-            title: "Lorenzo's Recommendations",
-            vigneti: "Top Amarone Wineries: Masi Tenuta Canova, Bertani, Allegrini.",
-            ristoranti: "Traditional Osterie: Trattoria Caprini, Osteria n.8, Locanda '800.",
-            verona: "Verona Historic Center is just 10 mins away. Lake Garda is 20 mins away."
+            title: "Local Experiences",
+            catCantine: "🍷 Amarone Wineries & Tastings",
+            catRistoranti: "🍽️ Selected Restaurants & Osterie",
+            catAttrazioni: "🏛️ Historic Villages & Parks",
+            btnStradaVino: "🍇 Valpolicella Wine Route →",
+            btnInfoValpo: "🗺️ Official InfoValpolicella Guide →"
           },
           emergency: {
             eyebrow: "Emergency Numbers",
@@ -1175,21 +1207,39 @@
         quickWifiSub: "Touchez pour copier le mot de passe",
         copy: "Copier",
         copied: "Copié dans le presse-papier !",
-        writeHost: "Écrire à l'hôte",
+        writeHost: "Écrire à Simone",
         emergency: "Urgences",
+        cards: {
+          checkin: "Arrivée / Départ",
+          amenities: "Équipements",
+          wifi: "Wi-Fi Fibre",
+          arrival: "Comment Venir",
+          parking: "Parking",
+          climate: "Climatisation",
+          waste: "Tri Sélectif",
+          rules: "Règlement",
+          guide: "Expériences"
+        },
         modals: {
           checkin: {
             eyebrow: "Accès & Horaires",
             title: "Arrivée & Départ",
-            from: "Heure d'arrivée:",
+            from: "Arrivée en personne:",
+            fromInfo: "Accueil personnalisé à l'arrivée",
             to: "Heure de départ:",
-            smartlock: "Code Serrure Intelligente:",
-            inst: "Instructions d'accès:"
+            toInfo: "Avant 10h00",
+            departureTitle: "Rappels avant de partir:",
+            departureItems: [
+              "Éteindre toutes les lumières intérieures",
+              "Déposer les déchets triés dans les bacs extérieurs",
+              "Bien fermer les fenêtres et les portes",
+              "Remettre les clés à Simone ou les laisser sur la table"
+            ]
           },
           amenities: {
-            eyebrow: "Équipements",
+            eyebrow: "Équipements & Confort",
             title: "Dans la maison",
-            desc: "Tout le confort haut de gamme pour votre séjour.",
+            desc: "Tout le confort haut de gamme pour votre séjour:",
             items: ["Wi-Fi fibre haut débit", "Cuisine équipée à induction", "Machine à espresso avec capsules", "Linge de maison et kit de bienvenue", "Smart TV connectée", "Lave-linge & fer à repasser"]
           },
           wifi: {
@@ -1217,21 +1267,23 @@
             info: "Fonctionnement du système:"
           },
           waste: {
-            eyebrow: "Écologie",
+            eyebrow: "Écologie & Tri",
             title: "Tri des Déchets",
             info: "Guide de tri sélectif:"
           },
           rules: {
             eyebrow: "Savoir-vivre",
             title: "Règlement Intérieur",
-            info: "Règles de la maison:"
+            info: "Directives pour le séjour:"
           },
           guide: {
             eyebrow: "Valpolicella & Découvertes",
-            title: "Les Conseils de Lorenzo",
-            vigneti: "Caves d'Amarone réputées: Masi, Bertani, Allegrini.",
-            ristoranti: "Bonnes tables: Trattoria Caprini, Osteria n.8.",
-            verona: "Vérone centre à 10 min. Lac de Garde à 20 min."
+            title: "Expériences Locales",
+            catCantine: "🍷 Caves d'Amarone & Dégustations",
+            catRistoranti: "🍽️ Restaurants & Bonnes Tables",
+            catAttrazioni: "🏛️ Villages Historiques & Parcs",
+            btnStradaVino: "🍇 Route des Vins de Valpolicella →",
+            btnInfoValpo: "🗺️ Guide Officiel InfoValpolicella →"
           },
           emergency: {
             eyebrow: "Numéros d'Urgence",
@@ -1243,26 +1295,44 @@
         }
       },
       de: {
-        welcome: "Willkommens-Guide",
+        welcome: "Willkommen in",
         quickWifi: "Highspeed Glasfaser-WLAN",
-        quickWifiSub: "Tippen zum Kopieren des Passworts",
+        quickWifiSub: "Tippen zum Kopieren",
         copy: "Kopieren",
         copied: "In die Zwischenablage kopiert!",
-        writeHost: "Gastgeber schreiben",
+        writeHost: "Simone schreiben",
         emergency: "Notfälle",
+        cards: {
+          checkin: "Check-in / Out",
+          amenities: "Ausstattung",
+          wifi: "Glasfaser-WLAN",
+          arrival: "Anfahrt",
+          parking: "Parkplatz",
+          climate: "Klima & A/C",
+          waste: "Mülltrennung",
+          rules: "Hausregeln",
+          guide: "Erlebnisse"
+        },
         modals: {
           checkin: {
             eyebrow: "Zugang & Zeiten",
-            title: "Check-in & Check-out",
-            from: "Check-in Zeit:",
+            title: "Anreise & Abreise",
+            from: "Persönlicher Check-in:",
+            fromInfo: "Persönlicher Empfang bei der Ankunft",
             to: "Check-out Zeit:",
-            smartlock: "Smart Lock / Code:",
-            inst: "Zugangsanweisungen:"
+            toInfo: "Bis 10:00 Uhr",
+            departureTitle: "Hinweise vor der Abreise:",
+            departureItems: [
+              "Alle Innenlichter ausschalten",
+              "Getrennten Müll in die Außenbehälter bringen",
+              "Fenster und Türen sicher schließen",
+              "Schlüssel an Simone übergeben oder auf dem Tisch lassen"
+            ]
           },
           amenities: {
-            eyebrow: "Ausstattung",
+            eyebrow: "Ausstattung & Komfort",
             title: "Im Apartment",
-            desc: "Exklusiver Komfort für Ihren Aufenthalt.",
+            desc: "Exklusiver Komfort für Ihren perfekten Aufenthalt:",
             items: ["Schnelles Glasfaser-WLAN", "Voll ausgestattete Induktionsküche", "Espressomaschine mit Kapseln", "Hochwertige Bettwäsche & Handtücher", "Smart TV mit Streaming", "Waschmaschine & Bügeleisen"]
           },
           wifi: {
@@ -1301,10 +1371,12 @@
           },
           guide: {
             eyebrow: "Valpolicella & Region",
-            title: "Lorenzos Empfehlungen",
-            vigneti: "Top Amarone Weingüter: Masi, Bertani, Allegrini.",
-            ristoranti: "Traditionelle Restaurants: Trattoria Caprini, Osteria n.8.",
-            verona: "Verona Zentrum nur 10 Min. entfernt. Gardasee 20 Min."
+            title: "Erlebnisse & Empfehlungen",
+            catCantine: "🍷 Amarone Weingüter & Verkostungen",
+            catRistoranti: "🍽️ Ausgewählte Restaurants & Osterien",
+            catAttrazioni: "🏛️ Historische Dörfer & Parks",
+            btnStradaVino: "🍇 Valpolicella Weinstraße →",
+            btnInfoValpo: "🗺️ Offizieller InfoValpolicella Guide →"
           },
           emergency: {
             eyebrow: "Notfallkontakte",
@@ -1316,26 +1388,44 @@
         }
       },
       es: {
-        welcome: "Guía de Bienvenida",
+        welcome: "Bienvenido a",
         quickWifi: "Wi-Fi Fibra de Alta Velocidad",
-        quickWifiSub: "Toca para copiar la contraseña",
+        quickWifiSub: "Toca para copiar contraseña",
         copy: "Copiar",
         copied: "¡Copiado al portapapeles!",
-        writeHost: "Escribir al Anfitrión",
+        writeHost: "Escribir a Simone",
         emergency: "Emergencias",
+        cards: {
+          checkin: "Llegada / Salida",
+          amenities: "Servicios",
+          wifi: "Wi-Fi Fibra",
+          arrival: "Cómo Llegar",
+          parking: "Aparcamiento",
+          climate: "Climatización",
+          waste: "Reciclaje",
+          rules: "Normas Casa",
+          guide: "Experiencias"
+        },
         modals: {
           checkin: {
             eyebrow: "Acceso y Horarios",
-            title: "Check-in y Check-out",
-            from: "Horario de Check-in:",
+            title: "Llegada y Salida",
+            from: "Check-in en Persona:",
+            fromInfo: "Bienvenida presencial a la llegada",
             to: "Horario de Check-out:",
-            smartlock: "Código de Cerradura Digital:",
-            inst: "Instrucciones de Acceso:"
+            toInfo: "Antes de las 10:00",
+            departureTitle: "Recordatorio antes de salir:",
+            departureItems: [
+              "Apagar todas las luces interiores",
+              "Llevar los residuos clasificados a los contenedores exteriores",
+              "Cerrar bien puertas y ventanas",
+              "Entregar las llaves a Simone o dejarlas sobre la mesa"
+            ]
           },
           amenities: {
             eyebrow: "Servicios y Confort",
             title: "En la Propiedad",
-            desc: "Todas las comodidades de lujo para tu estancia.",
+            desc: "Todas las comodidades de lujo para tu estancia:",
             items: ["Wi-Fi fibra de alta velocidad", "Cocina de inducción totalmente equipada", "Cafetera espresso con cápsulas", "Ropa de cama y toallas de lujo", "Smart TV con Netflix / Prime Video", "Lavadora y plancha"]
           },
           wifi: {
@@ -1374,10 +1464,12 @@
           },
           guide: {
             eyebrow: "Valpolicella y Alrededores",
-            title: "Recomendaciones de Lorenzo",
-            vigneti: "Bodegas destacadas de Amarone: Masi, Bertani, Allegrini.",
-            ristoranti: "Restaurantes recomendados: Trattoria Caprini, Osteria n.8.",
-            verona: "Centro de Verona a 10 min. Lago de Garda a 20 min."
+            title: "Experiencias y Consejos",
+            catCantine: "🍷 Bodegas de Amarone y Catas",
+            catRistoranti: "🍽️ Restaurantes y Tabernas Típicas",
+            catAttrazioni: "🏛️ Pueblos Históricos y Parques",
+            btnStradaVino: "🍇 Ruta del Vino Valpolicella →",
+            btnInfoValpo: "🗺️ Portal Oficial InfoValpolicella →"
           },
           emergency: {
             eyebrow: "Contactos de Urgencia",
@@ -1474,6 +1566,19 @@
       document.getElementById('txtWhatsapp').textContent = t.writeHost;
       document.getElementById('txtEmergency').textContent = t.emergency;
       document.getElementById('toastMsg').textContent = t.copied;
+
+      // Aggiorna le 9 Card labels
+      if (t.cards) {
+        if (document.getElementById('lblCheckin')) document.getElementById('lblCheckin').textContent = t.cards.checkin;
+        if (document.getElementById('lblAmenities')) document.getElementById('lblAmenities').textContent = t.cards.amenities;
+        if (document.getElementById('lblWifi')) document.getElementById('lblWifi').textContent = t.cards.wifi;
+        if (document.getElementById('lblArrival')) document.getElementById('lblArrival').textContent = t.cards.arrival;
+        if (document.getElementById('lblParking')) document.getElementById('lblParking').textContent = t.cards.parking;
+        if (document.getElementById('lblClimate')) document.getElementById('lblClimate').textContent = t.cards.climate;
+        if (document.getElementById('lblWaste')) document.getElementById('lblWaste').textContent = t.cards.waste;
+        if (document.getElementById('lblRules')) document.getElementById('lblRules').textContent = t.cards.rules;
+        if (document.getElementById('lblGuide')) document.getElementById('lblGuide').textContent = t.cards.guide;
+      }
     }
 
     function showToast(msg) {
