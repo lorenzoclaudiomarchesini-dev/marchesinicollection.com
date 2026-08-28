@@ -384,6 +384,132 @@
     }
     .qb-action:active { transform: scale(0.95); }
 
+    
+    /* APPLE WALLET BADGE & PASS */
+    .wallet-badge-container {
+      display: flex;
+      justify-content: center;
+      margin: 0 20px 16px;
+    }
+    .wallet-add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #000000;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-pill);
+      padding: 9px 20px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .wallet-add-btn:active { transform: scale(0.96); }
+    .wallet-icon-svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+    }
+
+    /* VIRTUAL APPLE WALLET PASS */
+    .wallet-pass-card {
+      background: linear-gradient(145deg, #1f1b17 0%, #0d0b09 100%);
+      border: 1px solid rgba(197, 168, 128, 0.35);
+      border-radius: 24px;
+      padding: 24px;
+      color: #fcfaf7;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(197, 168, 128, 0.15);
+      position: relative;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .wallet-pass-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(197, 168, 128, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .pass-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+    .pass-brand {
+      font-family: var(--serif);
+      font-size: 18px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .pass-type {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .pass-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .pass-field {
+      display: flex;
+      flex-direction: column;
+    }
+    .pass-label {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 2px;
+    }
+    .pass-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .pass-barcode {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 16px;
+    }
+    .barcode-lines {
+      width: 100%;
+      height: 40px;
+      background: repeating-linear-gradient(90deg, #000 0, #000 2px, transparent 2px, transparent 4px, #000 4px, #000 7px, transparent 7px, transparent 9px);
+    }
+    .barcode-num {
+      font-family: monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #000;
+    }
+    .pass-geofence-note {
+      font-size: 11px;
+      color: var(--mid);
+      text-align: center;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
     /* FOOTER BRANDING */
     .footer-note {
       text-align: center;
@@ -875,7 +1001,8 @@
 
     <!-- FOOTER -->
     <div class="footer-note">
-      <p>© 2026 Marchesini Collection · <a href="/" target="_blank">marchesinicollection.com</a></p>
+      <p style="margin-bottom:6px;">© 2026 Marchesini Collection · <a href="/" target="_blank">marchesinicollection.com</a></p>
+      <p style="font-size:10px; letter-spacing:1px; color:var(--mid);">Curated with <a href="/builder.html" style="color:var(--gold); font-weight:500; text-decoration:none;">Vibe Concierge Studio</a> · Create your guide</p>
     </div>
 
   </div>
@@ -1762,6 +1889,54 @@
             </div>
           </div>
         `;
+            } else if (type === 'wallet') {
+        html = `
+          <div class="wallet-pass-card">
+            <div class="pass-header">
+              <div>
+                <div class="pass-brand">Ṁ · MARCHESINI</div>
+                <div class="pass-type">${prop.name}</div>
+              </div>
+              <div style="font-size:22px; color:var(--gold);">✦</div>
+            </div>
+            
+            <div class="pass-row">
+              <div class="pass-field">
+                <span class="pass-label">OSPITE / GUEST</span>
+                <span class="pass-value">Benvenuto Ospite</span>
+              </div>
+              <div class="pass-field">
+                <span class="pass-label">CHECK-IN / OUT</span>
+                <span class="pass-value">15:00 → 10:00</span>
+              </div>
+            </div>
+
+            <div class="pass-row">
+              <div class="pass-field">
+                <span class="pass-label">WI-FI RETE</span>
+                <span class="pass-value">${prop.wifi.ssid}</span>
+              </div>
+              <div class="pass-field">
+                <span class="pass-label">WI-FI PASSWORD</span>
+                <span class="pass-value">${prop.wifi.pass}</span>
+              </div>
+            </div>
+
+            <div class="pass-field" style="margin-bottom:12px;">
+              <span class="pass-label">INDIRIZZO / LOCATION</span>
+              <span class="pass-value" style="font-size:12px;">${prop.location}</span>
+            </div>
+
+            <div class="pass-barcode">
+              <div class="barcode-lines"></div>
+              <span class="barcode-num">MARCHESINI-2026-VIP</span>
+            </div>
+
+            <p class="pass-geofence-note">
+              📍 <strong>Smart Lockscreen:</strong> Sul tuo iPhone apparirà la notifica con WiFi e istruzioni non appena ti avvicinerai alla dimora.
+            </p>
+          </div>
+        `;
       } else if (type === 'wifi') {
         html = `
           <div class="copy-box">
@@ -1837,6 +2012,42 @@
             </div>
           </div>
         `;
+            } else if (type === 'sound') {
+        html = `
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:18px; padding:18px; text-align:center;">
+              <div style="width:48px; height:48px; border-radius:50%; background:rgba(197, 168, 128, 0.12); margin:0 auto 12px; display:flex; align-items:center; justify-content:center;">
+                <svg viewBox="0 0 24 24" style="width:22px; height:22px; stroke:var(--gold); stroke-width:1.5; fill:none;"><path d="M9 18V5l12-2v13M9 9l12-2M6 18a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm12 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+              </div>
+              <h4 style="font-family:var(--serif); font-size:20px; font-weight:500; color:var(--dark); margin-bottom:4px;">Impianto Audio & Smart Home</h4>
+              <p style="font-size:12px; color:var(--mid); line-height:1.6;">Connettiti facilmente all'impianto audio della dimora tramite <strong>Apple AirPlay</strong> o Bluetooth.</p>
+              
+              <div class="copy-box" style="margin:14px 0 0; padding:10px 14px;">
+                <div class="copy-info">
+                  <span class="copy-label">Dispositivo Audio</span>
+                  <span class="copy-val" style="font-size:14px;">${prop.name} Sound</span>
+                </div>
+                <button class="btn-action-sm" onclick="copyText('${prop.name} Sound')">Copia</button>
+              </div>
+            </div>
+
+            <!-- CURATED PLAYLIST -->
+            <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:18px; padding:18px;">
+              <span class="tag-badge">🍷 Signature Playlist</span>
+              <h5 style="font-size:13px; font-weight:600; margin:6px 0 4px; color:var(--dark);">La Colonna Sonora del Soggiorno</h5>
+              <p style="font-size:12px; color:var(--mid); margin-bottom:14px;">Una selezione lounge, jazz e acustica curata per accompagnare un calice di Amarone in totale relax.</p>
+              
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <a href="https://music.apple.com" target="_blank" class="btn-action-sm" style="justify-content:center; padding:12px; text-decoration:none; background:#000; color:#fff;">
+                  🍎 Ascolta su Apple Music
+                </a>
+                <a href="https://open.spotify.com" target="_blank" class="btn-action-sm" style="justify-content:center; padding:12px; text-decoration:none; background:#1DB954; color:#fff;">
+                  🟢 Ascolta su Spotify
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
       } else if (type === 'amenities') {
         html = `
           <p style="margin-bottom:12px; font-size:13px; color:var(--mid);">${lang.desc}</p>
@@ -1846,7 +2057,11 @@
                 <span style="color:var(--gold);">✦</span> ${item}
               </div>
             `).join('')}
-          </div>
+                    <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--warm-border);">
+            <button class="btn-action-sm" style="width:100%; justify-content:center; padding:12px; font-size:12px; background:var(--dark); color:var(--white);" onclick="openModal('sound')">
+              🎵 Impianto Audio & Playlist Dimora →
+            </button>
+          </div></div>
         `;
       } else if (type === 'guide') {
         const cantine = [
