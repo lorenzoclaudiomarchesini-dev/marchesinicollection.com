@@ -575,9 +575,12 @@
       }
       .reviews-grid::-webkit-scrollbar { display: none; }
       .reviews-grid > div {
-        min-width: 85vw !important;
+        min-width: calc(100vw - 32px) !important;
+        max-width: calc(100vw - 32px) !important;
         scroll-snap-align: start;
         flex-shrink: 0;
+        overflow: hidden !important;
+        box-sizing: border-box;
       }
       .reviews-nav {
         display: flex !important;
