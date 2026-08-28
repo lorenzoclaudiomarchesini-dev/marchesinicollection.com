@@ -1622,38 +1622,90 @@
           </div>
         `;
       } else if (type === 'guide') {
+        const cantine = [
+          { name: "Giuseppe Quintarelli", loc: "Negrar di Valpolicella", query: "Giuseppe+Quintarelli+Negrar" },
+          { name: "Allegrini · Villa Della Torre", loc: "Fumane", query: "Allegrini+Winery+Fumane" },
+          { name: "Masi Agricola · Tenuta Canova", loc: "Gargagnago / Lazise", query: "Masi+Tenuta+Canova+Lazise" },
+          { name: "Tommasi Family Estates", loc: "Pedemonte di Valpolicella", query: "Tommasi+Family+Estates+Pedemonte" },
+          { name: "Speri Viticoltori", loc: "Pedemonte di Valpolicella", query: "Speri+Viticoltori+Pedemonte" },
+          { name: "Monte dei Ragni", loc: "Fumane", query: "Monte+dei+Ragni+Fumane" },
+          { name: "Bertani", loc: "Grezzana / Arbizzano", query: "Cantina+Bertani+Grezzana" }
+        ];
+
+        const ristoranti = [
+          { name: "Trattoria Caprini", loc: "Torbe di Negrar", query: "Trattoria+Caprini+Torbe+Negrar" },
+          { name: "Trattoria Alla Porchetta", loc: "Negrar di Valpolicella", query: "Trattoria+Alla+Porchetta+Negrar" },
+          { name: "Trattoria La Bice", loc: "Negrar di Valpolicella", query: "Trattoria+La+Bice+Negrar" },
+          { name: "Osteria n.8", loc: "Arbizzano", query: "Osteria+numero+8+Arbizzano" },
+          { name: "Locanda '800", loc: "Negrar di Valpolicella", query: "Locanda+800+Negrar" }
+        ];
+
+        const attrazioni = [
+          { name: "Santuario Madonna della Corona", loc: "Spiazzi · Monte Baldo", query: "Santuario+Madonna+della+Corona+Spiazzi" },
+          { name: "Pieve di San Giorgio Martire", loc: "San Giorgio di Valpolicella", query: "Pieve+San+Giorgio+Martire+Valpolicella" },
+          { name: "Parco Giardino Sigurtà", loc: "Valeggio sul Mincio", query: "Parco+Giardino+Sigurta+Valeggio" },
+          { name: "Parco Natura Viva (Zoo Safari)", loc: "Bussolengo", query: "Parco+Natura+Viva+Bussolengo" },
+          { name: "Gardaland Park", loc: "Castelnuovo del Garda", query: "Gardaland+Park+Castelnuovo" },
+          { name: "Movieland Park", loc: "Lazise sul Garda", query: "Movieland+Park+Lazise" }
+        ];
+
         html = `
-          <div class="list-steps">
-            <div class="step-item">
-              <div class="step-text">
-                <span class="tag-badge">🍷 Cantine & Degustazioni</span>
-                <p style="font-size:13px; margin-bottom:10px;">${lang.vigneti}</p>
-                <a href="https://www.stradadelvinovalpolicella.it/eng/home" target="_blank" class="btn-action-sm" style="display:inline-flex; width:100%; justify-content:center; text-decoration:none; padding:10px 14px; background:var(--white); color:var(--dark); border:1px solid var(--warm-border); font-size:11px;">
-                  🍇 Strada del Vino Valpolicella →
-                </a>
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            
+            <!-- CANTINE -->
+            <div>
+              <span class="tag-badge">🍷 Cantine & Degustazioni Amarone</span>
+              <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+                ${cantine.map(c => `
+                  <div style="display:flex; align-items:center; justify-content:space-between; background:var(--white); padding:10px 14px; border-radius:14px; border:1px solid var(--warm-border);">
+                    <div>
+                      <div style="font-weight:600; font-size:13px; color:var(--dark);">${c.name}</div>
+                      <div style="font-size:11px; color:var(--mid);">${c.loc}</div>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${c.query}" target="_blank" class="btn-action-sm" style="padding:6px 12px; font-size:10px; text-decoration:none;">📍 Maps</a>
+                  </div>
+                `).join('')}
+              </div>
+              <a href="https://www.stradadelvinovalpolicella.it/eng/home" target="_blank" class="btn-action-sm" style="display:inline-flex; width:100%; justify-content:center; text-decoration:none; padding:10px 14px; margin-top:10px; background:var(--white); color:var(--dark); border:1px solid var(--warm-border); font-size:11px;">
+                🍇 Strada del Vino Valpolicella →
+              </a>
+            </div>
+
+            <!-- RISTORANTI -->
+            <div>
+              <span class="tag-badge">🍽️ Ristoranti & Trattorie Selezionate</span>
+              <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+                ${ristoranti.map(r => `
+                  <div style="display:flex; align-items:center; justify-content:space-between; background:var(--white); padding:10px 14px; border-radius:14px; border:1px solid var(--warm-border);">
+                    <div>
+                      <div style="font-weight:600; font-size:13px; color:var(--dark);">${r.name}</div>
+                      <div style="font-size:11px; color:var(--mid);">${r.loc}</div>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${r.query}" target="_blank" class="btn-action-sm" style="padding:6px 12px; font-size:10px; text-decoration:none;">📍 Maps</a>
+                  </div>
+                `).join('')}
               </div>
             </div>
-            <div class="step-item">
-              <div class="step-text">
-                <span class="tag-badge">🌿 Guida Ufficiale Territorio</span>
-                <p style="font-size:13px; margin-bottom:10px;">Itinerari tra borghi storici, ville venete, eventi, percorsi in bici e sentieri naturalistici.</p>
-                <a href="https://www.infovalpolicella.it/eng/home" target="_blank" class="btn-action-sm" style="display:inline-flex; width:100%; justify-content:center; text-decoration:none; padding:10px 14px; background:var(--white); color:var(--dark); border:1px solid var(--warm-border); font-size:11px;">
-                  🗺️ Portale InfoValpolicella →
-                </a>
+
+            <!-- ATTRAZIONI -->
+            <div>
+              <span class="tag-badge">🏛️ Borghi, Parchi & Attrazioni</span>
+              <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+                ${attrazioni.map(a => `
+                  <div style="display:flex; align-items:center; justify-content:space-between; background:var(--white); padding:10px 14px; border-radius:14px; border:1px solid var(--warm-border);">
+                    <div>
+                      <div style="font-weight:600; font-size:13px; color:var(--dark);">${a.name}</div>
+                      <div style="font-size:11px; color:var(--mid);">${a.loc}</div>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${a.query}" target="_blank" class="btn-action-sm" style="padding:6px 12px; font-size:10px; text-decoration:none;">📍 Maps</a>
+                  </div>
+                `).join('')}
               </div>
+              <a href="https://www.infovalpolicella.it/eng/home" target="_blank" class="btn-action-sm" style="display:inline-flex; width:100%; justify-content:center; text-decoration:none; padding:10px 14px; margin-top:10px; background:var(--white); color:var(--dark); border:1px solid var(--warm-border); font-size:11px;">
+                🗺️ Portale InfoValpolicella →
+              </a>
             </div>
-            <div class="step-item">
-              <div class="step-text">
-                <span class="tag-badge">🍽️ Ristoranti & Osterie</span>
-                <p>${lang.ristoranti}</p>
-              </div>
-            </div>
-            <div class="step-item">
-              <div class="step-text">
-                <span class="tag-badge">🏛️ Verona & Lago di Garda</span>
-                <p>${lang.verona}</p>
-              </div>
-            </div>
+
           </div>
         `;
       } else if (type === 'emergency') {
