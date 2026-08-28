@@ -117,7 +117,7 @@ def refresh_calendar(apt_key: str):
 
 # ── Serve file statici (HTML, foto, loghi) ────────────────────────────────────
 # Monta le cartelle delle foto
-for folder in ["CCB-A", "CCB-B", "Casa Albertina", "Casa Albertina 2", "FOTO CCB"]:
+for folder in ["CCB-A", "CCB-B", "Casa Albertina", "Casa Albertina 2", "FOTO CCB", "territorio"]:
     folder_path = os.path.join(os.path.dirname(__file__), folder)
     if os.path.exists(folder_path):
         app.mount(f"/{folder}", StaticFiles(directory=folder_path), name=folder.replace(" ", "_"))
