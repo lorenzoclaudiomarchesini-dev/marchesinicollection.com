@@ -131,6 +131,14 @@ def serve_index():
 def serve_admin():
     return FileResponse(os.path.join(os.path.dirname(__file__), "admin.html"))
 
+@app.get("/guida")
+@app.get("/guide")
+@app.get("/guida/{prop}")
+@app.get("/guide/{prop}")
+@app.get("/welcome/{prop}")
+def serve_guide(prop: str = "caboare-a"):
+    return FileResponse(os.path.join(os.path.dirname(__file__), "guide.html"))
+
 @app.get("/prezzi.json")
 def serve_prezzi():
     return FileResponse(PREZZI_FILE)
