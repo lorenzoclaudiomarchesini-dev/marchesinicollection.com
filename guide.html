@@ -881,7 +881,7 @@
     <div class="wallet-badge-container">
       <button class="wallet-add-btn" onclick="openModal('wallet')">
         <svg class="wallet-icon-svg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20M16 14h2"/></svg>
-        <span id="txtWalletBtn">Salva su Apple Wallet</span>
+        <span id="txtWalletBtn">Aggiungi a Wallet</span>
       </button>
     </div>
 
@@ -1818,6 +1818,18 @@
       document.getElementById('txtWhatsapp').textContent = t.writeHost;
       document.getElementById('txtEmergency').textContent = t.emergency;
       document.getElementById('toastMsg').textContent = t.copied;
+      
+      const walletTranslations = {
+        it: "Aggiungi a Wallet",
+        en: "Add to Apple Wallet",
+        fr: "Ajouter à Apple Wallet",
+        de: "Zu Apple Wallet hinzufügen",
+        es: "Añadir a Apple Wallet"
+      };
+      if (document.getElementById('txtWalletBtn')) {
+        document.getElementById('txtWalletBtn').textContent = walletTranslations[currentLang] || "Aggiungi a Wallet";
+      }
+
       updatePropUI();
 
       // Aggiorna le 9 Card labels
