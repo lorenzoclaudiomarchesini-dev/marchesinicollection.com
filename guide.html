@@ -1869,18 +1869,69 @@
     /* ── GESTIONE MODALE BOTTOM SHEET ── */
     function openModal(type) {
       const prop = PROPERTIES[currentProp];
-      const lang = I18N[currentLang].modals[type];
+      const lang = (I18N[currentLang].modals && I18N[currentLang].modals[type]) || {
+        eyebrow: "Apple Wallet",
+        title: "Digital Key Pass"
+      };
       const backdrop = document.getElementById('modalBackdrop');
       const eyebrow = document.getElementById('modalEyebrow');
       const title = document.getElementById('modalTitle');
       const body = document.getElementById('modalBody');
 
-      eyebrow.textContent = lang.eyebrow;
-      title.textContent = lang.title;
+      eyebrow.textContent = lang.eyebrow || 'Apple Wallet';
+      title.textContent = lang.title || 'Digital Pass';
 
       let html = '';
 
-      if (type === 'checkin') {
+      if (type === 'wallet') {
+        html = `
+          <div class="wallet-pass-card">
+            <div class="pass-header">
+              <div>
+                <div class="pass-brand">Ṁ · MARCHESINI</div>
+                <div class="pass-type">${prop.name}</div>
+              </div>
+              <div style="font-size:22px; color:var(--gold);">✦</div>
+            </div>
+            
+            <div class="pass-row">
+              <div class="pass-field">
+                <span class="pass-label">OSPITE / GUEST</span>
+                <span class="pass-value">Benvenuto Ospite</span>
+              </div>
+              <div class="pass-field">
+                <span class="pass-label">CHECK-IN / OUT</span>
+                <span class="pass-value">15:00 → 10:00</span>
+              </div>
+            </div>
+
+            <div class="pass-row">
+              <div class="pass-field">
+                <span class="pass-label">WI-FI RETE</span>
+                <span class="pass-value">${prop.wifi.ssid}</span>
+              </div>
+              <div class="pass-field">
+                <span class="pass-label">WI-FI PASSWORD</span>
+                <span class="pass-value">${prop.wifi.pass}</span>
+              </div>
+            </div>
+
+            <div class="pass-field" style="margin-bottom:12px;">
+              <span class="pass-label">INDIRIZZO / LOCATION</span>
+              <span class="pass-value" style="font-size:12px;">${prop.location}</span>
+            </div>
+
+            <div class="pass-barcode">
+              <div class="barcode-lines"></div>
+              <span class="barcode-num">MARCHESINI-2026-VIP</span>
+            </div>
+
+            <p class="pass-geofence-note">
+              📍 <strong>Smart Lockscreen:</strong> Notifica automatica con credenziali Wi-Fi e dettagli non appena ti avvicini alla dimora.
+            </p>
+          </div>
+        `;
+      } else if (type === 'sound') {
         html = `
           <div class="list-steps">
             <div class="step-item">
