@@ -705,14 +705,6 @@
       </div>
     </header>
 
-    <!-- PROPERTY SELECTOR PILLS -->
-    <div class="property-pill-bar" id="propertyBar">
-      <button class="prop-tag active" onclick="selectProperty('caboare-a')">Corte Cà Boare · A</button>
-      <button class="prop-tag" onclick="selectProperty('caboare-b')">Corte Cà Boare · B</button>
-      <button class="prop-tag" onclick="selectProperty('albertina')">Casa Albertina</button>
-      <button class="prop-tag" onclick="selectProperty('elisabetta')">Casa Elisabetta</button>
-    </div>
-
     <!-- HERO / IDENTITY -->
     <section class="hero-profile">
       <div class="logo-container" id="propLogoWrap">
@@ -1364,10 +1356,18 @@
     let currentLang = 'it';
     let currentProp = 'caboare-a';
 
-    // Rileva da URL ?prop=albertina o ?lang=en
+    // Rileva da path /guida/albertina o query ?prop=albertina e lingua ?lang=en
     function initParams() {
+      // 1. Controllo path (es. /guida/albertina, /welcome/caboare-b)
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const lastSegment = pathParts[pathParts.length - 1];
+      if (lastSegment && PROPERTIES[lastSegment]) {
+        currentProp = lastSegment;
+      }
+
+      // 2. Controllo query params (es. ?prop=albertina)
       const urlParams = new URLSearchParams(window.location.search);
-      const p = urlParams.get('prop');
+      const p = urlParams.get('prop') || urlParams.get('casa') || urlParams.get('apt');
       const l = urlParams.get('lang');
       if (p && PROPERTIES[p]) currentProp = p;
       if (l && I18N[l]) currentLang = l;
