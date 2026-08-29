@@ -131,6 +131,15 @@ def serve_index():
 def serve_admin():
     return FileResponse(os.path.join(os.path.dirname(__file__), "admin.html"))
 
+@app.get("/admin/ospiti")
+@app.get("/admin-ospiti")
+def serve_admin_ospiti():
+    return FileResponse(os.path.join(os.path.dirname(__file__), "admin-ospiti.html"))
+
+@app.get("/builder")
+def serve_builder():
+    return FileResponse(os.path.join(os.path.dirname(__file__), "builder.html"))
+
 @app.get("/guida")
 @app.get("/guide")
 @app.get("/guida/{prop}")

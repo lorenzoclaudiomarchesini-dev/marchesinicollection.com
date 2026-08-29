@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vibe Concierge Studio · Luxury Digital Guest Experience</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg-void: #0a0908;
+      --bg-surface: #12100e;
+      --bg-card: #1a1715;
+      --border-subtle: rgba(212, 175, 55, 0.12);
+      --border-line: rgba(255, 255, 255, 0.07);
+      
+      --gold-champagne: #c5a880;
+      --gold-muted: #9e8565;
+      --gold-glow: rgba(197, 168, 128, 0.15);
+      
+      --text-pure: #fcfaf7;
+      --text-soft: #dcd3c9;
+      --text-muted: #8c8277;
+      --text-dim: #544e47;
+      
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-pill: 9999px;
+    }
+
+    /* THEME PALETTES PER IL SIMULATORE RESCHIO STYLE */
+    .theme-reschio {
+      --sim-bg: #f5f1eb;
+      --sim-card: rgba(255, 255, 255, 0.85);
+      --sim-card-border: rgba(168, 150, 130, 0.22);
+      --sim-text: #1b1714;
+      --sim-mid: #7e7367;
+      --sim-accent: #a3845b;
+      --sim-modal-bg: #faf7f2;
+    }
+
+    .theme-tuscany {
+      --sim-bg: #f4eee6;
+      --sim-card: rgba(255, 255, 255, 0.9);
+      --sim-card-border: rgba(170, 140, 110, 0.25);
+      --sim-text: #241c16;
+      --sim-mid: #8a7565;
+      --sim-accent: #9e6443;
+      --sim-modal-bg: #f9f4ee;
+    }
+
+    .theme-riviera {
+      --sim-bg: #eff3f5;
+      --sim-card: rgba(255, 255, 255, 0.9);
+      --sim-card-border: rgba(80, 110, 130, 0.2);
+      --sim-text: #101c24;
+      --sim-mid: #5d7585;
+      --sim-accent: #335c75;
+      --sim-modal-bg: #f4f8fa;
+    }
+
+    .theme-noir {
+      --sim-bg: #12100e;
+      --sim-card: rgba(28, 25, 23, 0.88);
+      --sim-card-border: rgba(197, 168, 128, 0.25);
+      --sim-text: #f5f0eb;
+      --sim-mid: #9c9185;
+      --sim-accent: #c5a880;
+      --sim-modal-bg: #191614;
+    }
+
+    body {
+      background-color: var(--bg-void);
+      color: var(--text-pure);
+      font-family: var(--sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ══════════════════════════════════════
+       STUDIO HEADER (QUIET LUXURY)
+    ══════════════════════════════════════ */
+    .app-header {
+      height: 72px;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-line);
+      background: rgba(10, 9, 8, 0.92);
+      backdrop-filter: blur(24px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-monogram {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-champagne);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-champagne);
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .brand-title-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-family: var(--serif);
+      font-size: 21px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-pure);
+      line-height: 1.1;
+    }
+
+    .brand-tagline {
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-champagne);
+      font-weight: 400;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .pricing-pill {
+      border: 1px solid var(--border-subtle);
+      background: rgba(197, 168, 128, 0.06);
+      color: var(--gold-champagne);
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+    }
+
+    .btn-publish {
+      background: var(--text-pure);
+      color: var(--bg-void);
+      border: none;
+      padding: 12px 28px;
+      border-radius: var(--radius-pill);
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-publish:hover {
+      background: var(--gold-champagne);
+      color: var(--bg-void);
+      transform: translateY(-1px);
+    }
+    .btn-publish:active { transform: scale(0.97); }
+
+    /* ══════════════════════════════════════
+       MAIN WORKSPACE (SPLIT SCREEN)
+    ══════════════════════════════════════ */
+    .studio-workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 500px 1fr;
+      width: 100%;
+      min-height: calc(100vh - 72px);
+    }
+
+    /* ── LEFT CONFIGURATOR ── */
+    .config-panel {
+      padding: 40px 40px 100px;
+      border-right: 1px solid var(--border-line);
+      background: var(--bg-surface);
+      overflow-y: auto;
+      max-height: calc(100vh - 72px);
+    }
+
+    .config-header {
+      margin-bottom: 32px;
+    }
+
+    .config-eyebrow {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold-champagne);
+      margin-bottom: 6px;
+    }
+
+    .config-section-title {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--text-pure);
+      line-height: 1.15;
+    }
+    .config-section-title em { font-style: italic; color: var(--gold-champagne); }
+
+    .config-subtitle {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    /* CARD DI CONFIGURAZIONE */
+    .form-group-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: border-color 0.3s;
+    }
+    .form-group-card:focus-within {
+      border-color: rgba(197, 168, 128, 0.4);
+    }
+
+    .group-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .group-icon-svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--gold-champagne);
+      stroke-width: 1.2;
+      fill: none;
+    }
+
+    .group-title {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-pure);
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .input-row.full { grid-template-columns: 1fr; }
+
+    .field-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .field-input, .field-textarea {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      color: var(--text-pure);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      outline: none;
+      transition: all 0.25s;
+      width: 100%;
+    }
+
+    .field-input:focus, .field-textarea:focus {
+      border-color: var(--gold-champagne);
+      background: rgba(0, 0, 0, 0.6);
+      box-shadow: 0 0 0 1px var(--gold-champagne);
+    }
+
+    .field-textarea {
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.6;
+    }
+
+    .palette-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .palette-btn {
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-sm);
+      padding: 12px 8px;
+      background: rgba(0,0,0,0.3);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s;
+    }
+    .palette-btn.active {
+      border-color: var(--gold-champagne);
+      background: rgba(197, 168, 128, 0.1);
+    }
+
+    .palette-preview-dots {
+      display: flex;
+      gap: 5px;
+    }
+    .p-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .palette-name {
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .palette-btn.active .palette-name { color: var(--text-pure); }
+
+    /* ══════════════════════════════════════
+       RIGHT: LIVE NATIVE SIMULATOR (RESCHIO / NYC)
+    ══════════════════════════════════════ */
+    .simulator-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background: radial-gradient(circle at 50% 35%, #181512 0%, #080706 80%);
+      position: relative;
+    }
+
+    .simulator-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-pill);
+      padding: 6px 16px;
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold-champagne);
+      box-shadow: 0 0 8px var(--gold-champagne);
+    }
+
+    /* IPHONE FRAME CHASSIS */
+    .iphone-chassis {
+      width: 380px;
+      height: 790px;
+      background: #191715;
+      border-radius: 54px;
+      padding: 12px;
+      box-shadow: 
+        0 0 0 1.5px #38332e,
+        0 0 0 6px #191715,
+        0 30px 90px -10px rgba(0, 0, 0, 0.9),
+        0 10px 40px rgba(197, 168, 128, 0.12);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .iphone-screen {
+      width: 100%;
+      height: 100%;
+      background-color: var(--sim-bg);
+      color: var(--sim-text);
+      border-radius: 44px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      scrollbar-width: none;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .iphone-screen::-webkit-scrollbar { display: none; }
+
+    /* DYNAMIC ISLAND (PERFECTLY CENTERED) */
+    .dynamic-island {
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 105px;
+      height: 28px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 12px;
+      pointer-events: none;
+    }
+    .camera-lens {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #111;
+      border: 1px solid #242424;
+    }
+
+    /* ── SIMULATED RESCHIO GUEST EXPERIENCE ── */
+    .sim-top-nav {
+      padding: 12px 18px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 10;
+      min-height: 44px;
+    }
+    .sim-brand-eyebrow {
+      font-size: 8px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--sim-mid);
+      line-height: 1.25;
+      text-align: left;
+    }
+    .sim-lang-picker {
+      display: flex;
+      gap: 3px;
+      background: rgba(0,0,0,0.05);
+      padding: 3px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--sim-card-border);
+    }
+    .sim-lang-pill {
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      padding: 3px 6px;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: transparent;
+      color: var(--sim-mid);
+      cursor: pointer;
+    }
+    .sim-lang-pill.active {
+      background: var(--sim-text);
+      color: var(--sim-bg);
+    }
+
+    .sim-hero {
+      text-align: center;
+      padding: 14px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .sim-logo-circle {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid var(--sim-card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      position: relative;
+    }
+    .sim-logo-circle::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      border: 1px solid var(--sim-accent);
+      opacity: 0.35;
+    }
+    .sim-logo-text {
+      font-family: var(--serif);
+      font-size: 34px;
+      font-weight: 300;
+      color: var(--sim-text);
+      letter-spacing: 1px;
+    }
+
+    .sim-welcome-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-style: italic;
+      color: var(--sim-text);
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+    .sim-prop-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--sim-text);
+      margin-bottom: 2px;
+    }
+    .sim-prop-sub {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--sim-mid);
+      margin-bottom: 10px;
+    }
+    .sim-weather-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--sim-card);
+      border: 1px solid var(--sim-card-border);
+      border-radius: var(--radius-pill);
+      padding: 4px 12px;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--sim-text);
+    }
+    .sim-weather-badge svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--sim-accent);
+      stroke-width: 1.4;
+      fill: none;
+    }
+
+        /* WALLET BUTTON IN SIMULATOR */
+    .sim-wallet-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 0 18px 12px;
+    }
+    .sim-wallet-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sim-text);
+      color: var(--sim-bg);
+      border: 1px solid var(--sim-card-border);
+      border-radius: var(--radius-pill);
+      padding: 8px 18px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      transition: all 0.2s;
+    }
+    .sim-wallet-btn:active { transform: scale(0.95); }
+    .sim-wallet-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+    /* REALISTIC PASS PREVIEW */
+    .sim-pass-card {
+      background: linear-gradient(145deg, #1f1b17 0%, #0d0b09 100%);
+      border: 1px solid rgba(197, 168, 128, 0.35);
+      border-radius: 20px;
+      padding: 18px;
+      color: #fcfaf7;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .sim-pass-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .sim-pass-brand {
+      font-family: var(--serif);
+      font-size: 15px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold-champagne);
+    }
+    .sim-pass-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .sim-pass-field { display: flex; flex-direction: column; }
+    .sim-pass-lbl { font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; color: #8c8277; margin-bottom: 2px; }
+    .sim-pass-val { font-size: 11px; font-weight: 600; color: #fff; }
+    .sim-pass-barcode {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin-top: 10px;
+    }
+    .sim-barcode-lines {
+      width: 100%;
+      height: 28px;
+      background: repeating-linear-gradient(90deg, #000 0, #000 2px, transparent 2px, transparent 3.5px, #000 3.5px, #000 6px, transparent 6px, transparent 8px);
+    }
+    .sim-barcode-text { font-family: monospace; font-size: 8px; letter-spacing: 2px; color: #000; }
+
+    /* QUICK BANNER WIFI (MINIMAL ELEGANCE) */
+    .sim-quick-wifi {
+      margin: 4px 18px 18px;
+      background: var(--sim-card);
+      border: 1px solid var(--sim-card-border);
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.02);
+    }
+    .sim-qw-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--sim-text);
+    }
+    .sim-qw-sub {
+      font-size: 10px;
+      font-weight: 300;
+      color: var(--sim-mid);
+    }
+    .sim-qw-btn {
+      background: var(--sim-text);
+      color: var(--sim-bg);
+      border: none;
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    /* 9 CARD GRID (HAIRLINE MINIMAL VECTOR ICONS) */
+    .sim-grid {
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 90px;
+    }
+    .sim-card {
+      background: var(--sim-card);
+      border: 1px solid var(--sim-card-border);
+      border-radius: 20px;
+      padding: 16px 8px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.02);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      aspect-ratio: 1 / 1.06;
+    }
+    .sim-card:active {
+      transform: scale(0.93);
+    }
+    .sim-card-icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    .sim-card svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--sim-text);
+      stroke-width: 1.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .sim-card-label {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--sim-text);
+      line-height: 1.2;
+    }
+
+    /* BOTTOM BAR RESCHIO STYLE */
+    .sim-bottom-bar {
+      position: sticky;
+      bottom: 14px;
+      margin: 0 16px 14px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 9999px;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(16px);
+    }
+    .sim-bb-btn {
+      height: 40px;
+      border-radius: 9999px;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 6px;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .sim-bb-btn.whatsapp {
+      flex: 1.8;
+      background: #25D366;
+      color: #fff;
+    }
+    .sim-bb-btn.dark {
+      flex: 1;
+      background: #1b1714;
+      color: #fff;
+    }
+
+    /* BOTTOM SHEET MODAL NELL'IPHONE */
+    .sim-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: flex-end;
+    }
+    .sim-modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .sim-modal-sheet {
+      width: 100%;
+      background: var(--sim-modal-bg);
+      border-radius: 28px 28px 0 0;
+      padding: 14px 20px 32px;
+      transform: translateY(100%);
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 80%;
+      overflow-y: auto;
+    }
+    .sim-modal-backdrop.open .sim-modal-sheet {
+      transform: translateY(0);
+    }
+    .sim-modal-drag {
+      width: 32px;
+      height: 3px;
+      background: var(--sim-card-border);
+      border-radius: 4px;
+      margin: 0 auto 14px;
+    }
+    .sim-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .sim-modal-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--sim-text);
+    }
+    .sim-modal-close {
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: var(--sim-mid);
+    }
+    .sim-modal-body {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--sim-text);
+      line-height: 1.7;
+    }
+
+    /* ══════════════════════════════════════
+       PUBLISH MODAL
+    ══════════════════════════════════════ */
+    .modal-publish-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(16px);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .modal-publish-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .publish-card {
+      width: 90%;
+      max-width: 480px;
+      background: var(--bg-surface);
+      border: 1px solid var(--gold-champagne);
+      border-radius: var(--radius-lg);
+      padding: 38px 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 40px var(--gold-glow);
+      text-align: center;
+      position: relative;
+    }
+
+    .publish-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-champagne);
+      color: var(--gold-champagne);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin: 0 auto 16px;
+      font-family: var(--serif);
+    }
+
+    .publish-title {
+      font-family: var(--serif);
+      font-size: 30px;
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .publish-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .generated-url-box {
+      background: #000;
+      border: 1px solid var(--border-line);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .generated-url {
+      font-family: monospace;
+      font-size: 12px;
+      color: var(--gold-champagne);
+      word-break: break-all;
+    }
+
+    .btn-close-modal {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand-group">
+      <div class="brand-monogram">V</div>
+      <div class="brand-title-wrap">
+        <div class="brand-title">Vibe Studio</div>
+        <div class="brand-tagline">Bespoke Guest Experience</div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="pricing-pill">29€ Una Tantum · Zero Canoni</div>
+      <button class="btn-publish" onclick="openPublishModal()">
+        <span>Attiva la Guida</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- WORKSPACE -->
+  <main class="studio-workspace">
+    
+    <!-- LEFT: CONFIGURATOR FORM -->
+    <aside class="config-panel">
+      <div class="config-header">
+        <div class="config-eyebrow">Luxury Hospitality Suite</div>
+        <h2 class="config-section-title">Crea la tua Guida <em>di Charme</em></h2>
+        <p class="config-subtitle">Ogni dettaglio è curato con standard da boutique hotel a 5 stelle. Digita nei campi per vedere la tua guida prendere vita a destra.</p>
+      </div>
+
+            <!-- MAGIC 1-TAP IMPORT BOX -->
+      <div class="magic-import-card" style="background: linear-gradient(135deg, rgba(197, 168, 128, 0.12) 0%, rgba(26, 23, 21, 0.9) 100%); border: 1px solid var(--gold-champagne); border-radius: var(--radius-md); padding: 22px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px; color:var(--gold-champagne);">✦</span>
+            <span style="font-family:var(--serif); font-size:17px; letter-spacing:1px; color:var(--gold-champagne); text-transform:uppercase;">Importazione Magica 1-Tap</span>
+          </div>
+          <span style="font-size:9px; letter-spacing:1px; text-transform:uppercase; background:rgba(197,168,128,0.2); color:var(--gold-champagne); padding:3px 8px; border-radius:var(--radius-pill);">Instant AI</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">Incolla il link del tuo annuncio Booking.com o Airbnb: estraiamo foto, regole e indirizzo autogenerando la guida all'istante.</p>
+        
+        <!-- PRESET CHIPS PER SIMULAZIONE RAPIDA -->
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+          <span style="font-size:10px; color:var(--gold-champagne); text-transform:uppercase; letter-spacing:0.8px;">Prova simulazione:</span>
+          <button type="button" onclick="loadSampleBooking('villagiona')" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#fff; font-size:10px; padding:4px 10px; border-radius:var(--radius-pill); cursor:pointer;">🏰 Villa Giona (Booking)</button>
+          <button type="button" onclick="loadSampleBooking('albertina')" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#fff; font-size:10px; padding:4px 10px; border-radius:var(--radius-pill); cursor:pointer;">🏡 Casa Albertina (Booking)</button>
+          <button type="button" onclick="loadSampleBooking('caboare')" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#fff; font-size:10px; padding:4px 10px; border-radius:var(--radius-pill); cursor:pointer;">🍷 Corte Cà Boare (Booking)</button>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+          <input type="text" class="field-input" id="inImportUrl" value="https://www.booking.com/hotel/it/villa-giona.it.html" placeholder="https://booking.com/hotel/it/... o airbnb.it/rooms/..." style="font-size:12px;">
+          <button class="btn-publish" id="btnMagicImport" style="padding:10px 18px; font-size:11px; white-space:nowrap; background:var(--gold-champagne); color:#000;" onclick="magicImport()">
+            Autogenera →
+          </button>
+        </div>
+      </div>
+
+      <!-- 1. IDENTITÀ TENUTA -->
+      <div class="form-group-card">
+        <div class="group-header">
+          <svg class="group-icon-svg" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 10h6M9 14h6M9 18h6"/></svg>
+          <div class="group-title">1. Identità & Tenuta</div>
+        </div>
+
+        <div class="input-row">
+          <div class="field-wrap">
+            <label class="field-label">Nome Dimora / Proprietà</label>
+            <input type="text" class="field-input" id="inPropName" value="Castello di San Pietro" oninput="updateSimulator()">
+          </div>
+          <div class="field-wrap">
+            <label class="field-label">Tipologia & Carattere</label>
+            <input type="text" class="field-input" id="inPropSub" value="Dimora Storica con Parco Privato" oninput="updateSimulator()">
+          </div>
+        </div>
+
+        <div class="input-row full">
+          <div class="field-wrap">
+            <label class="field-label">Indirizzo (per Navigatore Apple / Google)</label>
+            <input type="text" class="field-input" id="inPropAddress" value="Località San Pietro 12 · Valpolicella (VR)" oninput="updateSimulator()">
+          </div>
+        </div>
+
+        <div class="field-wrap" style="margin-top:10px;">
+          <label class="field-label">Palette Cromatiche Signature</label>
+          <div class="palette-selector">
+            <button class="palette-btn active" onclick="setTheme('reschio', this)">
+              <div class="palette-preview-dots">
+                <span class="p-dot" style="background:#f5f1eb; border:1px solid #ddd;"></span>
+                <span class="p-dot" style="background:#a3845b;"></span>
+                <span class="p-dot" style="background:#1b1714;"></span>
+              </div>
+              <span class="palette-name">Warm Sand</span>
+            </button>
+            <button class="palette-btn" onclick="setTheme('tuscany', this)">
+              <div class="palette-preview-dots">
+                <span class="p-dot" style="background:#f4eee6; border:1px solid #ddd;"></span>
+                <span class="p-dot" style="background:#9e6443;"></span>
+                <span class="p-dot" style="background:#241c16;"></span>
+              </div>
+              <span class="palette-name">Tuscan Clay</span>
+            </button>
+            <button class="palette-btn" onclick="setTheme('riviera', this)">
+              <div class="palette-preview-dots">
+                <span class="p-dot" style="background:#eff3f5; border:1px solid #ddd;"></span>
+                <span class="p-dot" style="background:#335c75;"></span>
+                <span class="p-dot" style="background:#101c24;"></span>
+              </div>
+              <span class="palette-name">Riviera Blue</span>
+            </button>
+            <button class="palette-btn" onclick="setTheme('noir', this)">
+              <div class="palette-preview-dots">
+                <span class="p-dot" style="background:#12100e;"></span>
+                <span class="p-dot" style="background:#c5a880;"></span>
+                <span class="p-dot" style="background:#f5f0eb;"></span>
+              </div>
+              <span class="palette-name">Lounge Noir</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. WI-FI & ACCOGLIENZA -->
+      <div class="form-group-card">
+        <div class="group-header">
+          <svg class="group-icon-svg" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+          <div class="group-title">2. Connettività & Accoglienza</div>
+        </div>
+
+        <div class="input-row">
+          <div class="field-wrap">
+            <label class="field-label">Rete Wi-Fi (SSID)</label>
+            <input type="text" class="field-input" id="inWifiSSID" value="SanPietro_Guest" oninput="updateSimulator()">
+          </div>
+          <div class="field-wrap">
+            <label class="field-label">Password Wi-Fi (Copia a 1 Tap)</label>
+            <input type="text" class="field-input" id="inWifiPass" value="residenza2026" oninput="updateSimulator()">
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="field-wrap">
+            <label class="field-label">Orario Check-in</label>
+            <input type="text" class="field-input" id="inCheckinTime" value="15:00 - 20:00" oninput="updateSimulator()">
+          </div>
+          <div class="field-wrap">
+            <label class="field-label">Orario Partenza (Check-out)</label>
+            <input type="text" class="field-input" id="inCheckoutTime" value="Entro le ore 10:00" oninput="updateSimulator()">
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. ESTATE CONCIERGE -->
+      <div class="form-group-card">
+        <div class="group-header">
+          <svg class="group-icon-svg" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <div class="group-title">3. Estate Concierge</div>
+        </div>
+
+        <div class="input-row">
+          <div class="field-wrap">
+            <label class="field-label">Nome Host / Concierge</label>
+            <input type="text" class="field-input" id="inHostName" value="Simone" oninput="updateSimulator()">
+          </div>
+          <div class="field-wrap">
+            <label class="field-label">WhatsApp Diretto (con prefisso)</label>
+            <input type="text" class="field-input" id="inHostPhone" value="+39 349 5256975" oninput="updateSimulator()">
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. ESPERIENZE & REGOLE -->
+      <div class="form-group-card">
+        <div class="group-header">
+          <svg class="group-icon-svg" viewBox="0 0 24 24"><path d="M8 22h8M12 11v11M5 3h14l-2 8H7L5 3z"/></svg>
+          <div class="group-title">4. Esperienze & Etichetta</div>
+        </div>
+
+        <div class="field-wrap" style="margin-bottom:14px;">
+          <label class="field-label">Cantine, Tavole & Luoghi Consigliati</label>
+          <textarea class="field-textarea" id="inLocalTips" oninput="updateSimulator()">• Giuseppe Quintarelli · Eccellenza vinicola
+• Trattoria Caprini · Autentica cucina locale
+• Santuario Madonna della Corona · Panorama suggestivo</textarea>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label">Etichetta & Regole della Dimora</label>
+          <textarea class="field-textarea" id="inHouseRules" oninput="updateSimulator()">• Rigorosamente non fumatori negli ambienti interni.
+• Rispetto del silenzio e della quiete tra le 23:00 e le 08:00.
+• Cura e rispetto degli arredi e degli spazi esterni.</textarea>
+        </div>
+      </div>
+
+          <!-- 5. AMBIANCE & SMART SOUND -->
+      <div class="form-group-card">
+        <div class="group-header">
+          <svg class="group-icon-svg" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13M9 9l12-2M6 18a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm12 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+          <div class="group-title">5. Diffusione Sonora & Smart Home</div>
+        </div>
+
+        <div class="input-row">
+          <div class="field-wrap">
+            <label class="field-label">Dispositivo Audio (AirPlay / Bluetooth)</label>
+            <input type="text" class="field-input" id="inSoundDevice" value="Castello San Pietro Sound" oninput="updateSimulator()">
+          </div>
+          <div class="field-wrap">
+            <label class="field-label">Playlist Mood</label>
+            <input type="text" class="field-input" id="inPlaylistMood" value="Acoustic Jazz & Wine Lounge" oninput="updateSimulator()">
+          </div>
+        </div>
+      </div>
+
+          <!-- 6. SELF CHECK-IN & QUESTURA / ROSS1000 -->
+      <div class="form-group-card" style="border: 1px solid rgba(197, 168, 128, 0.45); background: linear-gradient(145deg, rgba(26,23,21,0.95) 0%, rgba(18,16,14,0.98) 100%);">
+        <div class="group-header">
+          <svg class="group-icon-svg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+          <div class="group-title" style="color:var(--gold-champagne);">6. Check-in Online & Burocrazia Zero</div>
+        </div>
+        <p style="font-size:11px; color:var(--text-muted); line-height:1.5; margin-bottom:14px;">L'ospite fotografa il passaporto/carta d'identità con scansione OCR automatica. Il sistema prepara i flussi per Questura (Alloggiati Web), ROSS1000 e Imposta di Soggiorno.</p>
+        
+        <div class="input-row">
+          <div class="field-wrap">
+            <label class="field-label">Comune (per Tassa Soggiorno)</label>
+            <input type="text" class="field-input" id="inComune" value="San Pietro in Cariano (VR)" oninput="updateSimulator()">
+          </div>
+          <div class="field-wrap">
+            <label class="field-label">Imposta Soggiorno (€ / notte)</label>
+            <input type="text" class="field-input" id="inCityTax" value="1.50€" oninput="updateSimulator()">
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.3); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-line);">
+          <div style="font-size:11px; color:var(--text-pure);">Generazione automatica <code>alloggiati.txt</code> Questura</div>
+          <span style="font-size:9px; background:#25D366; color:#fff; padding:2px 8px; border-radius:var(--radius-pill); font-weight:600;">ATTIVO</span>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT: LIVE LUXURY IPHONE SIMULATOR -->
+    <section class="simulator-stage">
+      
+      <div class="simulator-badge">
+        <span class="live-dot"></span>
+        <span>Anteprima iPhone 16 Pro Live</span>
+      </div>
+
+      <div class="iphone-chassis">
+        <div class="iphone-screen theme-reschio" id="simScreen">
+          
+          <!-- DYNAMIC ISLAND (CENTERED) -->
+          <div class="dynamic-island">
+            <div class="camera-lens"></div>
+          </div>
+
+          <!-- TOP BAR -->
+          <div class="sim-top-nav">
+            <div class="sim-brand-eyebrow">PRIVATE<br>RESIDENCE</div>
+            <div class="sim-lang-picker">
+              <button class="sim-lang-pill active">IT</button>
+              <button class="sim-lang-pill">EN</button>
+              <button class="sim-lang-pill">DE</button>
+            </div>
+          </div>
+
+          <!-- HERO PROFILE -->
+          <div class="sim-hero">
+            <div class="sim-logo-circle">
+              <span class="sim-logo-text" id="simMonogram">C</span>
+            </div>
+            <div class="sim-welcome-title">Benvenuti a</div>
+            <div class="sim-prop-name" id="simPropName">Castello di San Pietro</div>
+            <div class="sim-prop-sub" id="simPropSub">Dimora Storica con Parco Privato</div>
+            
+            <div class="sim-weather-badge">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+              <span id="simWeather">24°C · Valpolicella</span>
+            </div>
+          </div>
+
+          <!-- APPLE WALLET PASS BUTTON -->
+          <div class="sim-wallet-wrap" style="display:flex; justify-content:center; margin:0 18px 12px;">
+            <button class="sim-wallet-btn" onclick="openSimModal('wallet')">
+              <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20M16 14h2"/></svg>
+              <span>Aggiungi a Wallet</span>
+            </button>
+          </div>
+
+          <!-- QUICK WIFI BANNER -->
+          <div class="sim-quick-wifi">
+            <div>
+              <div class="sim-qw-title">Wi-Fi Fibra Veloce</div>
+              <div class="sim-qw-sub">Tocca per copiare la password</div>
+            </div>
+            <button class="sim-qw-btn" onclick="simCopyWifi()">Copia</button>
+          </div>
+
+          <!-- 9 REFINED HAIRLINE CARDS -->
+          <div class="sim-grid">
+            
+            <!-- 1. Self Check-in & Documenti -->
+            <div class="sim-card" onclick="openSimModal('checkin_online')" style="border-color: rgba(197, 168, 128, 0.4); background: rgba(197, 168, 128, 0.08);">
+              <div class="sim-card-icon-wrap" style="background: rgba(197, 168, 128, 0.15);">
+                <svg viewBox="0 0 24 24" style="stroke: var(--sim-accent);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+              </div>
+              <div class="sim-card-label" style="color: var(--sim-accent); font-weight:700;">Check-in VIP</div>
+            </div>
+
+            <!-- 2. WiFi -->
+            <div class="sim-card" onclick="openSimModal('wifi')">
+              <div class="sim-card-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+              </div>
+              <div class="sim-card-label">Wi-Fi Fibra</div>
+            </div>
+
+            <!-- 3. Come Arrivare -->
+            <div class="sim-card" onclick="openSimModal('arrival')">
+              <div class="sim-card-icon-wrap">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+              </div>
+              <div class="sim-card-label">Come Arrivare</div>
+            </div>
+
+            <!-- 4. Servizi & Casa -->
+            <div class="sim-card" onclick="openSimModal('amenities')">
+              <div class="sim-card-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M3 7v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/><path d="M21 11H3M7 3v4M17 3v4"/></svg>
+              </div>
+              <div class="sim-card-label">Servizi Casa</div>
+            </div>
+
+            <!-- 5. Parcheggio -->
+            <div class="sim-card" onclick="openSimModal('parking')">
+              <div class="sim-card-icon-wrap">
+                <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="3"/><path d="M9 16V8h4a3 3 0 0 1 0 6H9"/></svg>
+              </div>
+              <div class="sim-card-label">Parcheggio</div>
+            </div>
+
+            <!-- 6. Clima -->
+            <div class="sim-card" onclick="openSimModal('climate')">
+              <div class="sim-card-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
+              </div>
+              <div class="sim-card-label">Clima & A/C</div>
+            </div>
+
+            <!-- 7. Differenziata -->
+            <div class="sim-card" onclick="openSimModal('waste')">
+              <div class="sim-card-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </div>
+              <div class="sim-card-label">Rifiuti & Eco</div>
+            </div>
+
+            <!-- 8. Regole -->
+            <div class="sim-card" onclick="openSimModal('rules')">
+              <div class="sim-card-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </div>
+              <div class="sim-card-label">Regole Casa</div>
+            </div>
+
+            <!-- 9. Consigli -->
+            <div class="sim-card" onclick="openSimModal('guide')">
+              <div class="sim-card-icon-wrap">
+                <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+              </div>
+              <div class="sim-card-label">Esperienze</div>
+            </div>
+
+          </div>
+
+          <!-- BOTTOM CONCIERGE BAR -->
+          <div class="sim-bottom-bar">
+            <button class="sim-bb-btn whatsapp" id="simBtnWhatsapp" onclick="alert('Apre WhatsApp verso ' + document.getElementById('inHostPhone').value)">
+              Scrivi a Simone
+            </button>
+            <button class="sim-bb-btn dark" onclick="openSimModal('emergency')">
+              Emergenze
+            </button>
+          </div>
+
+          <!-- SIMULATED MODAL SHEET -->
+          <div class="sim-modal-backdrop" id="simModal" onclick="closeSimModalOnBackdrop(event)">
+            <div class="sim-modal-sheet">
+              <div class="sim-modal-drag"></div>
+              <div class="sim-modal-header">
+                <div class="sim-modal-title" id="simModalTitle">Dettaglio</div>
+                <button class="sim-modal-close" onclick="closeSimModal()">✕</button>
+              </div>
+              <div class="sim-modal-body" id="simModalBody"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL CHECKOUT & PUBLISH -->
+  <div class="modal-publish-overlay" id="publishModal">
+    <div class="publish-card">
+      <button class="btn-close-modal" onclick="closePublishModal()">✕</button>
+      
+      <div class="publish-icon">V</div>
+      <h3 class="publish-title">La tua Guida è Pronta</h3>
+      <p class="publish-desc">Il tuo link riservato è pronto per essere inviato via WhatsApp o Booking ai tuoi ospiti. Nessun abbonamento mensile: <strong>29€ una tantum</strong> per sempre.</p>
+
+      <div class="generated-url-box">
+        <span class="generated-url" id="outGeneratedUrl">https://vibeguide.app/castello-san-pietro</span>
+        <button class="btn-publish" style="padding:7px 16px; font-size:10px;" onclick="copyOutUrl()">Copia Link</button>
+      </div>
+
+      <button class="btn-publish" style="width:100%; justify-content:center; padding:16px; font-size:12px; background:var(--gold-champagne); color:#000;" onclick="alert('Integrazione Apple Pay / Carta (29€ una tantum)')">
+        Attiva con Apple Pay / Carta (29€)
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function updateSimulator() {
+      const name = document.getElementById('inPropName').value || 'Nome Proprietà';
+      const sub = document.getElementById('inPropSub').value || 'Dimora Storica';
+      const address = document.getElementById('inPropAddress').value || 'Indirizzo';
+      const ssid = document.getElementById('inWifiSSID').value || 'Nome Rete';
+      const pass = document.getElementById('inWifiPass').value || 'Password';
+      const checkin = document.getElementById('inCheckinTime').value || '15:00 - 20:00';
+      const checkout = document.getElementById('inCheckoutTime').value || 'Entro le ore 10:00';
+      const host = document.getElementById('inHostName').value || 'Simone';
+      const phone = document.getElementById('inHostPhone').value || '';
+      const tips = document.getElementById('inLocalTips').value;
+      const rules = document.getElementById('inHouseRules').value;
+
+      // Aggiorna elementi visivi iPhone
+      document.getElementById('simPropName').textContent = name;
+      document.getElementById('simPropSub').textContent = sub;
+      document.getElementById('simMonogram').textContent = name.trim().charAt(0).toUpperCase() || 'V';
+      document.getElementById('simBtnWhatsapp').textContent = `Scrivi a ${host.split(' ')[0]}`;
+
+      // Aggiorna URL generato
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      document.getElementById('outGeneratedUrl').textContent = `https://vibeguide.app/${slug || 'residenza'}`;
+    }
+
+    function setTheme(theme, btn) {
+      document.querySelectorAll('.palette-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const screen = document.getElementById('simScreen');
+      screen.className = `iphone-screen theme-${theme}`;
+    }
+
+    function simCopyWifi() {
+      const pass = document.getElementById('inWifiPass').value;
+      navigator.clipboard.writeText(pass);
+      alert(`Password WiFi "${pass}" copiata negli appunti.`);
+    }
+
+    /* MODALI DENTRO L'IPHONE */
+    function openSimModal(type) {
+      const title = document.getElementById('simModalTitle');
+      const body = document.getElementById('simModalBody');
+      const name = document.getElementById('inPropName').value;
+      const address = document.getElementById('inPropAddress').value;
+      const ssid = document.getElementById('inWifiSSID').value;
+      const pass = document.getElementById('inWifiPass').value;
+      const checkin = document.getElementById('inCheckinTime').value;
+      const checkout = document.getElementById('inCheckoutTime').value;
+      const host = document.getElementById('inHostName').value;
+      const tips = document.getElementById('inLocalTips').value;
+      const rules = document.getElementById('inHouseRules').value;
+
+                  if (type === 'checkin_online') {
+        title.textContent = 'Check-in Online & Documenti';
+        body.innerHTML = `
+          <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:20px; padding:18px; margin-bottom:14px; text-align:center;">
+            <div style="width:52px; height:52px; border-radius:50%; background:rgba(197, 168, 128, 0.12); margin:0 auto 10px; display:flex; align-items:center; justify-content:center;">
+              <svg viewBox="0 0 24 24" style="width:24px; height:24px; stroke:var(--gold-champagne); stroke-width:1.5; fill:none;"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2M15 12h2M7 16h10"/></svg>
+            </div>
+            <h4 style="font-family:var(--serif); font-size:19px; font-weight:500; color:var(--sim-text); margin-bottom:4px;">Registrazione Rapida Ospiti</h4>
+            <p style="font-size:11px; color:var(--sim-mid); line-height:1.5;">Scatta una foto al documento per completare la registrazione ufficiale in 30 secondi e accedere senza attese.</p>
+          </div>
+
+          <!-- SCANNER BOX INTERATTIVO -->
+          <div id="scanBoxArea" style="border: 2px dashed rgba(197, 168, 128, 0.4); border-radius:18px; padding:20px 14px; text-align:center; background:rgba(0,0,0,0.02); margin-bottom:14px;">
+            <div id="scanInitialState">
+              <div style="font-size:28px; margin-bottom:8px;">📸</div>
+              <div style="font-size:12px; font-weight:600; color:var(--sim-text); margin-bottom:4px;">Inquadra Passaporto o Carta d'Identità</div>
+              <div style="font-size:10px; color:var(--sim-mid); margin-bottom:14px;">Riconoscimento ottico istantaneo conforme Questura / ISTAT</div>
+              <button class="btn-publish" style="width:100%; justify-content:center; padding:12px; font-size:11px; background:var(--sim-text); color:var(--sim-bg);" onclick="simulateOcrScan()">
+                📷 Avvia Scansione Documento
+              </button>
+            </div>
+
+            <div id="scanLoadingState" style="display:none; padding:10px 0;">
+              <div style="display:inline-block; width:24px; height:24px; border:2px solid var(--gold-champagne); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite;"></div>
+              <div style="font-size:11px; color:var(--sim-mid); margin-top:10px; letter-spacing:0.5px;">Lettura OCR e validazione dati in corso...</div>
+            </div>
+
+            <div id="scanSuccessState" style="display:none; text-align:left;">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:8px;">
+                <span style="font-size:11px; font-weight:700; color:#25D366;">✓ Documento Riconosciuto</span>
+                <span style="font-size:9px; background:rgba(37,211,102,0.1); color:#25D366; padding:2px 8px; border-radius:10px; font-weight:600;">100% VALIDO</span>
+              </div>
+              
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:11px; margin-bottom:10px;">
+                <div><span style="color:var(--sim-mid); font-size:9px; text-transform:uppercase;">Nome:</span><br><strong>Alexander</strong></div>
+                <div><span style="color:var(--sim-mid); font-size:9px; text-transform:uppercase;">Cognome:</span><br><strong>von Müller</strong></div>
+                <div><span style="color:var(--sim-mid); font-size:9px; text-transform:uppercase;">Cittadinanza:</span><br><strong>Germania (DEU)</strong></div>
+                <div><span style="color:var(--sim-mid); font-size:9px; text-transform:uppercase;">N. Passaporto:</span><br><strong>C4X980211</strong></div>
+              </div>
+
+              <div style="background:rgba(0,0,0,0.04); border-radius:10px; padding:10px; font-size:10px; color:var(--sim-mid); line-height:1.5;">
+                🔒 <strong>Flusso Automatico Pronto:</strong><br>
+                • Alloggiati Web (Questura): Tracciato <code>alloggiati.txt</code> compilato.<br>
+                • ROSS1000 (Regione Veneto): Flusso statistico generato.<br>
+                • Imposta Soggiorno: ${document.getElementById('inCityTax').value} calcolata.
+              </div>
+
+              <button class="btn-publish" style="width:100%; justify-content:center; padding:12px; font-size:11px; background:#25D366; color:#fff; margin-top:12px;" onclick="confirmCheckinGuest()">
+                ✓ Conferma & Completa Check-in
+              </button>
+            </div>
+          </div>
+
+          <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+        `;
+      } else if (type === 'wallet') {
+        title.textContent = 'Digital Pass & Wallet';
+        body.innerHTML = `
+          <div class="sim-pass-card">
+            <div class="sim-pass-hdr">
+              <div>
+                <div class="sim-pass-brand">${name}</div>
+                <div style="font-size:8px; letter-spacing:1.5px; text-transform:uppercase; color:#8c8277;">VIP RESIDENCE PASS</div>
+              </div>
+              <div style="font-size:16px; color:var(--gold-champagne);">✦</div>
+            </div>
+
+            <div class="sim-pass-grid">
+              <div class="sim-pass-field">
+                <span class="sim-pass-lbl">OSPITE / GUEST</span>
+                <span class="sim-pass-val">Benvenuto Ospite</span>
+              </div>
+              <div class="sim-pass-field">
+                <span class="sim-pass-lbl">CHECK-IN / OUT</span>
+                <span class="sim-pass-val">${checkin.split(' ')[0]} → ${checkout.replace('Entro le ore ', '')}</span>
+              </div>
+            </div>
+
+            <div class="sim-pass-grid">
+              <div class="sim-pass-field">
+                <span class="sim-pass-lbl">WI-FI RETE</span>
+                <span class="sim-pass-val">${ssid}</span>
+              </div>
+              <div class="sim-pass-field">
+                <span class="sim-pass-lbl">WI-FI PASSWORD</span>
+                <span class="sim-pass-val">${pass}</span>
+              </div>
+            </div>
+
+            <div class="sim-pass-field" style="margin-bottom:8px;">
+              <span class="sim-pass-lbl">INDIRIZZO / LOCATION</span>
+              <span class="sim-pass-val" style="font-size:10px;">${address}</span>
+            </div>
+
+            <div class="sim-pass-barcode">
+              <div class="sim-barcode-lines"></div>
+              <span class="sim-barcode-text">RESIDENCE-PASS-2026</span>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <button class="btn-publish" style="width:100%; justify-content:center; padding:11px; font-size:11px; background:#000; color:#fff;" onclick="downloadPkPassMock('${name}')">
+              🍎 Salva su Apple Wallet (.pkpass)
+            </button>
+            <button class="btn-publish" style="width:100%; justify-content:center; padding:11px; font-size:11px; background:#fff; color:#000; border:1px solid #ccc;" onclick="alert('Pass aggiunto a Google Wallet!')">
+              🤖 Salva su Google Wallet
+            </button>
+          </div>
+
+          <p style="font-size:10px; color:var(--sim-mid); text-align:center; margin-top:10px; line-height:1.4;">
+            📍 <strong>Geofencing Live:</strong> Notifica automatica su iPhone e Apple Watch appena l'ospite giunge nei pressi della proprietà.
+          </p>
+        `;
+      } else if (type === 'checkin') {
+        title.textContent = 'Accoglienza & Partenza';
+        body.innerHTML = `
+          <p><strong>Arrivo (Check-in):</strong> ${checkin} · Accoglienza di persona all'arrivo</p>
+          <p style="margin:8px 0;"><strong>Partenza (Check-out):</strong> ${checkout}</p>
+          <div style="background:rgba(0,0,0,0.04); padding:12px 14px; border-radius:12px; margin-top:12px; border:1px solid rgba(0,0,0,0.05);">
+            <div style="font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; color:var(--sim-mid);">Promemoria prima di partire:</div>
+            <ul style="padding-left:16px; font-size:11px; line-height:1.7;">
+              <li>Spegnere tutte le luci interne</li>
+              <li>Portare i rifiuti differenziati nei contenitori esterni</li>
+              <li>Chiudere bene porte e finestre</li>
+              <li>Riconsegnare le chiavi a ${host} o lasciarle sul tavolo d'ingresso</li>
+            </ul>
+          </div>
+        `;
+      } else if (type === 'wifi') {
+        title.textContent = 'Wi-Fi Fibra';
+        body.innerHTML = `
+          <div style="background:rgba(0,0,0,0.04); padding:14px; border-radius:14px; margin-bottom:10px; border:1px solid rgba(0,0,0,0.05);">
+            <div style="font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--sim-mid); margin-bottom:2px;">Nome Rete (SSID)</div>
+            <div style="font-size:15px; font-weight:600;">${ssid}</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.04); padding:14px; border-radius:14px; border:1px solid rgba(0,0,0,0.05);">
+            <div style="font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--sim-mid); margin-bottom:2px;">Password</div>
+            <div style="font-size:15px; font-weight:600;">${pass}</div>
+          </div>
+        `;
+      } else if (type === 'arrival') {
+        title.textContent = 'Come Arrivare';
+        body.innerHTML = `
+          <p style="margin-bottom:14px;"><strong>Indirizzo:</strong> ${address}</p>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <a href="http://maps.apple.com/?q=${encodeURIComponent(address)}" target="_blank" style="background:#1b1714; color:#fff; padding:12px; border-radius:var(--radius-pill); text-align:center; text-decoration:none; font-weight:500; font-size:11px; letter-spacing:1px; text-transform:uppercase;">Apri su Apple Maps</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}" target="_blank" style="background:#fff; color:#1b1714; border:1px solid rgba(0,0,0,0.15); padding:12px; border-radius:var(--radius-pill); text-align:center; text-decoration:none; font-weight:500; font-size:11px; letter-spacing:1px; text-transform:uppercase;">Apri su Google Maps</a>
+          </div>
+        `;
+      } else if (type === 'amenities') {
+        title.textContent = 'Dotazioni & Comfort';
+        body.innerHTML = `
+          <p style="margin-bottom:10px;">Tutti i comfort presenti nella dimora per il vostro soggiorno:</p>
+          <ul style="padding-left:16px; font-size:12px; line-height:1.8;">
+            <li>Wi-Fi Fibra ad alta velocità</li>
+            <li>Cucina a induzione completamente attrezzata</li>
+            <li>Macchina del caffè espresso con cialde di benvenuto</li>
+            <li>Set cortesia e biancheria di lusso</li>
+            <li>Smart TV connect</li>
+            <li>Lavatrice e set stiro</li>
+          </ul>
+        `;
+      } else if (type === 'parking') {
+        title.textContent = 'Parcheggio';
+        body.innerHTML = `<p style="line-height:1.7;">Posto auto riservato all'interno della proprietà. Vi preghiamo di parcheggiare in modo da consentire il passaggio agli altri veicoli e di rispettare gli spazi assegnati.</p>`;
+      } else if (type === 'climate') {
+        title.textContent = 'Climatizzazione';
+        body.innerHTML = `<p style="line-height:1.7;">L'impianto di climatizzazione e riscaldamento è completamente automatico e autoregolamentato per garantire la temperatura ideale. Non è necessario alcun intervento manuale.</p>`;
+      } else if (type === 'waste') {
+        title.textContent = 'Raccolta Differenziata';
+        body.innerHTML = `<p style="line-height:1.7;">Vi preghiamo di aiutarci a preservare l'ambiente facendo la raccolta differenziata. Utilizzare i sacchetti forniti e chiuderli prima di depositarli nei contenitori esterni.</p>`;
+      } else if (type === 'rules') {
+        title.textContent = 'Regole della Dimora';
+        body.innerHTML = `<p style="white-space:pre-line; line-height:1.7;">${rules}</p>`;
+      } else if (type === 'guide') {
+        title.textContent = 'Esperienze & Dintorni';
+        body.innerHTML = `<p style="white-space:pre-line; line-height:1.7;">${tips}</p>`;
+      } else if (type === 'emergency') {
+        title.textContent = 'Contatti & Emergenze';
+        body.innerHTML = `
+          <div style="border-left:2px solid #e74c3c; padding-left:12px; margin-bottom:12px;">
+            <div style="font-size:10px; letter-spacing:1px; text-transform:uppercase; color:#e74c3c; font-weight:600;">Numero Unico Europeo</div>
+            <a href="tel:112" style="font-size:18px; font-weight:600; color:#e74c3c; text-decoration:none;">112</a>
+          </div>
+          <div style="background:rgba(0,0,0,0.04); padding:12px; border-radius:12px;">
+            <div style="font-size:10px; color:var(--sim-mid); text-transform:uppercase;">Concierge (${host})</div>
+            <a href="tel:${document.getElementById('inHostPhone').value}" style="color:var(--sim-text); font-weight:600; text-decoration:none; font-size:14px;">${document.getElementById('inHostPhone').value}</a>
+          </div>
+        `;
+      }
+
+      document.getElementById('simModal').classList.add('open');
+    }
+
+    function closeSimModal() {
+      document.getElementById('simModal').classList.remove('open');
+    }
+
+    function closeSimModalOnBackdrop(e) {
+      if (e.target.id === 'simModal') closeSimModal();
+    }
+
+    /* MODAL PUBLISH */
+    function openPublishModal() {
+      document.getElementById('publishModal').classList.add('open');
+    }
+    function closePublishModal() {
+      document.getElementById('publishModal').classList.remove('open');
+    }
+    function copyOutUrl() {
+      const url = document.getElementById('outGeneratedUrl').textContent;
+      navigator.clipboard.writeText(url);
+      alert('Link copiato negli appunti.');
+    }
+
+    
+    function loadSampleBooking(type) {
+      const input = document.getElementById('inImportUrl');
+      if (type === 'villagiona') {
+        input.value = 'https://www.booking.com/hotel/it/villa-giona.it.html';
+      } else if (type === 'albertina') {
+        input.value = 'https://www.booking.com/hotel/it/casa-albertina-arbizzano.html';
+      } else if (type === 'caboare') {
+        input.value = 'https://www.booking.com/hotel/it/corte-ca-boare-arbizzano.html';
+      }
+      magicImport();
+    }
+
+    function magicImport() {
+      const btn = document.getElementById('btnMagicImport');
+      const input = document.getElementById('inImportUrl');
+      const url = input.value.trim().toLowerCase();
+
+      btn.textContent = 'Analisi Booking in corso...';
+      btn.style.opacity = '0.7';
+
+      setTimeout(() => {
+        if (url.includes('villa-giona') || url.includes('giona')) {
+          // DATI REALI ESTRATTI DA BOOKING: VILLA GIONA
+          document.getElementById('inPropName').value = 'Villa Giona';
+          document.getElementById('inPropSub').value = 'Dimora Storica del XVI Secolo con Parco Secolare';
+          document.getElementById('inPropAddress').value = 'Via Cengia 85 · San Pietro in Cariano (VR)';
+          document.getElementById('inWifiSSID').value = 'VillaGiona_Guest_Fibra';
+          document.getElementById('inWifiPass').value = 'villagiona2026';
+          document.getElementById('inCheckinTime').value = '14:30 - 19:30';
+          document.getElementById('inCheckoutTime').value = 'Entro le ore 11:00';
+          document.getElementById('inHostName').value = 'Reception & Concierge';
+          document.getElementById('inHostPhone').value = '+39 045 6850024';
+          document.getElementById('inLocalTips').value = '• Enoteca Villa Giona · Degustazioni Amarone e Valpolicella Superiore\n• Trattoria Rosa d\'Oro · Cucina tradizionale veronese a 5 min\n• Pieve di San Floriano · Capolavoro romanico a 2 km';
+          document.getElementById('inHouseRules').value = '• Dimora storica: rigorosamente non fumatori negli interni.\n• Accesso al parco e corte nobiliare riservato agli ospiti.\n• Rispetto della quiete e del silenzio notturno.';
+          setTheme('tuscany', document.querySelectorAll('.palette-btn')[1]);
+        } else if (url.includes('albertina')) {
+          document.getElementById('inPropName').value = 'Casa Albertina';
+          document.getElementById('inPropSub').value = 'Dimora Indipendente con Giardino Privato';
+          document.getElementById('inPropAddress').value = 'Via S. Maria 3/A · Arbizzano di Negrar (VR)';
+          document.getElementById('inWifiSSID').value = 'Guest';
+          document.getElementById('inWifiPass').value = 'guest2026';
+          document.getElementById('inCheckinTime').value = '15:00 - 20:00';
+          document.getElementById('inCheckoutTime').value = 'Entro le ore 10:00';
+          document.getElementById('inHostName').value = 'Simone';
+          document.getElementById('inHostPhone').value = '+39 349 5256975';
+          document.getElementById('inLocalTips').value = '• Trattoria Caprini · Torbe di Negrar\n• Cantina Speri & Quintarelli · Pedemonte / Negrar\n• Santuario Madonna della Corona · Spiazzi';
+          document.getElementById('inHouseRules').value = '• Rigorosamente non fumatori negli interni.\n• Rispetto del silenzio dalle 23:00 alle 08:00.\n• Giardino privato a disposizione esclusiva.';
+          setTheme('reschio', document.querySelectorAll('.palette-btn')[0]);
+        } else {
+          document.getElementById('inPropName').value = 'Villa Giona';
+          document.getElementById('inPropSub').value = 'Dimora Storica del XVI Secolo nel cuore della Valpolicella';
+          document.getElementById('inPropAddress').value = 'Via Cengia 85 · San Pietro in Cariano (VR)';
+          document.getElementById('inWifiSSID').value = 'VillaGiona_Guest_Fibra';
+          document.getElementById('inWifiPass').value = 'villagiona2026';
+          document.getElementById('inHostName').value = 'Concierge Villa Giona';
+          document.getElementById('inHostPhone').value = '+39 045 6850024';
+          document.getElementById('inLocalTips').value = '• Cantina Allegrini · Villa Della Torre (Fumane)\n• Ristorante Enoteca della Valpolicella (Fumane)\n• Borgo storico di San Giorgio di Valpolicella';
+          document.getElementById('inHouseRules').value = '• Struttura monumentale: divieto assoluto di fumo negli interni.\n• Parco secolare e piscina a disposizione nel rispetto della quiete.';
+          setTheme('tuscany', document.querySelectorAll('.palette-btn')[1]);
+        }
+
+        updateSimulator();
+
+        btn.textContent = '✓ Guida Autogenerata!';
+        btn.style.background = '#25D366';
+        btn.style.color = '#fff';
+        btn.style.opacity = '1';
+
+        setTimeout(() => {
+          btn.textContent = 'Autogenera →';
+          btn.style.background = 'var(--gold-champagne)';
+          btn.style.color = '#000';
+        }, 3500);
+      }, 900);
+    }
+
+    // Init
+    updateSimulator();
+  </script>
+</body>
+</html>

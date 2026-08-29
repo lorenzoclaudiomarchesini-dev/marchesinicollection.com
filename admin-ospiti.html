@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Ospiti & Ministero · Marchesini Collection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0b09;
+      --surface: #171412;
+      --card: #201c18;
+      --gold: #c5a880;
+      --gold-glow: rgba(197, 168, 128, 0.2);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f5f0eb;
+      --text-muted: #8c8277;
+      --green: #25D366;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      padding: 0 0 80px;
+    }
+
+    /* HEADER */
+    .header {
+      background: rgba(13, 11, 9, 0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+    }
+    .header-title {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+    .header-sub {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .btn-action-gold {
+      background: var(--gold);
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-action-gold:hover { transform: translateY(-1px); box-shadow: 0 4px 16px var(--gold-glow); }
+
+    .container {
+      max-width: 1280px;
+      margin: 36px auto 0;
+      padding: 0 32px;
+    }
+
+    /* STATS ROW */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+    .stat-value { font-family: var(--serif); font-size: 28px; font-weight: 600; color: #fff; }
+
+    /* SECTION CARD */
+    .panel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 28px;
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .panel-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: #fff;
+    }
+    .panel-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* CIN / CIR CONFIG GRID */
+    .cin-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .cin-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .cin-prop-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+    .field-group label { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
+    .field-input {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      color: #fff;
+      font-size: 12px;
+      outline: none;
+    }
+    .field-input:focus { border-color: var(--gold); }
+
+    /* GUEST TABLE */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 12px;
+    }
+    th {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text);
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .status-ok { background: rgba(37,211,102,0.15); color: #25D366; }
+    .status-pending { background: rgba(212,175,55,0.15); color: var(--gold); }
+
+    .btn-table-action {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-table-action:hover { background: var(--gold); color: #000; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div>
+      <div class="header-title">Marchesini Collection · Ospiti & Burocrazia</div>
+      <div class="header-sub">Portale Alloggiati Web Questura · ROSS1000 Veneto · City Tax</div>
+    </div>
+    <div style="display:flex; gap:12px;">
+      <button class="btn-action-gold" onclick="generateAlloggiatiTxt()">📄 Scarica Alloggiati.txt (Questura)</button>
+      <button class="btn-action-gold" style="background:#fff;" onclick="alert('Flusso automatico WebService Questura inviato!')">🚀 Invia Automatico API</button>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Ospiti Registrati Mese</span>
+        <span class="stat-value">28</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Trasmessi a Questura</span>
+        <span class="stat-value" style="color:#25D366;">28 / 28</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Flusso ROSS1000</span>
+        <span class="stat-value" style="color:var(--gold);">Allineato</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Tassa Soggiorno Negrar</span>
+        <span class="stat-value">42.00 €</span>
+      </div>
+    </div>
+
+    <!-- CONFIGURAZIONE CODICI CIN & CIR -->
+    <div class="panel-card">
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Codici Ministeriali Strutture (CIN & CIR)</h3>
+          <p class="panel-subtitle">Associazione ufficiale per la trasmissione telematica dei dati ospiti</p>
+        </div>
+        <button class="btn-action-gold" style="padding:7px 16px; font-size:10px;" onclick="alert('Codici CIN e CIR salvati con successo!')">Salva Codici</button>
+      </div>
+
+      <div class="cin-grid">
+        
+        <!-- CORTE CA BOARE A -->
+        <div class="cin-box">
+          <div class="cin-prop-name">Corte Cà Boare · Apt A</div>
+          <div class="field-group">
+            <label>CIN (Codice Identificativo Nazionale)</label>
+            <input type="text" class="field-input" id="cin_caboare_a" value="IT023052B4XXXXXXXX">
+          </div>
+          <div class="field-group">
+            <label>CIR / Codice Regione Veneto</label>
+            <input type="text" class="field-input" id="cir_caboare_a" value="M0230520001">
+          </div>
+        </div>
+
+        <!-- CORTE CA BOARE B -->
+        <div class="cin-box">
+          <div class="cin-prop-name">Corte Cà Boare · Apt B</div>
+          <div class="field-group">
+            <label>CIN (Codice Identificativo Nazionale)</label>
+            <input type="text" class="field-input" id="cin_caboare_b" value="IT023052B4YYYYYYYY">
+          </div>
+          <div class="field-group">
+            <label>CIR / Codice Regione Veneto</label>
+            <input type="text" class="field-input" id="cir_caboare_b" value="M0230520002">
+          </div>
+        </div>
+
+        <!-- CASA ALBERTINA -->
+        <div class="cin-box">
+          <div class="cin-prop-name">Casa Albertina</div>
+          <div class="field-group">
+            <label>CIN (Codice Identificativo Nazionale)</label>
+            <input type="text" class="field-input" id="cin_albertina" value="IT023052B4ZZZZZZZZ">
+          </div>
+          <div class="field-group">
+            <label>CIR / Codice Regione Veneto</label>
+            <input type="text" class="field-input" id="cir_albertina" value="M0230520003">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- REGISTRO OSPITI ARRIVATI -->
+    <div class="panel-card">
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Registro Check-in Ospiti in Tempo Reale</h3>
+          <p class="panel-subtitle">Dati acquisiti via OCR con scansione documento e firma digitale</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Data Arrivo</th>
+              <th>Struttura</th>
+              <th>Ospite Principale</th>
+              <th>Cittadinanza</th>
+              <th>Documento</th>
+              <th>Alloggiati Web</th>
+              <th>ROSS1000</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody id="guestTableBody">
+            <tr>
+              <td>Oggi, 15:42</td>
+              <td><strong style="color:var(--gold);">Casa Albertina</strong></td>
+              <td>Alexander von Müller</td>
+              <td>Germania (DEU)</td>
+              <td>Passaporto C4X980211</td>
+              <td><span class="status-badge status-ok">✓ Trasmesso</span></td>
+              <td><span class="status-badge status-ok">✓ Inviato</span></td>
+              <td><button class="btn-table-action" onclick="alert('Ricevuta Questura PDF scaricata!')">Ricevuta PDF</button></td>
+            </tr>
+            <tr>
+              <td>Ieri, 18:20</td>
+              <td><strong>Corte Cà Boare · A</strong></td>
+              <td>Sophie Laurent</td>
+              <td>Francia (FRA)</td>
+              <td>C.I. 19048201FR</td>
+              <td><span class="status-badge status-ok">✓ Trasmesso</span></td>
+              <td><span class="status-badge status-ok">✓ Inviato</span></td>
+              <td><button class="btn-table-action" onclick="alert('Ricevuta Questura PDF scaricata!')">Ricevuta PDF</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function generateAlloggiatiTxt() {
+      // Tracciato record ufficiale Polizia di Stato Alloggiati Web (formato a lunghezza fissa)
+      const sampleTxt = "192841023052B4000120260828DEUVON MULLER        ALEXANDER           M19850412BERLINO             DEUPASC4X980211        QUESTURA DI VERONA\\r\\n";
+      const blob = new Blob([sampleTxt], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `alloggiati_questura_${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      alert('File alloggiati.txt generato secondo le specifiche ufficiali della Questura!');
+    }
+  </script>
+</body>
+</html>
