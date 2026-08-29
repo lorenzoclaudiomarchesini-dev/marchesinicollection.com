@@ -2039,6 +2039,55 @@
       }
     };
 
+    
+    let registeredGuest = null;
+
+    function getWelcomeGreeting(lang, guestName) {
+      if (guestName) {
+        const map = {
+          it: `Benvenuto ${guestName} a`,
+          en: `Welcome ${guestName} to`,
+          fr: `Bienvenue ${guestName} à`,
+          de: `Willkommen ${guestName} in`,
+          es: `Bienvenido ${guestName} a`,
+          ru: `Добро пожаловать, ${guestName}, в`,
+          pt: `Bem-vindo ${guestName} a`
+        };
+        return map[lang] || `Benvenuto ${guestName} a`;
+      } else {
+        const map = {
+          it: "Benvenuti a",
+          en: "Welcome to",
+          fr: "Bienvenue à",
+          de: "Willkommen in",
+          es: "Bienvenido a",
+          ru: "Добро пожаловать в",
+          pt: "Bem-vindo a"
+        };
+        return map[lang] || "Benvenuti a";
+      }
+    }
+
+    function updateWelcomeTitleUI() {
+      const guestName = registeredGuest ? registeredGuest.name : getUrlGuestName();
+      const greeting = getWelcomeGreeting(currentLang, guestName);
+      document.getElementById('txtWelcome').textContent = greeting;
+
+      // Aggiorna anche il messaggio WhatsApp per Simone con il nome dell'ospite se registrato
+      const whatsappBtn = document.getElementById('btnWhatsapp');
+      if (whatsappBtn) {
+        const propName = PROPERTIES[currentProp].name;
+        const guestPart = guestName ? `sono ${guestName}` : "sono un ospite";
+        const message = encodeURIComponent(`Ciao Simone, ${guestPart} di ${propName}.`);
+        whatsappBtn.href = `https://wa.me/393495256975?text=${message}`;
+      }
+    }
+
+    function getUrlGuestName() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('ospite') || urlParams.get('guest') || urlParams.get('nome') || null;
+    }
+
     let currentLang = 'it';
     let currentProp = 'caboare-a';
 
@@ -2119,7 +2168,7 @@
 
     function updateLangUI() {
       const t = I18N[currentLang];
-      document.getElementById('txtWelcome').textContent = t.welcome;
+      updateWelcomeTitleUI();
       document.getElementById('txtQuickWifiTitle').textContent = t.quickWifi;
       document.getElementById('txtQuickWifiSub').textContent = t.quickWifiSub;
       document.getElementById('txtCopyBtn').textContent = t.copy;
@@ -2186,14 +2235,27 @@
 
     
     function completeVipCheckin() {
+      // Estrai dati anagrafici dal form o OCR
+      const extractedName = document.getElementById('resName') ? document.getElementById('resName').textContent.trim() : "Enrico";
+      const extractedSurname = document.getElementById('resSurname') ? document.getElementById('resSurname').textContent.trim() : "Marchesini";
+      const extractedDocNum = document.getElementById('resDocNum') ? document.getElementById('resDocNum').textContent.trim() : "CA92841ZZ";
+
+      registeredGuest = {
+        name: extractedName,
+        surname: extractedSurname,
+        docNum: extractedDocNum
+      };
+
+      localStorage.setItem('guest_profile_' + currentProp, JSON.stringify(registeredGuest));
+
       // 1. Invia dati al server backend
       const guestData = {
         apt: currentProp,
-        name: "Enrico",
-        surname: "Marchesini",
+        name: extractedName,
+        surname: extractedSurname,
         citizenship: "ITA",
         doc_type: "CARTA_IDENTITA",
-        doc_num: "CA92841ZZ",
+        doc_num: extractedDocNum,
         checkin_date: new Date().toISOString().split('T')[0],
         timestamp: new Date().toISOString()
       };
@@ -2222,12 +2284,18 @@
 
       const gatedSection = document.getElementById('gatedContentSection');
       if (gatedSection) gatedSection.classList.remove('is-locked');
+      updateWelcomeTitleUI();
     }
 
     function checkExistingUnlock() {
-      if (localStorage.getItem('checkin_completed_' + currentProp) === 'true') {
+      const savedProfile = localStorage.getItem('guest_profile_' + currentProp);
+      if (savedProfile) {
+        try { registeredGuest = JSON.parse(savedProfile); } catch(e){}
+      }
+      if (localStorage.getItem('checkin_completed_' + currentProp) === 'true' || registeredGuest) {
         unlockGuestExperience();
       }
+      updateWelcomeTitleUI();
     }
 
     function _old_completeVipCheckin() {
@@ -2340,7 +2408,7 @@
             <div class="pass-row">
               <div class="pass-field">
                 <span class="pass-label">OSPITE / GUEST</span>
-                <span class="pass-value">Benvenuto Ospite</span>
+                <span class="pass-value" id="passGuestName">${registeredGuest ? (registeredGuest.name + ' ' + registeredGuest.surname) : (getUrlGuestName() || 'Ospite VIP')}</span>
               </div>
               <div class="pass-field">
                 <span class="pass-label">CHECK-IN / OUT</span>
@@ -2485,7 +2553,7 @@
             <div class="pass-row">
               <div class="pass-field">
                 <span class="pass-label">OSPITE / GUEST</span>
-                <span class="pass-value">Benvenuto Ospite</span>
+                <span class="pass-value" id="passGuestName">${registeredGuest ? (registeredGuest.name + ' ' + registeredGuest.surname) : (getUrlGuestName() || 'Ospite VIP')}</span>
               </div>
               <div class="pass-field">
                 <span class="pass-label">CHECK-IN / OUT</span>
