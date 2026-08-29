@@ -387,17 +387,10 @@
 
     
     
-    /* ══════════════════════════════════════
-       CHECK-IN GATED LOCK SYSTEM
-    ══════════════════════════════════════ */
-    .locked-gated-section {
-      transition: all 0.4s ease;
-    }
+    /* GATED CONTAINER */
+    .locked-gated-section { transition: all 0.3s; }
     .locked-gated-section.is-locked {
-      filter: blur(8px) grayscale(0.5);
-      opacity: 0.35;
-      pointer-events: none;
-      user-select: none;
+      display: none !important;
     }
 
     /* GATE OVERLAY BANNER */
