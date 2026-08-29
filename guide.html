@@ -105,9 +105,9 @@
     .lang-btn {
       border: none;
       background: transparent;
-      padding: 5px 9px;
+      padding: 4px 7px;
       font-family: var(--sans);
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 500;
       letter-spacing: 1px;
       color: var(--mid);
@@ -935,13 +935,15 @@
     <header class="top-header">
       <div class="brand-eyebrow">Marchesini Collection</div>
       
-      <!-- LINGUE -->
+      <!-- LINGUE (7 LINGUE) -->
       <div class="lang-picker" id="langPicker">
         <button class="lang-btn active" onclick="setLanguage('it')">IT</button>
         <button class="lang-btn" onclick="setLanguage('en')">EN</button>
         <button class="lang-btn" onclick="setLanguage('fr')">FR</button>
         <button class="lang-btn" onclick="setLanguage('de')">DE</button>
         <button class="lang-btn" onclick="setLanguage('es')">ES</button>
+        <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+        <button class="lang-btn" onclick="setLanguage('pt')">PT</button>
       </div>
     </header>
 
@@ -1179,7 +1181,9 @@
           en: "Apartment A · Loft with exposed wooden beams",
           fr: "Appartement A · Loft avec poutres apparentes",
           de: "Apartment A · Loft mit sichtbaren Holzbalken",
-          es: "Apartamento A · Loft con vigas de madera a la vista"
+          es: "Apartamento A · Loft con vigas de madera a la vista",
+          ru: "Апартаменты A · Лофт с открытыми деревянными балками",
+          pt: "Apartamento A · Loft com vigas de madeira aparentes"
         },
         location: "Via S. Maria 13 · Arbizzano di Negrar (VR)",
         coords: "45.5034,10.9632",
@@ -1230,7 +1234,9 @@
           en: "Apartment B · Loft with exposed wooden beams",
           fr: "Appartement B · Loft avec poutres apparentes",
           de: "Apartment B · Loft mit sichtbaren Holzbalken",
-          es: "Apartamento B · Loft con vigas de madera a la vista"
+          es: "Apartamento B · Loft con vigas de madera a la vista",
+          ru: "Апартаменты B · Лофт с открытыми деревянными балками",
+          pt: "Apartamento B · Loft com vigas de madeira aparentes"
         },
         location: "Via S. Maria 13 · Arbizzano di Negrar (VR)",
         coords: "45.5034,10.9632",
@@ -1281,7 +1287,9 @@
           en: "Independent Home with Private Garden",
           fr: "Demeure Indépendante avec Jardin Privé",
           de: "Freistehendes Haus mit privatem Garten",
-          es: "Vivienda Independiente con Jardín Privado"
+          es: "Vivienda Independiente con Jardín Privado",
+          ru: "Отдельный дом с собственным садом",
+          pt: "Residência Independente com Jardim Privado"
         },
         location: "Via S. Maria 3/A · Arbizzano di Negrar (VR)",
         coords: "45.5029,10.9638",
@@ -1750,6 +1758,192 @@
           }
         }
       },
+      ru: {
+        welcome: "Добро пожаловать в",
+        quickWifi: "Скоростной Wi-Fi (Оптоволокно)",
+        quickWifiSub: "Нажмите, чтобы скопировать пароль",
+        copy: "Копировать",
+        copied: "Скопировано в буфер обмена!",
+        writeHost: "Написать Симоне",
+        emergency: "Экстренные службы",
+        cards: {
+          checkin: "Заезд / Выезд",
+          amenities: "Удобства",
+          wifi: "Wi-Fi Оптоволокно",
+          arrival: "Как добраться",
+          parking: "Парковка",
+          climate: "Климат и A/C",
+          waste: "Раздельный сбор",
+          rules: "Правила дома",
+          guide: "Впечатления"
+        },
+        modals: {
+          checkin: {
+            eyebrow: "Прибытие и Время",
+            title: "Заезд и Отъезд",
+            from: "Личная встреча при заезде:",
+            fromInfo: "Личный прием гостей по прибытии",
+            to: "Время выезда:",
+            toInfo: "До 10:00 утра",
+            departureTitle: "Перед отъездом просьба:",
+            departureItems: [
+              "Выключить все освещение в доме",
+              "Вынести рассортированный мусор в уличные контейнеры",
+              "Плотно закрыть окна и входные двери",
+              "Передать ключи Симоне или оставить их на столике в прихожей"
+            ]
+          },
+          amenities: {
+            eyebrow: "Удобства и Комфорт",
+            title: "В доме",
+            desc: "Все удобства для вашего идеального отдыха:",
+            items: ["Высокоскоростной оптоволоконный Wi-Fi", "Полностью оборудованная индукционная кухня", "Эспрессо-кофемашина с приветственными капсулами", "Элитное постельное белье и банные принадлежности", "Smart TV со стриминговыми сервисами", "Стиральная машина и гладильные принадлежности"]
+          },
+          wifi: {
+            eyebrow: "Подключение к сети",
+            title: "Wi-Fi Оптоволокно",
+            name: "Имя сети (SSID):",
+            pass: "Пароль:",
+            btnCopy: "Скопировать пароль"
+          },
+          arrival: {
+            eyebrow: "Навигация и Карты",
+            title: "Как добраться",
+            address: "Точный адрес:",
+            mapsBtn: "Открыть в Apple Maps",
+            gmapsBtn: "Открыть в Google Maps"
+          },
+          parking: {
+            eyebrow: "Транспорт и Парковка",
+            title: "Частная парковка",
+            info: "Инструкции по парковке:"
+          },
+          climate: {
+            eyebrow: "Климат-контроль",
+            title: "Кондиционирование и Отопление",
+            info: "Работа системы климат-контроля:"
+          },
+          waste: {
+            eyebrow: "Экология и Переработка",
+            title: "Раздельный сбор мусора",
+            info: "Инструкции по сортировке:"
+          },
+          rules: {
+            eyebrow: "Правила Проживания",
+            title: "Правила Дома",
+            info: "Рекомендации на время пребывания:"
+          },
+          guide: {
+            eyebrow: "Вальполичелла и Окрестности",
+            title: "Впечатления и Советы",
+            catCantine: "🍷 Винодельни Амароне и Дегустации",
+            catRistoranti: "🍽️ Избранные Рестораны и Остерии",
+            catAttrazioni: "🏛️ Исторические Борго и Парки",
+            btnStradaVino: "🍇 Винная дорога Вальполичеллы →",
+            btnInfoValpo: "🗺️ Официальный портал InfoValpolicella →"
+          },
+          emergency: {
+            eyebrow: "Экстренные Контакты",
+            title: "Полезные Телефоны",
+            hospital: "Больница Сакро Куоре Дон Калабрия (Неграр): 045 6013111",
+            pharmacy: "Аптека Арбиццано: 045 7513028",
+            num112: "Единый номер экстренных служб: 112"
+          }
+        }
+      },
+      pt: {
+        welcome: "Bem-vindo a",
+        quickWifi: "Wi-Fi Fibra de Alta Velocidade",
+        quickWifiSub: "Toque para copiar a senha",
+        copy: "Copiar",
+        copied: "Copiado para a área de transferência!",
+        writeHost: "Escrever para Simone",
+        emergency: "Emergências",
+        cards: {
+          checkin: "Check-in / Out",
+          amenities: "Comodidades",
+          wifi: "Wi-Fi Fibra",
+          arrival: "Como Chegar",
+          parking: "Estacionamento",
+          climate: "Clima & A/C",
+          waste: "Reciclagem",
+          rules: "Regras da Casa",
+          guide: "Experiências"
+        },
+        modals: {
+          checkin: {
+            eyebrow: "Acesso e Horários",
+            title: "Check-in e Partida",
+            from: "Check-in Presencial:",
+            fromInfo: "Boas-vindas presenciais na chegada",
+            to: "Horário de Check-out:",
+            toInfo: "Até às 10:00",
+            departureTitle: "Lembretes antes de sair:",
+            departureItems: [
+              "Desligar todas as luzes interiores",
+              "Colocar o lixo separado nos contentores exteriores",
+              "Fechar bem portas e janelas",
+              "Entregar as chaves a Simone ou deixá-las sobre a mesa"
+            ]
+          },
+          amenities: {
+            eyebrow: "Comodidades & Conforto",
+            title: "Na Residência",
+            desc: "Todo o conforto de luxo para a sua estadia:",
+            items: ["Wi-Fi fibra de alta velocidade", "Cozinha de indução totalmente equipada", "Máquina de café expresso com cápsulas de cortesia", "Roupa de cama e banho de luxo", "Smart TV com streaming", "Máquina de lavar e ferro de engomar"]
+          },
+          wifi: {
+            eyebrow: "Acesso à Internet",
+            title: "Wi-Fi Fibra",
+            name: "Nome da Rede (SSID):",
+            pass: "Senha:",
+            btnCopy: "Copiar Senha"
+          },
+          arrival: {
+            eyebrow: "Navegação & Mapas",
+            title: "Como Chegar",
+            address: "Endereço Exato:",
+            mapsBtn: "Abrir no Apple Maps",
+            gmapsBtn: "Abrir no Google Maps"
+          },
+          parking: {
+            eyebrow: "Veículos & Estacionamento",
+            title: "Estacionamento Privado",
+            info: "Instruções de estacionamento:"
+          },
+          climate: {
+            eyebrow: "Controlo Térmico",
+            title: "Climatização & Aquecimento",
+            info: "Funcionamento do sistema:"
+          },
+          waste: {
+            eyebrow: "Ecologia & Reciclagem",
+            title: "Separação de Resíduos",
+            info: "Instruções de reciclagem:"
+          },
+          rules: {
+            eyebrow: "Convivência & Regras",
+            title: "Regras da Casa",
+            info: "Diretrizes para a sua estadia:"
+          },
+          guide: {
+            eyebrow: "Valpolicella & Arredores",
+            title: "Experiências e Dicas",
+            catCantine: "🍷 Vinícolas de Amarone e Degustações",
+            catRistoranti: "🍽️ Restaurantes e Tabernas Selecionadas",
+            catAttrazioni: "🏛️ Aldeias Históricas e Parques",
+            btnStradaVino: "🍇 Rota do Vinho Valpolicella →",
+            btnInfoValpo: "🗺️ Portal Oficial InfoValpolicella →"
+          },
+          emergency: {
+            eyebrow: "Contactos de Urgência",
+            title: "Contactos Úteis",
+            hospital: "Hospital Sacro Cuore Don Calabria (Negrar): 045 6013111",
+            pharmacy: "Farmácia de Arbizzano: 045 7513028",
+            num112: "Número Europeu de Emergência: 112"
+          }
+        }
+      }
       es: {
         welcome: "Bienvenido a",
         quickWifi: "Wi-Fi Fibra de Alta Velocidad",
@@ -1938,7 +2132,9 @@
         en: "Add to Apple Wallet",
         fr: "Ajouter à Apple Wallet",
         de: "Zu Apple Wallet hinzufügen",
-        es: "Añadir a Apple Wallet"
+        es: "Añadir a Apple Wallet",
+        ru: "Добавить в Apple Wallet",
+        pt: "Adicionar ao Apple Wallet"
       };
       if (document.getElementById('txtWalletBtn')) {
         document.getElementById('txtWalletBtn').textContent = walletTranslations[currentLang] || "Aggiungi a Wallet";
