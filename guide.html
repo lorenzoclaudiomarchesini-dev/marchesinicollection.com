@@ -74,14 +74,15 @@
       background: radial-gradient(circle at 50% 0%, #ffffff 0%, var(--bg-body) 65%);
     }
 
-    /* TOP BAR & LANGUAGE SELECTOR */
+    /* TOP BAR & LANGUAGE SELECTOR (ALWAYS ACCESSIBLE) */
     .top-header {
       padding: 18px 24px 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: relative;
-      z-index: 10;
+      z-index: 999;
+      pointer-events: auto !important;
     }
 
     .brand-eyebrow {
@@ -1385,7 +1386,116 @@
       }
     };
 
-        const I18N = {
+        
+    const GATE_I18N = {
+      it: {
+        title: "Primo Step: Registrazione Documenti",
+        desc: "Per accedere al Wi-Fi, codici, servizi e dettagli della dimora è necessario completare il check-in online rapido a norma di legge.",
+        btn: "📸 Completa Check-in VIP",
+        unlocked: "✓ Check-in VIP Registrato · Accesso Completo Attivo",
+        modalTitle: "Check-in Online & Documenti",
+        modalDesc: "Fotografa il tuo documento per completare la registrazione ufficiale in 30 secondi. Dati crittografati e conformi a Questura & ISTAT.",
+        promptTitle: "Inquadra Passaporto o Carta d'Identità",
+        promptSub: "Acquisizione automatica della zona a lettura ottica (MRZ)",
+        btnUpload: "📷 Scatta Foto o Carica Documento",
+        processing: "Lettura OCR & Validazione Documento...",
+        processingSub: "Estrazione dati anagrafici e conformità Questura",
+        successTitle: "✓ Documento Acquisito con Successo",
+        btnConfirm: "✓ Conferma & Invia Registrazione"
+      },
+      en: {
+        title: "Step 1: Guest Registration",
+        desc: "To access Wi-Fi, entry codes, residence amenities and local guides, please complete the quick official online check-in.",
+        btn: "📸 Complete VIP Check-in",
+        unlocked: "✓ VIP Check-in Completed · Full Access Granted",
+        modalTitle: "Online Check-in & Documents",
+        modalDesc: "Photograph your passport or ID to complete official registration in 30 seconds. Encrypted and compliant with police authorities.",
+        promptTitle: "Capture Passport or National ID",
+        promptSub: "Automatic Machine Readable Zone (MRZ) extraction",
+        btnUpload: "📷 Take Photo or Upload Document",
+        processing: "OCR Reading & Document Validation...",
+        processingSub: "Extracting personal details & official compliance",
+        successTitle: "✓ Document Successfully Verified",
+        btnConfirm: "✓ Confirm & Complete Check-in"
+      },
+      fr: {
+        title: "Étape 1 : Enregistrement des Hôtes",
+        desc: "Pour accéder au Wi-Fi, aux codes d'entrée et aux services de la demeure, veuillez compléter l'enregistrement officiel rapide.",
+        btn: "📸 Compléter le Check-in VIP",
+        unlocked: "✓ Check-in VIP Validé · Accès Complet Débloqué",
+        modalTitle: "Enregistrement en Ligne & Pièce d'Identité",
+        modalDesc: "Photographiez votre passeport ou carte d'identité pour compléter l'enregistrement en 30 secondes en toute sécurité.",
+        promptTitle: "Cadrez votre Passeport ou Carte d'Identité",
+        promptSub: "Reconnaissance optique automatique des données",
+        btnUpload: "📷 Prendre une Photo ou Charger le Document",
+        processing: "Lecture OCR & Validation en cours...",
+        processingSub: "Extraction sécurisée des informations d'identité",
+        successTitle: "✓ Document Validé avec Succès",
+        btnConfirm: "✓ Confirmer l'Enregistrement"
+      },
+      de: {
+        title: "Schritt 1: Offizielle Registrierung",
+        desc: "Um Zugang zu WLAN, Zugangscodes, Annehmlichkeiten und Guides zu erhalten, führen Sie bitte den schnellen Online-Check-in durch.",
+        btn: "📸 VIP Check-in Durchführen",
+        unlocked: "✓ VIP Check-in Erledigt · Vollständiger Zugang Aktiv",
+        modalTitle: "Online Check-in & Ausweisdokumente",
+        modalDesc: "Fotografieren Sie Ihren Reisepass oder Personalausweis für die gesetzliche Gästemeldung in 30 Sekunden.",
+        promptTitle: "Reisepass oder Personalausweis erfassen",
+        promptSub: "Automatische optische Zeichenerkennung (MRZ)",
+        btnUpload: "📷 Foto aufnehmen oder Dokument hochladen",
+        processing: "OCR-Erkennung & Dokumentenprüfung...",
+        processingSub: "Behördenkonforme Datenverarbeitung",
+        successTitle: "✓ Dokument Erfolgreich Überprüft",
+        btnConfirm: "✓ Bestätigen & Check-in Abschließen"
+      },
+      es: {
+        title: "Paso 1: Registro de Huéspedes",
+        desc: "Para acceder al Wi-Fi, códigos de entrada, comodidades y guías, complete el registro oficial obligatorio en línea.",
+        btn: "📸 Completar Check-in VIP",
+        unlocked: "✓ Check-in VIP Completado · Acceso Completo Activo",
+        modalTitle: "Check-in Online y Documentos",
+        modalDesc: "Fotografíe su pasaporte o documento de identidad para completar el registro oficial en 30 segundos de forma segura.",
+        promptTitle: "Encuadre su Pasaporte o Documento",
+        promptSub: "Lectura óptica automática de datos oficiales",
+        btnUpload: "📷 Tomar Foto o Subir Documento",
+        processing: "Lectura OCR y Validación en curso...",
+        processingSub: "Procesamiento de datos conforme a la ley",
+        successTitle: "✓ Documento Verificado con Éxito",
+        btnConfirm: "✓ Confirmar y Finalizar Registro"
+      },
+      ru: {
+        title: "Шаг 1: Регистрация гостей",
+        desc: "Для доступа к Wi-Fi, кодам доступа, удобствам и путеводителю пройдите быструю официальную онлайн-регистрацию.",
+        btn: "📸 Пройти VIP Check-in",
+        unlocked: "✓ VIP Check-in пройден · Полный доступ открыт",
+        modalTitle: "Онлайн Check-in и Документы",
+        modalDesc: "Сфотографируйте паспорт или удостоверение личности для официальной регистрации за 30 секунд.",
+        promptTitle: "Сфотографируйте паспорт или ID-карту",
+        promptSub: "Автоматическое считывание машиночитаемой зоны (MRZ)",
+        btnUpload: "📷 Сделать фото или загрузить документ",
+        processing: "OCR-сканирование и проверка данных...",
+        processingSub: "Подготовка данных для официального учета",
+        successTitle: "✓ Документ успешно проверен",
+        btnConfirm: "✓ Подтвердить и завершить Check-in"
+      },
+      pt: {
+        title: "Passo 1: Registo de Hóspedes",
+        desc: "Para aceder ao Wi-Fi, códigos de entrada, comodidades e guias da residência, conclua o registo oficial online.",
+        btn: "📸 Concluir Check-in VIP",
+        unlocked: "✓ Check-in VIP Concluído · Acesso Total Ativo",
+        modalTitle: "Check-in Online e Documentos",
+        modalDesc: "Fotografe o seu passaporte ou cartão de cidadão para concluir o registo oficial em 30 segundos.",
+        promptTitle: "Enquadre o Passaporte ou Documento de Identidade",
+        promptSub: "Leitura ótica automática de dados",
+        btnUpload: "📷 Tirar Foto ou Carregar Documento",
+        processing: "Leitura OCR e Validação de Documento...",
+        processingSub: "Extração de dados anagráficos e conformidade oficial",
+        successTitle: "✓ Documento Verificado com Sucesso",
+        btnConfirm: "✓ Confirmar e Concluir Check-in"
+      }
+    };
+
+    const I18N = {
       it: {
         welcome: "Benvenuti a",
         quickWifi: "Wi-Fi Fibra Veloce",
@@ -2168,6 +2278,8 @@
 
     function updateLangUI() {
       const t = I18N[currentLang];
+      const gateT = GATE_I18N[currentLang] || GATE_I18N.it;
+
       updateWelcomeTitleUI();
       document.getElementById('txtQuickWifiTitle').textContent = t.quickWifi;
       document.getElementById('txtQuickWifiSub').textContent = t.quickWifiSub;
@@ -2176,6 +2288,12 @@
       document.getElementById('txtEmergency').textContent = t.emergency;
       document.getElementById('toastMsg').textContent = t.copied;
       
+      // Traduci il Gate Lock Banner
+      if (document.getElementById('txtGateTitle')) document.getElementById('txtGateTitle').textContent = gateT.title;
+      if (document.getElementById('txtGateDesc')) document.getElementById('txtGateDesc').textContent = gateT.desc;
+      if (document.getElementById('txtGateBtn')) document.getElementById('txtGateBtn').textContent = gateT.btn;
+      if (document.getElementById('unlockedPill')) document.getElementById('unlockedPill').querySelector('span:last-child').textContent = gateT.unlocked;
+
       const walletTranslations = {
         it: "Aggiungi a Wallet",
         en: "Add to Apple Wallet",
@@ -2310,63 +2428,66 @@
     }
 
     /* ── GESTIONE MODALE BOTTOM SHEET ── */
+    /* ── GESTIONE MODALE BOTTOM SHEET ── */
     function openModal(type) {
       const prop = PROPERTIES[currentProp];
       const lang = (I18N[currentLang].modals && I18N[currentLang].modals[type]) || {
         eyebrow: "Apple Wallet",
         title: "Digital Key Pass"
       };
+      const gateT = GATE_I18N[currentLang] || GATE_I18N.it;
       const backdrop = document.getElementById('modalBackdrop');
       const eyebrow = document.getElementById('modalEyebrow');
       const title = document.getElementById('modalTitle');
       const body = document.getElementById('modalBody');
 
-      eyebrow.textContent = lang.eyebrow || 'Apple Wallet';
-      title.textContent = lang.title || 'Digital Pass';
+      eyebrow.textContent = lang.eyebrow || 'Check-in VIP';
+      title.textContent = lang.title || 'Digital Access';
 
       let html = '';
 
-            if (type === 'checkin_vip') {
+      if (type === 'checkin_vip' || type === 'checkin') {
+        eyebrow.textContent = "VIP Guest Check-in";
+        title.textContent = gateT.modalTitle;
         html = `
           <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:20px; padding:20px; margin-bottom:16px; text-align:center;">
             <div style="width:54px; height:54px; border-radius:50%; background:rgba(197, 168, 128, 0.12); margin:0 auto 12px; display:flex; align-items:center; justify-content:center;">
               <svg viewBox="0 0 24 24" style="width:26px; height:26px; stroke:var(--gold); stroke-width:1.5; fill:none;"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2M15 12h2M7 16h10"/></svg>
             </div>
-            <h4 style="font-family:var(--serif); font-size:22px; font-weight:500; color:var(--dark); margin-bottom:4px;">Check-in Online & Documenti</h4>
-            <p style="font-size:12px; color:var(--mid); line-height:1.5;">Fotografa il tuo documento per completare la registrazione ufficiale in 30 secondi. Dati crittografati e conformi a Questura & ISTAT.</p>
+            <h4 style="font-family:var(--serif); font-size:22px; font-weight:500; color:var(--dark); margin-bottom:4px;">${gateT.modalTitle}</h4>
+            <p style="font-size:12px; color:var(--mid); line-height:1.5;">${gateT.modalDesc}</p>
           </div>
 
           <!-- SCANNER INTERATTIVO REALISTICO -->
           <div id="liveScanArea" style="border: 2px dashed rgba(197, 168, 128, 0.45); border-radius:20px; padding:24px 16px; text-align:center; background:rgba(255,255,255,0.7); margin-bottom:16px;">
             <div id="scanPromptBox">
               <div style="font-size:32px; margin-bottom:8px;">📸</div>
-              <h5 style="font-size:13px; font-weight:600; color:var(--dark); margin-bottom:4px;">Inquadra Passaporto o Carta d'Identità</h5>
-              <p style="font-size:11px; color:var(--mid); margin-bottom:16px;">Acquisizione automatica della zona a lettura ottica (MRZ)</p>
+              <h5 style="font-size:13px; font-weight:600; color:var(--dark); margin-bottom:4px;">${gateT.promptTitle}</h5>
+              <p style="font-size:11px; color:var(--mid); margin-bottom:16px;">${gateT.promptSub}</p>
               
-              <!-- File input reale per iPhone / Safari -->
               <input type="file" id="docFileInput" accept="image/*" capture="environment" style="display:none;" onchange="handleDocUpload(event)">
-              <button class="btn-action-sm" style="width:100%; justify-content:center; padding:13px; font-size:12px;" onclick="document.getElementById('docFileInput').click()">
-                📷 Scatta Foto o Carica Documento
+              <button type="button" class="btn-action-sm" style="width:100%; justify-content:center; padding:13px; font-size:12px; cursor:pointer;" onclick="document.getElementById('docFileInput').click()">
+                ${gateT.btnUpload}
               </button>
             </div>
 
             <div id="scanProcessingBox" style="display:none; padding:16px 0;">
               <div style="display:inline-block; width:28px; height:28px; border:2.5px solid var(--gold); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite;"></div>
-              <div style="font-size:12px; font-weight:600; color:var(--dark); margin-top:12px;">Lettura OCR & Validazione Documento...</div>
-              <div style="font-size:10px; color:var(--mid); margin-top:4px;">Estrazione dati anagrafici e conformità Questura</div>
+              <div style="font-size:12px; font-weight:600; color:var(--dark); margin-top:12px;">${gateT.processing}</div>
+              <div style="font-size:10px; color:var(--mid); margin-top:4px;">${gateT.processingSub}</div>
             </div>
 
             <div id="scanResultBox" style="display:none; text-align:left;">
               <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid var(--warm-border); padding-bottom:8px;">
-                <span style="font-size:12px; font-weight:700; color:#25D366;">✓ Documento Acquisito con Successo</span>
+                <span style="font-size:12px; font-weight:700; color:#25D366;">${gateT.successTitle}</span>
                 <span style="font-size:9px; background:rgba(37,211,102,0.12); color:#25D366; padding:3px 8px; border-radius:10px; font-weight:700;">100% VALIDO</span>
               </div>
               
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12px; margin-bottom:14px; background:var(--white); padding:12px; border-radius:12px; border:1px solid var(--warm-border);">
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Nome:</span><br><strong id="resName">Enrico</strong></div>
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Cognome:</span><br><strong id="resSurname">Marchesini</strong></div>
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Cittadinanza:</span><br><strong>Italia (ITA)</strong></div>
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">N. Documento:</span><br><strong id="resDocNum">CA92841ZZ</strong></div>
+                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Nome:</span><br><strong id="resName">Alexander</strong></div>
+                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Cognome:</span><br><strong id="resSurname">von Müller</strong></div>
+                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Cittadinanza:</span><br><strong>Germania (DEU)</strong></div>
+                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">N. Documento:</span><br><strong id="resDocNum">C4X980211</strong></div>
               </div>
 
               <div style="background:rgba(0,0,0,0.03); border-radius:12px; padding:12px; font-size:11px; color:var(--dark-soft); line-height:1.6; margin-bottom:14px; border:1px solid var(--warm-border);">
@@ -2376,13 +2497,12 @@
                 • <strong>Imposta di Soggiorno:</strong> Registrata per il Comune di Negrar.
               </div>
 
-              <button class="btn-action-sm" style="width:100%; justify-content:center; padding:14px; font-size:12px; background:#25D366; color:#fff;" onclick="completeVipCheckin()">
-                ✓ Conferma & Invia Registrazione
+              <button type="button" class="btn-action-sm" style="width:100%; justify-content:center; padding:14px; font-size:12px; background:#25D366; color:#fff; cursor:pointer;" onclick="completeVipCheckin()">
+                ${gateT.btnConfirm}
               </button>
             </div>
           </div>
 
-          <!-- CHECKLIST DI PARTENZA INTEGRATA -->
           <div class="list-steps">
             <div class="step-item" style="border-left: 3px solid var(--gold); flex-direction:column; align-items:flex-start;">
               <span class="tag-badge">📋 Promemoria di Soggiorno:</span>
@@ -2395,6 +2515,8 @@
           <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
         `;
       } else if (type === 'wallet') {
+        eyebrow.textContent = "Apple Wallet";
+        title.textContent = "Digital Key Pass";
         html = `
           <div class="wallet-pass-card">
             <div class="pass-header">
@@ -2408,7 +2530,7 @@
             <div class="pass-row">
               <div class="pass-field">
                 <span class="pass-label">OSPITE / GUEST</span>
-                <span class="pass-value" id="passGuestName">${registeredGuest ? (registeredGuest.name + ' ' + registeredGuest.surname) : (getUrlGuestName() || 'Ospite VIP')}</span>
+                <span class="pass-value" id="passGuestName">${registeredGuest ? (registeredGuest.name + ' ' + registeredGuest.surname) : (getUrlGuestName() || 'Alexander von Müller')}</span>
               </div>
               <div class="pass-field">
                 <span class="pass-label">CHECK-IN / OUT</span>
@@ -2443,148 +2565,40 @@
           </div>
         `;
       } else if (type === 'sound') {
+        eyebrow.textContent = "Audio & Smart Home";
+        title.textContent = "Sound & Playlist";
         html = `
-          <div class="list-steps">
-            <div class="step-item">
-              <div class="step-num">🔑</div>
-              <div class="step-text">
-                <h4>${lang.from}</h4>
-                <p><strong>${prop.checkin.checkin_from} - ${prop.checkin.checkin_to}</strong> · ${lang.fromInfo}</p>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:18px; padding:18px; text-align:center;">
+              <div style="width:48px; height:48px; border-radius:50%; background:rgba(197, 168, 128, 0.12); margin:0 auto 12px; display:flex; align-items:center; justify-content:center;">
+                <svg viewBox="0 0 24 24" style="width:22px; height:22px; stroke:var(--gold); stroke-width:1.5; fill:none;"><path d="M9 18V5l12-2v13M9 9l12-2M6 18a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm12 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
               </div>
-            </div>
-            <div class="step-item">
-              <div class="step-num">⏰</div>
-              <div class="step-text">
-                <h4>${lang.to}</h4>
-                <p><strong>${lang.toInfo}</strong></p>
-              </div>
-            </div>
-            <div class="step-item" style="border-left: 3px solid var(--gold); flex-direction:column; align-items:flex-start;">
-              <span class="tag-badge">📋 ${lang.departureTitle}</span>
-              <div style="display:flex; flex-direction:column; gap:8px; width:100%; margin-top:8px;">
-                ${lang.departureItems.map(item => `
-                  <div style="display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--dark-soft);">
-                    <span style="color:var(--gold); font-weight:bold;">✓</span> ${item}
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          </div>
-        `;
-            } else       if (type === 'checkin_vip') {
-        html = `
-          <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:20px; padding:20px; margin-bottom:16px; text-align:center;">
-            <div style="width:54px; height:54px; border-radius:50%; background:rgba(197, 168, 128, 0.12); margin:0 auto 12px; display:flex; align-items:center; justify-content:center;">
-              <svg viewBox="0 0 24 24" style="width:26px; height:26px; stroke:var(--gold); stroke-width:1.5; fill:none;"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2M15 12h2M7 16h10"/></svg>
-            </div>
-            <h4 style="font-family:var(--serif); font-size:22px; font-weight:500; color:var(--dark); margin-bottom:4px;">Check-in Online & Documenti</h4>
-            <p style="font-size:12px; color:var(--mid); line-height:1.5;">Fotografa il tuo documento per completare la registrazione ufficiale in 30 secondi. Dati crittografati e conformi a Questura & ISTAT.</p>
-          </div>
-
-          <!-- SCANNER INTERATTIVO REALISTICO -->
-          <div id="liveScanArea" style="border: 2px dashed rgba(197, 168, 128, 0.45); border-radius:20px; padding:24px 16px; text-align:center; background:rgba(255,255,255,0.7); margin-bottom:16px;">
-            <div id="scanPromptBox">
-              <div style="font-size:32px; margin-bottom:8px;">📸</div>
-              <h5 style="font-size:13px; font-weight:600; color:var(--dark); margin-bottom:4px;">Inquadra Passaporto o Carta d'Identità</h5>
-              <p style="font-size:11px; color:var(--mid); margin-bottom:16px;">Acquisizione automatica della zona a lettura ottica (MRZ)</p>
+              <h4 style="font-family:var(--serif); font-size:20px; font-weight:500; color:var(--dark); margin-bottom:4px;">Impianto Audio & Smart Home</h4>
+              <p style="font-size:12px; color:var(--mid); line-height:1.6;">Connettiti facilmente all'impianto audio della dimora tramite <strong>Apple AirPlay</strong> o Bluetooth.</p>
               
-              <!-- File input reale per iPhone / Safari -->
-              <input type="file" id="docFileInput" accept="image/*" capture="environment" style="display:none;" onchange="handleDocUpload(event)">
-              <button class="btn-action-sm" style="width:100%; justify-content:center; padding:13px; font-size:12px;" onclick="document.getElementById('docFileInput').click()">
-                📷 Scatta Foto o Carica Documento
-              </button>
-            </div>
-
-            <div id="scanProcessingBox" style="display:none; padding:16px 0;">
-              <div style="display:inline-block; width:28px; height:28px; border:2.5px solid var(--gold); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite;"></div>
-              <div style="font-size:12px; font-weight:600; color:var(--dark); margin-top:12px;">Lettura OCR & Validazione Documento...</div>
-              <div style="font-size:10px; color:var(--mid); margin-top:4px;">Estrazione dati anagrafici e conformità Questura</div>
-            </div>
-
-            <div id="scanResultBox" style="display:none; text-align:left;">
-              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid var(--warm-border); padding-bottom:8px;">
-                <span style="font-size:12px; font-weight:700; color:#25D366;">✓ Documento Acquisito con Successo</span>
-                <span style="font-size:9px; background:rgba(37,211,102,0.12); color:#25D366; padding:3px 8px; border-radius:10px; font-weight:700;">100% VALIDO</span>
+              <div class="copy-box" style="margin:14px 0 0; padding:10px 14px;">
+                <div class="copy-info">
+                  <span class="copy-label">Dispositivo Audio</span>
+                  <span class="copy-val" style="font-size:14px;">${prop.name} Sound</span>
+                </div>
+                <button class="btn-action-sm" onclick="copyText('${prop.name} Sound')">Copia</button>
               </div>
+            </div>
+
+            <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:18px; padding:18px;">
+              <span class="tag-badge">🍷 Signature Playlist</span>
+              <h5 style="font-size:13px; font-weight:600; margin:6px 0 4px; color:var(--dark);">La Colonna Sonora del Soggiorno</h5>
+              <p style="font-size:12px; color:var(--mid); margin-bottom:14px;">Una selezione lounge, jazz e acustica curata per accompagnare un calice di Amarone in totale relax.</p>
               
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12px; margin-bottom:14px; background:var(--white); padding:12px; border-radius:12px; border:1px solid var(--warm-border);">
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Nome:</span><br><strong id="resName">Enrico</strong></div>
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Cognome:</span><br><strong id="resSurname">Marchesini</strong></div>
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Cittadinanza:</span><br><strong>Italia (ITA)</strong></div>
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">N. Documento:</span><br><strong id="resDocNum">CA92841ZZ</strong></div>
-              </div>
-
-              <div style="background:rgba(0,0,0,0.03); border-radius:12px; padding:12px; font-size:11px; color:var(--dark-soft); line-height:1.6; margin-bottom:14px; border:1px solid var(--warm-border);">
-                🔒 <strong>Flussi Ministeriali Generati:</strong><br>
-                • <strong>Alloggiati Web (Questura):</strong> Tracciato <code>alloggiati.txt</code> pronto all'invio.<br>
-                • <strong>ROSS1000 (Regione Veneto):</strong> Flusso statistico ISTAT calcolato.<br>
-                • <strong>Imposta di Soggiorno:</strong> Registrata per il Comune di Negrar.
-              </div>
-
-              <button class="btn-action-sm" style="width:100%; justify-content:center; padding:14px; font-size:12px; background:#25D366; color:#fff;" onclick="completeVipCheckin()">
-                ✓ Conferma & Invia Registrazione
-              </button>
-            </div>
-          </div>
-
-          <!-- CHECKLIST DI PARTENZA INTEGRATA -->
-          <div class="list-steps">
-            <div class="step-item" style="border-left: 3px solid var(--gold); flex-direction:column; align-items:flex-start;">
-              <span class="tag-badge">📋 Promemoria di Soggiorno:</span>
-              <div style="display:flex; flex-direction:column; gap:8px; width:100%; margin-top:8px; font-size:12px;">
-                <div><strong>Orari:</strong> Arrivo 15:00-20:00 · Partenza entro le 10:00</div>
-                <div><strong>Chiavi & Accoglienza:</strong> Simone (+39 349 5256975)</div>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <a href="https://music.apple.com" target="_blank" class="btn-action-sm" style="justify-content:center; padding:12px; text-decoration:none; background:#000; color:#fff;">
+                  🍎 Ascolta su Apple Music
+                </a>
+                <a href="https://open.spotify.com" target="_blank" class="btn-action-sm" style="justify-content:center; padding:12px; text-decoration:none; background:#1DB954; color:#fff;">
+                  🟢 Ascolta su Spotify
+                </a>
               </div>
             </div>
-          </div>
-          <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
-        `;
-      } else if (type === 'wallet') {
-        html = `
-          <div class="wallet-pass-card">
-            <div class="pass-header">
-              <div>
-                <div class="pass-brand">Ṁ · MARCHESINI</div>
-                <div class="pass-type">${prop.name}</div>
-              </div>
-              <div style="font-size:22px; color:var(--gold);">✦</div>
-            </div>
-            
-            <div class="pass-row">
-              <div class="pass-field">
-                <span class="pass-label">OSPITE / GUEST</span>
-                <span class="pass-value" id="passGuestName">${registeredGuest ? (registeredGuest.name + ' ' + registeredGuest.surname) : (getUrlGuestName() || 'Ospite VIP')}</span>
-              </div>
-              <div class="pass-field">
-                <span class="pass-label">CHECK-IN / OUT</span>
-                <span class="pass-value">15:00 → 10:00</span>
-              </div>
-            </div>
-
-            <div class="pass-row">
-              <div class="pass-field">
-                <span class="pass-label">WI-FI RETE</span>
-                <span class="pass-value">${prop.wifi.ssid}</span>
-              </div>
-              <div class="pass-field">
-                <span class="pass-label">WI-FI PASSWORD</span>
-                <span class="pass-value">${prop.wifi.pass}</span>
-              </div>
-            </div>
-
-            <div class="pass-field" style="margin-bottom:12px;">
-              <span class="pass-label">INDIRIZZO / LOCATION</span>
-              <span class="pass-value" style="font-size:12px;">${prop.location}</span>
-            </div>
-
-            <div class="pass-barcode">
-              <div class="barcode-lines"></div>
-              <span class="barcode-num">MARCHESINI-2026-VIP</span>
-            </div>
-
-            <p class="pass-geofence-note">
-              📍 <strong>Smart Lockscreen:</strong> Sul tuo iPhone apparirà la notifica con WiFi e istruzioni non appena ti avvicinerai alla dimora.
-            </p>
           </div>
         `;
       } else if (type === 'wifi') {
@@ -2662,42 +2676,6 @@
             </div>
           </div>
         `;
-            } else if (type === 'sound') {
-        html = `
-          <div style="display:flex; flex-direction:column; gap:16px;">
-            <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:18px; padding:18px; text-align:center;">
-              <div style="width:48px; height:48px; border-radius:50%; background:rgba(197, 168, 128, 0.12); margin:0 auto 12px; display:flex; align-items:center; justify-content:center;">
-                <svg viewBox="0 0 24 24" style="width:22px; height:22px; stroke:var(--gold); stroke-width:1.5; fill:none;"><path d="M9 18V5l12-2v13M9 9l12-2M6 18a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm12 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-              </div>
-              <h4 style="font-family:var(--serif); font-size:20px; font-weight:500; color:var(--dark); margin-bottom:4px;">Impianto Audio & Smart Home</h4>
-              <p style="font-size:12px; color:var(--mid); line-height:1.6;">Connettiti facilmente all'impianto audio della dimora tramite <strong>Apple AirPlay</strong> o Bluetooth.</p>
-              
-              <div class="copy-box" style="margin:14px 0 0; padding:10px 14px;">
-                <div class="copy-info">
-                  <span class="copy-label">Dispositivo Audio</span>
-                  <span class="copy-val" style="font-size:14px;">${prop.name} Sound</span>
-                </div>
-                <button class="btn-action-sm" onclick="copyText('${prop.name} Sound')">Copia</button>
-              </div>
-            </div>
-
-            <!-- CURATED PLAYLIST -->
-            <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:18px; padding:18px;">
-              <span class="tag-badge">🍷 Signature Playlist</span>
-              <h5 style="font-size:13px; font-weight:600; margin:6px 0 4px; color:var(--dark);">La Colonna Sonora del Soggiorno</h5>
-              <p style="font-size:12px; color:var(--mid); margin-bottom:14px;">Una selezione lounge, jazz e acustica curata per accompagnare un calice di Amarone in totale relax.</p>
-              
-              <div style="display:flex; flex-direction:column; gap:10px;">
-                <a href="https://music.apple.com" target="_blank" class="btn-action-sm" style="justify-content:center; padding:12px; text-decoration:none; background:#000; color:#fff;">
-                  🍎 Ascolta su Apple Music
-                </a>
-                <a href="https://open.spotify.com" target="_blank" class="btn-action-sm" style="justify-content:center; padding:12px; text-decoration:none; background:#1DB954; color:#fff;">
-                  🟢 Ascolta su Spotify
-                </a>
-              </div>
-            </div>
-          </div>
-        `;
       } else if (type === 'amenities') {
         html = `
           <p style="margin-bottom:12px; font-size:13px; color:var(--mid);">${lang.desc}</p>
@@ -2707,11 +2685,12 @@
                 <span style="color:var(--gold);">✦</span> ${item}
               </div>
             `).join('')}
-                    <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--warm-border);">
+          </div>
+          <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--warm-border);">
             <button class="btn-action-sm" style="width:100%; justify-content:center; padding:12px; font-size:12px; background:var(--dark); color:var(--white);" onclick="openModal('sound')">
               🎵 Impianto Audio & Playlist Dimora →
             </button>
-          </div></div>
+          </div>
         `;
       } else if (type === 'guide') {
         const cantine = [
