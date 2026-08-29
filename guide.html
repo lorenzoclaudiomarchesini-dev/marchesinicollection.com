@@ -690,10 +690,11 @@
       background: rgba(20, 16, 12, 0.55);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      z-index: 200;
+      z-index: 2000;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      visibility: hidden;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -702,6 +703,7 @@
     .modal-backdrop.open {
       opacity: 1;
       pointer-events: auto;
+      visibility: visible;
     }
 
     .modal-sheet {
@@ -2428,7 +2430,6 @@
     }
 
     /* ── GESTIONE MODALE BOTTOM SHEET ── */
-    /* ── GESTIONE MODALE BOTTOM SHEET ── */
     function openModal(type) {
       const prop = PROPERTIES[currentProp];
       const lang = (I18N[currentLang].modals && I18N[currentLang].modals[type]) || {
@@ -2805,7 +2806,8 @@
     }
 
     function closeModal() {
-      document.getElementById('modalBackdrop').classList.remove('open');
+      const b = document.getElementById('modalBackdrop');
+      if (b) b.classList.remove('open');
       document.body.style.overflow = '';
     }
 
