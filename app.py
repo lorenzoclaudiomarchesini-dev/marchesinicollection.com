@@ -75,7 +75,7 @@ def fetch_booked_dates(apt_key: str) -> list:
         print(f"Errore iCal {apt_key}: {e}")
         return []
 
-# ── Admin prezzi ──────────────────────────────────────────────────────────────
+# ── Database Ospiti & Check-in (ROSS1000 & Alloggiati Web) ───────────────────
 PREZZI_FILE = os.path.join(os.path.dirname(__file__), "prezzi.json")
 OSPITI_FILE = os.path.join(os.path.dirname(__file__), "ospiti.json")
 
@@ -86,37 +86,7 @@ def load_ospiti():
                 return json.load(f)
         except Exception:
             return []
-    # Dati demo iniziali se il database è vuoto
-    return [
-        {
-            "id": "GUEST-DEMO-1",
-            "apt": "albertina",
-            "apt_name": "Casa Albertina",
-            "name": "Alexander",
-            "surname": "von Müller",
-            "citizenship": "Germania (DEU)",
-            "doc_type": "PASSAPORTO",
-            "doc_num": "C4X980211",
-            "checkin_date": "Oggi, 15:42",
-            "created_at": "Oggi, 15:42",
-            "alloggiati_status": "✓ Trasmesso",
-            "ross1000_status": "✓ Inviato"
-        },
-        {
-            "id": "GUEST-DEMO-2",
-            "apt": "caboare-a",
-            "apt_name": "Corte Cà Boare · A",
-            "name": "Sophie",
-            "surname": "Laurent",
-            "citizenship": "Francia (FRA)",
-            "doc_type": "CARTA_IDENTITA",
-            "doc_num": "19048201FR",
-            "checkin_date": "Ieri, 18:20",
-            "created_at": "Ieri, 18:20",
-            "alloggiati_status": "✓ Trasmesso",
-            "ross1000_status": "✓ Inviato"
-        }
-    ]
+    return []
 
 def save_ospiti_list(data):
     with open(OSPITI_FILE, 'w', encoding='utf-8') as f:
@@ -133,42 +103,66 @@ async def submit_guest_checkin(request_body: dict):
     ospiti = load_ospiti()
     
     apt_code = request_body.get("apt", "albertina")
-    apt_display = "Casa Albertina" if "albertina" in apt_code else ("Corte Cà Boare · Apt A" if "caboare-a" in apt_code else ("Corte Cà Boare · Apt B" if "caboare-b" in apt_code else apt_code))
+    apt_display = "Casa Albertina"
+    if "caboare-a" in apt_code or "ccb-a" in apt_code.lower():
+        apt_display = "Corte Cà Boare · Apt A (Sub 1)"
+    elif "caboare-b" in apt_code or "ccb-b" in apt_code.lower():
+        apt_display = "Corte Cà Boare · Apt B (Sub 2)"
+    elif "elisabetta" in apt_code:
+        apt_display = "Casa Elisabetta"
 
-    new_guest = {
-        "id": f"GUEST-{int(datetime.now().timestamp())}",
+    # Support single guest payload or full multi-guest group payload
+    group_id = f"GRP-{int(datetime.now().timestamp())}"
+    arrival = request_body.get("arrival_date") or datetime.now().strftime("%d/%m/%Y")
+    departure = request_body.get("departure_date") or ""
+    num_guests = int(request_body.get("num_guests", 1))
+
+    # Lead guest
+    lead = request_body.get("lead_guest") or {
+        "tipo_alloggiato": request_body.get("tipo_alloggiato", "Capogruppo" if num_guests > 1 else "Ospite Singolo"),
+        "nome": request_body.get("nome") or request_body.get("name", "Ospite"),
+        "cognome": request_body.get("cognome") or request_body.get("surname", ""),
+        "sesso": request_body.get("sesso", "M"),
+        "data_nascita": request_body.get("data_nascita", ""),
+        "cittadinanza": request_body.get("cittadinanza", "ITALIA"),
+        "stato_nascita": request_body.get("stato_nascita", "ITALIA"),
+        "comune_nascita": request_body.get("comune_nascita", ""),
+        "stato_residenza": request_body.get("stato_residenza", "ITALIA"),
+        "comune_residenza": request_body.get("comune_residenza", ""),
+        "indirizzo_residenza": request_body.get("indirizzo_residenza", ""),
+        "tipo_documento": request_body.get("tipo_documento", "CARTA DI IDENTITA'"),
+        "numero_documento": request_body.get("numero_documento") or request_body.get("doc_num", ""),
+        "stato_rilascio": request_body.get("stato_rilascio", "ITALIA"),
+        "comune_rilascio": request_body.get("comune_rilascio", "")
+    }
+
+    # Additional guests
+    other_guests = request_body.get("additional_guests", [])
+
+    entry = {
+        "id": group_id,
         "apt": apt_code,
         "apt_name": apt_display,
-        "name": request_body.get("name", "Ospite"),
-        "surname": request_body.get("surname", ""),
-        "citizenship": request_body.get("citizenship", "Italia (ITA)"),
-        "doc_type": request_body.get("doc_type", "CARTA IDENTITÀ"),
-        "doc_num": request_body.get("doc_num", "CA92841ZZ"),
-        "checkin_date": datetime.now().strftime("%d/%m/%Y, %H:%M"),
-        "created_at": datetime.now().strftime("%d/%m/%Y %H:%M"),
-        "alloggiati_status": "✓ Trasmesso",
-        "ross1000_status": "✓ Inviato"
+        "num_guests": num_guests,
+        "arrival_date": arrival,
+        "departure_date": departure,
+        "created_at": datetime.now().strftime("%d/%m/%Y, %H:%M"),
+        "lead_guest": lead,
+        "additional_guests": other_guests,
+        "alloggiati_status": "✓ Pronto per Invio",
+        "ross1000_status": "✓ Pronto per ROSS1000"
     }
-    
-    ospiti.insert(0, new_guest)
-    save_ospiti_list(ospiti)
-    return {"status": "ok", "guest": new_guest, "total": len(ospiti)}
 
-@app.delete("/api/ospiti/{guest_id}")
-def delete_ospite(guest_id: str):
+    ospiti.insert(0, entry)
+    save_ospiti_list(ospiti)
+    return {"status": "ok", "group": entry, "total_groups": len(ospiti)}
+
+@app.delete("/api/ospiti/{group_id}")
+def delete_ospite(group_id: str):
     ospiti = load_ospiti()
-    ospiti = [o for o in ospiti if o.get("id") != guest_id]
+    ospiti = [o for o in ospiti if o.get("id") != group_id]
     save_ospiti_list(ospiti)
     return {"status": "ok", "remaining": len(ospiti)}
-
-@app.post("/api/admin/prezzi")
-async def save_prezzi(request_body: dict):
-    try:
-        with open(PREZZI_FILE, 'w', encoding='utf-8') as f:
-            json.dump(request_body, f, ensure_ascii=False, indent=2)
-        return {"status": "ok"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 # ── API Import Listing (Airbnb & Booking) ────────────────────────────────────
 class ImportRequest(BaseModel):

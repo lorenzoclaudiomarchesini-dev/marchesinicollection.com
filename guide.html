@@ -2347,52 +2347,159 @@
     }
 
     
-    async function completeVipCheckin() {
-      const nameEl = document.getElementById('resNameInput') || document.getElementById('resName');
-      const surnameEl = document.getElementById('resSurnameInput') || document.getElementById('resSurname');
-      const citEl = document.getElementById('resCitizenshipInput');
-      const docEl = document.getElementById('resDocNumInput') || document.getElementById('resDocNum');
+    
+    function renderMultiGuestFields(totalCount) {
+      const container = document.getElementById('additionalGuestsContainer');
+      if (!container) return;
+      const count = parseInt(totalCount, 10);
+      if (count <= 1) {
+        container.innerHTML = '';
+        return;
+      }
 
-      const extractedName = (nameEl ? (nameEl.value || nameEl.textContent) : "Alexander").trim();
-      const extractedSurname = (surnameEl ? (surnameEl.value || surnameEl.textContent) : "von Müller").trim();
-      const extractedCitizenship = (citEl ? citEl.value : "Germania (DEU)").trim();
-      const extractedDocNum = (docEl ? (docEl.value || docEl.textContent) : "C4X980211").trim();
+      let html = '';
+      for (let i = 2; i <= count; i++) {
+        html += `
+          <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:18px; padding:16px; margin-bottom:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+              <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--gold);">Ospite ${i} (Membro Gruppo / Famiglia)</span>
+              <span style="font-size:9px; background:rgba(0,0,0,0.05); color:var(--mid); padding:2px 8px; border-radius:10px;">Dati Essenziali</span>
+            </div>
 
-      registeredGuest = {
-        name: extractedName,
-        surname: extractedSurname,
-        docNum: extractedDocNum
-      };
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Cognome *</label>
+                <input type="text" class="chk-extra-surname" placeholder="Cognome" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Nome *</label>
+                <input type="text" class="chk-extra-name" placeholder="Nome" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+            </div>
 
-      localStorage.setItem('guest_profile_' + currentProp, JSON.stringify(registeredGuest));
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Sesso *</label>
+                <select class="chk-extra-sex" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+                  <option value="M">Maschio (M)</option>
+                  <option value="F">Femmina (F)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Data di Nascita *</label>
+                <input type="date" class="chk-extra-dob" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+            </div>
 
-      // 1. Invia dati al server backend live
-      const guestData = {
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Cittadinanza *</label>
+                <input type="text" class="chk-extra-cit" value="ITALIA" placeholder="Cittadinanza" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Luogo di Nascita *</label>
+                <input type="text" class="chk-extra-birth" placeholder="Comune o Stato" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
+    }
+
+    async function submitFullGuestCheckin() {
+      const surname = (document.getElementById('chkLeadSurname')?.value || '').trim();
+      const name = (document.getElementById('chkLeadName')?.value || '').trim();
+      const sex = document.getElementById('chkLeadSex')?.value || 'M';
+      const dob = document.getElementById('chkLeadDob')?.value || '';
+      const cit = (document.getElementById('chkLeadCit')?.value || 'ITALIA').trim();
+      const birthPlace = (document.getElementById('chkLeadBirthPlace')?.value || '').trim();
+      const resPlace = (document.getElementById('chkLeadResPlace')?.value || '').trim();
+      const address = (document.getElementById('chkLeadAddress')?.value || '').trim();
+      const docType = document.getElementById('chkLeadDocType')?.value || "CARTA DI IDENTITA'";
+      const docNum = (document.getElementById('chkLeadDocNum')?.value || '').trim();
+      const docIssue = (document.getElementById('chkLeadDocIssue')?.value || '').trim();
+      const arrival = document.getElementById('chkArrivalDate')?.value || '';
+      const departure = document.getElementById('chkDepartureDate')?.value || '';
+      const numGuests = parseInt(document.getElementById('chkNumGuests')?.value || '1', 10);
+
+      if (!surname || !name) {
+        alert('Compila il Nome e Cognome dell'ospite principale.');
+        return;
+      }
+      if (!docNum) {
+        alert('Inserisci il Numero di Documento dell'ospite principale.');
+        return;
+      }
+
+      // Collect other guests
+      const otherGuests = [];
+      const extraSurnames = document.querySelectorAll('.chk-extra-surname');
+      const extraNames = document.querySelectorAll('.chk-extra-name');
+      const extraSexes = document.querySelectorAll('.chk-extra-sex');
+      const extraDobs = document.querySelectorAll('.chk-extra-dob');
+      const extraCits = document.querySelectorAll('.chk-extra-cit');
+      const extraBirths = document.querySelectorAll('.chk-extra-birth');
+
+      for (let i = 0; i < extraSurnames.length; i++) {
+        otherGuests.push({
+          tipo_alloggiato: "Membro Gruppo",
+          cognome: extraSurnames[i].value.trim() || 'Ospite',
+          nome: extraNames[i]?.value.trim() || `${i+2}`,
+          sesso: extraSexes[i]?.value || 'M',
+          data_nascita: extraDobs[i]?.value || '',
+          cittadinanza: extraCits[i]?.value.trim() || 'ITALIA',
+          stato_nascita: extraCits[i]?.value.trim() || 'ITALIA',
+          comune_nascita: extraBirths[i]?.value.trim() || ''
+        });
+      }
+
+      const payload = {
         apt: currentProp,
-        name: extractedName,
-        surname: extractedSurname,
-        citizenship: extractedCitizenship,
-        doc_type: "CARTA_IDENTITA",
-        doc_num: extractedDocNum,
-        checkin_date: new Date().toLocaleDateString('it-IT') + ', ' + new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}),
-        timestamp: new Date().toISOString()
+        num_guests: numGuests,
+        arrival_date: arrival,
+        departure_date: departure,
+        lead_guest: {
+          tipo_alloggiato: numGuests > 1 ? "Capogruppo" : "Ospite Singolo",
+          cognome: surname,
+          nome: name,
+          sesso: sex,
+          data_nascita: dob,
+          cittadinanza: cit,
+          stato_nascita: cit,
+          comune_nascita: birthPlace,
+          stato_residenza: cit,
+          comune_residenza: resPlace,
+          indirizzo_residenza: address,
+          tipo_documento: docType,
+          numero_documento: docNum,
+          stato_rilascio: cit,
+          comune_rilascio: docIssue
+        },
+        additional_guests: otherGuests
       };
 
       try {
         await fetch('/api/guest-checkin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(guestData)
+          body: JSON.stringify(payload)
         });
-      } catch(e) {
+      } catch (e) {
         console.log('Saved offline/local:', e);
       }
 
-      // 2. Sblocca la UI
+      registeredGuest = {
+        name: name,
+        surname: surname,
+        docNum: docNum
+      };
+      localStorage.setItem('guest_profile_' + currentProp, JSON.stringify(registeredGuest));
       unlockGuestExperience();
-      showToast('✓ Check-in registrato! Accesso sbloccato a tutta la dimora.');
+      showToast('✓ Check-in completato con successo! Accesso sbloccato.');
       closeModal();
     }
+
 
     function unlockGuestExperience() {
       localStorage.setItem('checkin_completed_' + currentProp, 'true');
@@ -2447,85 +2554,133 @@
 
       let html = '';
 
-      if (type === 'checkin_vip' || type === 'checkin') {
-        eyebrow.textContent = "VIP Guest Check-in";
-        title.textContent = gateT.modalTitle;
+            if (type === 'checkin_vip' || type === 'checkin') {
+        eyebrow.textContent = "Self Check-in Ufficiale";
+        title.textContent = "Registrazione Ospiti & Alloggiati";
         html = `
-          <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:20px; padding:20px; margin-bottom:16px; text-align:center;">
-            <div style="width:54px; height:54px; border-radius:50%; background:rgba(197, 168, 128, 0.12); margin:0 auto 12px; display:flex; align-items:center; justify-content:center;">
-              <svg viewBox="0 0 24 24" style="width:26px; height:26px; stroke:var(--gold); stroke-width:1.5; fill:none;"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2M15 12h2M7 16h10"/></svg>
+          <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:18px; padding:16px; margin-bottom:16px; text-align:center;">
+            <div style="width:48px; height:48px; border-radius:50%; background:rgba(197, 168, 128, 0.12); margin:0 auto 10px; display:flex; align-items:center; justify-content:center;">
+              <svg viewBox="0 0 24 24" style="width:24px; height:24px; stroke:var(--gold); stroke-width:1.5; fill:none;"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2M15 12h2M7 16h10"/></svg>
             </div>
-            <h4 style="font-family:var(--serif); font-size:22px; font-weight:500; color:var(--dark); margin-bottom:4px;">${gateT.modalTitle}</h4>
-            <p style="font-size:12px; color:var(--mid); line-height:1.5;">${gateT.modalDesc}</p>
+            <h4 style="font-family:var(--serif); font-size:20px; font-weight:500; color:var(--dark); margin-bottom:4px;">Check-in Online Obbligatorio</h4>
+            <p style="font-size:11px; color:var(--mid); line-height:1.5;">Compilazione richiesta per adempimento di legge (Questura Alloggiati Web & Regione Veneto ROSS1000). Al termine riceverai subito i codici di accesso.</p>
           </div>
 
-          <!-- SCANNER INTERATTIVO REALISTICO -->
-          <div id="liveScanArea" style="border: 2px dashed rgba(197, 168, 128, 0.45); border-radius:20px; padding:24px 16px; text-align:center; background:rgba(255,255,255,0.7); margin-bottom:16px;">
-            <div id="scanPromptBox">
-              <div style="font-size:32px; margin-bottom:8px;">📸</div>
-              <h5 style="font-size:13px; font-weight:600; color:var(--dark); margin-bottom:4px;">${gateT.promptTitle}</h5>
-              <p style="font-size:11px; color:var(--mid); margin-bottom:16px;">${gateT.promptSub}</p>
-              
-              <input type="file" id="docFileInput" accept="image/*" capture="environment" style="display:none;" onchange="handleDocUpload(event)">
-              <button type="button" class="btn-action-sm" style="width:100%; justify-content:center; padding:13px; font-size:12px; cursor:pointer;" onclick="document.getElementById('docFileInput').click()">
-                ${gateT.btnUpload}
-              </button>
+          <!-- SEZIONE PRENOTAZIONE & NUMERO OSPITI -->
+          <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:18px; padding:16px; margin-bottom:14px;">
+            <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:12px;">1. Dati Soggiorno</div>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+              <div>
+                <label style="font-size:10px; font-weight:600; color:var(--dark); display:block; margin-bottom:3px;">Data Arrivo *</label>
+                <input type="date" id="chkArrivalDate" value="${new Date().toISOString().split('T')[0]}" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px; font-family:var(--sans); outline:none;">
+              </div>
+              <div>
+                <label style="font-size:10px; font-weight:600; color:var(--dark); display:block; margin-bottom:3px;">Data Partenza *</label>
+                <input type="date" id="chkDepartureDate" value="${new Date(Date.now() + 86400000).toISOString().split('T')[0]}" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px; font-family:var(--sans); outline:none;">
+              </div>
             </div>
 
-            <div id="scanProcessingBox" style="display:none; padding:16px 0;">
-              <div style="display:inline-block; width:28px; height:28px; border:2.5px solid var(--gold); border-top-color:transparent; border-radius:50%; animation:spin 0.8s linear infinite;"></div>
-              <div style="font-size:12px; font-weight:600; color:var(--dark); margin-top:12px;">${gateT.processing}</div>
-              <div style="font-size:10px; color:var(--mid); margin-top:4px;">${gateT.processingSub}</div>
-            </div>
-
-            <div id="scanResultBox" style="display:none; text-align:left;">
-              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; border-bottom:1px solid var(--warm-border); padding-bottom:8px;">
-                <span style="font-size:12px; font-weight:700; color:#25D366;">${gateT.successTitle}</span>
-                <span style="font-size:9px; background:rgba(37,211,102,0.12); color:#25D366; padding:3px 8px; border-radius:10px; font-weight:700;">100% VALIDO</span>
-              </div>
-              
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12px; margin-bottom:14px; background:var(--white); padding:12px; border-radius:12px; border:1px solid var(--warm-border);">
-                <div>
-                  <label style="color:var(--mid); font-size:9px; text-transform:uppercase; font-weight:600; display:block; margin-bottom:3px;">Nome:</label>
-                  <input type="text" id="resNameInput" value="Alexander" style="width:100%; border:1px solid #ddd; border-radius:8px; padding:6px 8px; font-size:12px; font-weight:600; color:var(--dark);">
-                </div>
-                <div>
-                  <label style="color:var(--mid); font-size:9px; text-transform:uppercase; font-weight:600; display:block; margin-bottom:3px;">Cognome:</label>
-                  <input type="text" id="resSurnameInput" value="von Müller" style="width:100%; border:1px solid #ddd; border-radius:8px; padding:6px 8px; font-size:12px; font-weight:600; color:var(--dark);">
-                </div>
-                <div>
-                  <label style="color:var(--mid); font-size:9px; text-transform:uppercase; font-weight:600; display:block; margin-bottom:3px;">Cittadinanza:</label>
-                  <input type="text" id="resCitizenshipInput" value="Germania (DEU)" style="width:100%; border:1px solid #ddd; border-radius:8px; padding:6px 8px; font-size:12px; font-weight:600; color:var(--dark);">
-                </div>
-                <div>
-                  <label style="color:var(--mid); font-size:9px; text-transform:uppercase; font-weight:600; display:block; margin-bottom:3px;">N. Documento:</label>
-                  <input type="text" id="resDocNumInput" value="C4X980211" style="width:100%; border:1px solid #ddd; border-radius:8px; padding:6px 8px; font-size:12px; font-weight:600; color:var(--dark);">
-                </div>
-              </div>
-
-              <div style="background:rgba(0,0,0,0.03); border-radius:12px; padding:12px; font-size:11px; color:var(--dark-soft); line-height:1.6; margin-bottom:14px; border:1px solid var(--warm-border);">
-                🔒 <strong>Flussi Ministeriali Pronti:</strong><br>
-                • <strong>Alloggiati Web (Questura):</strong> Tracciato <code>alloggiati.txt</code> generato.<br>
-                • <strong>ROSS1000 (Regione Veneto):</strong> Flusso statistico ISTAT calcolato.<br>
-                • <strong>Database Host:</strong> Sincronizzazione automatica su <code>/admin/ospiti</code>.
-              </div>
-
-              <button type="button" class="btn-action-sm" style="width:100%; justify-content:center; padding:14px; font-size:12px; background:#25D366; color:#fff; cursor:pointer;" onclick="completeVipCheckin()">
-                ${gateT.btnConfirm}
-              </button>
+            <div>
+              <label style="font-size:10px; font-weight:600; color:var(--dark); display:block; margin-bottom:3px;">Totale Ospiti Presenti *</label>
+              <select id="chkNumGuests" onchange="renderMultiGuestFields(this.value)" style="width:100%; padding:10px 12px; border:1px solid var(--gold); border-radius:8px; font-size:13px; font-weight:600; background:rgba(197,168,128,0.06); color:var(--dark); outline:none;">
+                <option value="1">1 Ospite (Ospite Singolo)</option>
+                <option value="2" selected>2 Ospiti (Capogruppo + 1 Membro)</option>
+                <option value="3">3 Ospiti (Capogruppo + 2 Membri)</option>
+                <option value="4">4 Ospiti (Capogruppo + 3 Membri)</option>
+                <option value="5">5 Ospiti (Capogruppo + 4 Membri)</option>
+              </select>
             </div>
           </div>
 
-          <div class="list-steps">
-            <div class="step-item" style="border-left: 3px solid var(--gold); flex-direction:column; align-items:flex-start;">
-              <span class="tag-badge">📋 Promemoria di Soggiorno:</span>
-              <div style="display:flex; flex-direction:column; gap:8px; width:100%; margin-top:8px; font-size:12px;">
-                <div><strong>Orari:</strong> Arrivo 15:00-20:00 · Partenza entro le 10:00</div>
-                <div><strong>Chiavi & Accoglienza:</strong> Simone (+39 349 5256975)</div>
+          <!-- SEZIONE OSPITE 1: CAPOGRUPPO / INTESTATARIO (COMPLETO) -->
+          <div style="background:var(--white); border:1px solid var(--warm-border); border-radius:18px; padding:16px; margin-bottom:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+              <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--gold);">2. Ospite 1 (Intestatario / Capogruppo)</span>
+              <span style="font-size:9px; background:rgba(197,168,128,0.2); color:var(--dark); padding:2px 8px; border-radius:10px; font-weight:600;">Documento Obbligatorio</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Cognome *</label>
+                <input type="text" id="chkLeadSurname" placeholder="Es. Rossi" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Nome *</label>
+                <input type="text" id="chkLeadName" placeholder="Es. Mario" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Sesso *</label>
+                <select id="chkLeadSex" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+                  <option value="M">Maschio (M)</option>
+                  <option value="F">Femmina (F)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Data di Nascita *</label>
+                <input type="date" id="chkLeadDob" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Cittadinanza *</label>
+                <input type="text" id="chkLeadCit" value="ITALIA" placeholder="Es. ITALIA o GERMANIA" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Stato / Comune Nascita *</label>
+                <input type="text" id="chkLeadBirthPlace" placeholder="Es. Verona o Berlino" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Stato / Comune Residenza *</label>
+                <input type="text" id="chkLeadResPlace" placeholder="Es. Milano o Monaco" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+              <div>
+                <label style="font-size:10px; color:var(--mid); display:block; margin-bottom:2px;">Indirizzo (opzionale)</label>
+                <input type="text" id="chkLeadAddress" placeholder="Es. Via Roma 10" style="width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:8px; font-size:12px;">
+              </div>
+            </div>
+
+            <!-- DATI DOCUMENTO (SOLO LEAD) -->
+            <div style="background:rgba(0,0,0,0.02); border:1px solid rgba(0,0,0,0.06); border-radius:12px; padding:12px;">
+              <div style="font-size:10px; font-weight:700; color:var(--dark); margin-bottom:8px; text-transform:uppercase;">Dati Documento di Riconoscimento:</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px;">
+                <div>
+                  <label style="font-size:9px; color:var(--mid); display:block; margin-bottom:2px;">Tipo Documento *</label>
+                  <select id="chkLeadDocType" style="width:100%; padding:7px 8px; border:1px solid #ddd; border-radius:6px; font-size:11px;">
+                    <option value="CARTA DI IDENTITA'">Carta d'Identità</option>
+                    <option value="PASSAPORTO">Passaporto</option>
+                    <option value="PATENTE GUIDA">Patente di Guida</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:9px; color:var(--mid); display:block; margin-bottom:2px;">Numero Documento *</label>
+                  <input type="text" id="chkLeadDocNum" placeholder="Es. CA12345AA" style="width:100%; padding:7px 8px; border:1px solid #ddd; border-radius:6px; font-size:11px; text-transform:uppercase;">
+                </div>
+              </div>
+              <div>
+                <label style="font-size:9px; color:var(--mid); display:block; margin-bottom:2px;">Luogo di Rilascio *</label>
+                <input type="text" id="chkLeadDocIssue" placeholder="Es. Comune di Verona o Questura" style="width:100%; padding:7px 8px; border:1px solid #ddd; border-radius:6px; font-size:11px;">
               </div>
             </div>
           </div>
-          <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+
+          <!-- SEZIONE DINAMICA PER ALTRI OSPITI -->
+          <div id="additionalGuestsContainer"></div>
+
+          <!-- BOTTONE INVIO CHECK-IN -->
+          <div style="margin-top:16px;">
+            <button type="button" class="btn-action-sm" style="width:100%; justify-content:center; padding:16px; font-size:13px; font-weight:600; background:#25D366; color:#fff; cursor:pointer; border-radius:var(--radius-pill); box-shadow:0 6px 20px rgba(37,211,102,0.3);" onclick="submitFullGuestCheckin()">
+              ✓ Registra Ospiti & Sblocca Guida
+            </button>
+            <div style="font-size:10px; color:var(--mid); text-align:center; margin-top:8px;">I dati vengono trasmessi in modo cifrato direttamente al database della struttura.</div>
+          </div>
         `;
       } else if (type === 'wallet') {
         eyebrow.textContent = "Apple Wallet";
@@ -2813,6 +2968,7 @@
       }
 
       body.innerHTML = html;
+      if (type === 'checkin_vip' || type === 'checkin') renderMultiGuestFields(document.getElementById('chkNumGuests')?.value || 2);
       backdrop.classList.add('open');
       document.body.style.overflow = 'hidden';
     }
