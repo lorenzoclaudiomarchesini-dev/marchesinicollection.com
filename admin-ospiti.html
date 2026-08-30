@@ -413,24 +413,9 @@
           </thead>
           <tbody id="guestTableBody">
             <tr>
-              <td>Oggi, 15:42</td>
-              <td><strong style="color:var(--gold);">Casa Albertina</strong></td>
-              <td>Alexander von Müller</td>
-              <td>Germania (DEU)</td>
-              <td>Passaporto C4X980211</td>
-              <td><span class="status-badge status-ok">✓ Trasmesso</span></td>
-              <td><span class="status-badge status-ok">✓ Inviato</span></td>
-              <td><button class="btn-table-action" onclick="alert('Ricevuta Questura PDF scaricata!')">Ricevuta PDF</button></td>
-            </tr>
-            <tr>
-              <td>Ieri, 18:20</td>
-              <td><strong>Corte Cà Boare · A</strong></td>
-              <td>Sophie Laurent</td>
-              <td>Francia (FRA)</td>
-              <td>C.I. 19048201FR</td>
-              <td><span class="status-badge status-ok">✓ Trasmesso</span></td>
-              <td><span class="status-badge status-ok">✓ Inviato</span></td>
-              <td><button class="btn-table-action" onclick="alert('Ricevuta Questura PDF scaricata!')">Ricevuta PDF</button></td>
+              <td colspan="8" style="text-align:center; padding:32px 16px; color:var(--mid); font-size:13px;">
+                Caricamento registro in tempo reale...
+              </td>
             </tr>
           </tbody>
         </table>
@@ -439,10 +424,11 @@
 
   </div>
 
-  <script>
-    
+    <script>
     function copyPropertyLink(url, name) {
-      const msg = `Gentile Ospite, benvenuto a ${name}!\nPer completare la registrazione obbligatoria dei presenti e accedere alle credenziali Wi-Fi e alla guida della casa, puoi effettuare il check-in rapido qui:\n${url}`;
+      const msg = `Gentile Ospite, benvenuto a ${name}!
+Per completare la registrazione obbligatoria dei presenti e accedere alle credenziali Wi-Fi e alla guida della casa, puoi effettuare il check-in rapido qui:
+${url}`;
       navigator.clipboard.writeText(msg).then(() => {
         alert('Messaggio con link per ' + name + ' copiato negli appunti! Pronto da incollare su WhatsApp o Booking.');
       });
@@ -450,13 +436,15 @@
 
     async function loadLiveGuests() {
       try {
-        const res = await fetch('/api/ospiti');
+        const res = await fetch('/api/ospiti?t=' + Date.now());
         if (res.ok) {
           const guests = await res.json();
           renderGuestTable(guests);
+        } else {
+          console.error('Fetch /api/ospiti error:', res.status);
         }
       } catch (err) {
-        console.log('Error loading guests:', err);
+        console.error('Network error loading guests:', err);
       }
     }
 
@@ -467,26 +455,34 @@
 
       if (groups && groups.length > 0) {
         groups.forEach(g => {
-          const count = g.num_guests || (1 + (g.additional_guests ? g.additional_guests.length : 0));
+          const count = parseInt(g.num_guests, 10) || (1 + (g.additional_guests ? g.additional_guests.length : 0));
           totalGuests += count;
-          totalNightsEstimated += (count * 2); // stima 2 notti per calcolo imposta
+          totalNightsEstimated += (count * 2);
         });
       }
 
-      document.getElementById('statTotalGuests').textContent = totalGuests;
-      document.getElementById('statTotalGroups').textContent = totalGroups;
-      document.getElementById('statRossStatus').textContent = totalGroups > 0 ? `${totalGroups} Schedine` : '0 Schedine';
+      const elTot = document.getElementById('statTotalGuests');
+      const elGrp = document.getElementById('statTotalGroups');
+      const elRoss = document.getElementById('statRossStatus');
+      const elTax = document.getElementById('statCityTax');
+
+      if (elTot) elTot.textContent = totalGuests;
+      if (elGrp) elGrp.textContent = totalGroups;
+      if (elRoss) elRoss.textContent = totalGroups > 0 ? `${totalGroups} Schedine` : '0 Schedine';
       
       const taxRate = 1.50; // Negrar di Valpolicella
       const totalTax = (totalNightsEstimated * taxRate).toFixed(2);
-      document.getElementById('statCityTax').textContent = `${totalTax} €`;
+      if (elTax) elTax.textContent = `${totalTax} €`;
     }
 
     async function clearAllTestData() {
       if (!confirm('Vuoi azzerare tutte le registrazioni di prova e ripartire da zero?')) return;
       try {
-        await fetch('/api/admin/reset-ospiti', { method: 'POST' });
-        loadLiveGuests();
+        const res = await fetch('/api/admin/reset-ospiti', { method: 'POST' });
+        if (res.ok) {
+          alert('Database azzerato con successo!');
+          loadLiveGuests();
+        }
       } catch (e) {
         alert('Errore durante il reset.');
       }
@@ -496,13 +492,22 @@
       updateStatsCards(groups);
       const tbody = document.getElementById('guestTableBody');
       if (!tbody) return;
+
       if (!groups || groups.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--mid); padding:24px;">Nessun ospite registrato al momento nel database. Effettua un check-in dalla guida per vederlo apparire qui!</td></tr>';
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align:center; color:var(--mid); padding:36px 16px; font-size:13px; line-height:1.6;">
+              <div style="font-size:24px; margin-bottom:6px;">📭</div>
+              <strong>Nessun ospite registrato al momento nel database.</strong><br>
+              Invia uno dei 3 link sopra agli ospiti per vederli apparire qui in tempo reale!
+            </td>
+          </tr>
+        `;
         return;
       }
 
       tbody.innerHTML = groups.map((g, idx) => {
-        const lead = g.lead_guest || { nome: g.name || 'Ospite', cognome: g.surname || '', cittadinanza: g.citizenship || 'ITALIA', doc_type: g.doc_type || 'Doc', numero_documento: g.doc_num || '-' };
+        const lead = g.lead_guest || { nome: g.name || 'Ospite', cognome: g.surname || '', cittadinanza: g.citizenship || 'ITALIA', tipo_documento: g.doc_type || 'Doc', numero_documento: g.doc_num || '-' };
         const others = g.additional_guests || [];
         const totalCount = g.num_guests || (1 + others.length);
 
@@ -514,13 +519,13 @@
             </td>
             <td><strong style="color:var(--gold);">${g.apt_name || g.apt}</strong></td>
             <td>
-              <div style="font-weight:700; color:var(--dark);">${lead.cognome} ${lead.nome}</div>
+              <div style="font-weight:700; color:var(--dark); font-size:13px;">${lead.cognome} ${lead.nome}</div>
               <span style="font-size:9px; background:rgba(197,168,128,0.2); color:var(--dark); padding:2px 6px; border-radius:6px; font-weight:600;">${lead.tipo_alloggiato || 'Capogruppo'} (${totalCount} persone)</span>
             </td>
             <td>${lead.cittadinanza || 'ITALIA'}</td>
             <td>${lead.tipo_documento || 'Doc'}: <code>${lead.numero_documento || '-'}</code></td>
-            <td><span class="status-badge status-ok">${g.alloggiati_status || '✓ Trasmesso'}</span></td>
-            <td><span class="status-badge status-ok">${g.ross1000_status || '✓ Inviato'}</span></td>
+            <td><span class="status-badge status-ok">${g.alloggiati_status || '✓ Pronto per Invio'}</span></td>
+            <td><span class="status-badge status-ok">${g.ross1000_status || '✓ Pronto per ROSS1000'}</span></td>
             <td>
               <div style="display:flex; gap:4px; flex-wrap:wrap;">
                 <button class="btn-table-action" onclick="toggleGroupDetails('grp_${idx}')">📋 Dettaglio (${totalCount})</button>
@@ -531,31 +536,31 @@
           </tr>
           <tr id="grp_${idx}" style="display:none; background:rgba(0,0,0,0.02);">
             <td colspan="8" style="padding:16px 20px;">
-              <div style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px;">
+              <div style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.03);">
                 <div style="font-size:12px; font-weight:700; color:var(--gold); margin-bottom:10px; text-transform:uppercase;">
                   Scheda Dati Completa per Alloggiati Web & ROSS1000 · ${g.apt_name || g.apt}
                 </div>
                 
                 <div style="margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid #eee;">
-                  <div style="font-size:11px; font-weight:700; color:var(--dark); margin-bottom:4px;">1. Intestatario / Capogruppo: ${lead.cognome} ${lead.nome} (${lead.sesso || 'M'})</div>
-                  <div style="font-size:11px; color:var(--mid); line-height:1.6;">
+                  <div style="font-size:12px; font-weight:700; color:var(--dark); margin-bottom:4px;">1. Intestatario / Capogruppo: ${lead.cognome} ${lead.nome} (${lead.sesso || 'M'})</div>
+                  <div style="font-size:11px; color:var(--mid); line-height:1.7;">
                     • <strong>Nascita:</strong> ${lead.data_nascita || '-'} a ${lead.comune_nascita || '-'} (${lead.stato_nascita || lead.cittadinanza || 'ITALIA'})<br>
-                    • <strong>Residenza:</strong> ${lead.comune_residenza || '-'} (${lead.stato_residenza || lead.cittadinanza || 'ITALIA'}) - ${lead.indirizzo_residenza || ''}<br>
+                    • <strong>Residenza:</strong> ${lead.comune_residenza || '-'} (${lead.stato_residenza || lead.cittadinanza || 'ITALIA'}) - ${lead.indirizzo_residenza || 'Nessun indirizzo specificato'}<br>
                     • <strong>Documento:</strong> ${lead.tipo_documento || 'Carta Identità'} N° <code>${lead.numero_documento || '-'}</code> (Rilasciato da: ${lead.comune_rilascio || lead.stato_rilascio || 'Comune'})
                   </div>
                 </div>
 
                 ${others.length > 0 ? `
-                  <div style="font-size:11px; font-weight:700; color:var(--dark); margin-bottom:6px;">Altri Ospiti del Gruppo (${others.length}):</div>
+                  <div style="font-size:11px; font-weight:700; color:var(--dark); margin-bottom:6px;">Altri Componenti del Gruppo (${others.length}):</div>
                   <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:8px;">
                     ${others.map((o, oidx) => `
-                      <div style="background:rgba(0,0,0,0.03); padding:8px 10px; border-radius:8px; font-size:11px;">
+                      <div style="background:rgba(0,0,0,0.03); padding:8px 10px; border-radius:8px; font-size:11px; border:1px solid rgba(0,0,0,0.05);">
                         <strong>${oidx+2}. ${o.cognome} ${o.nome}</strong> (${o.sesso || 'M'})<br>
                         <span style="color:var(--mid);">Nato il ${o.data_nascita || '-'} a ${o.comune_nascita || o.stato_nascita || '-'} · Cittadinanza: ${o.cittadinanza || 'ITALIA'}</span>
                       </div>
                     `).join('')}
                   </div>
-                ` : '<div style="font-size:11px; color:var(--mid);">Nessun ospite aggiuntivo in questa prenotazione.</div>'}
+                ` : '<div style="font-size:11px; color:var(--mid);">Nessun ospite aggiuntivo registrato.</div>'}
               </div>
             </td>
           </tr>
@@ -571,7 +576,7 @@
     }
 
     async function deleteGuest(id) {
-      if (!confirm('Rimuovere questo gruppo di ospiti dal registro?')) return;
+      if (!confirm('Rimuovere questa registrazione dal database?')) return;
       try {
         await fetch('/api/ospiti/' + id, { method: 'DELETE' });
         loadLiveGuests();
@@ -596,8 +601,10 @@
       downloadQuesturaTxt('all_guests');
     }
 
+    // Carica subito e poi ogni 4 secondi
+    document.addEventListener('DOMContentLoaded', loadLiveGuests);
     loadLiveGuests();
-    setInterval(loadLiveGuests, 5000);
+    setInterval(loadLiveGuests, 4000);
   </script>
 
 </body>

@@ -2407,7 +2407,7 @@
       container.innerHTML = html;
     }
 
-    async function submitFullGuestCheckin() {
+        async function submitFullGuestCheckin() {
       const surname = (document.getElementById('chkLeadSurname')?.value || '').trim();
       const name = (document.getElementById('chkLeadName')?.value || '').trim();
       const sex = document.getElementById('chkLeadSex')?.value || 'M';
@@ -2424,7 +2424,7 @@
       const numGuests = parseInt(document.getElementById('chkNumGuests')?.value || '1', 10);
 
       if (!surname || !name) {
-        alert("Compila il Nome e Cognome dell'ospite principale.");
+        alert("Inserisci Nome e Cognome dell'ospite principale.");
         return;
       }
       if (!docNum) {
@@ -2480,13 +2480,16 @@
       };
 
       try {
-        await fetch('/api/guest-checkin', {
+        const res = await fetch('/api/guest-checkin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+        if (res.ok) {
+          console.log('Check-in inviato con successo a /api/guest-checkin');
+        }
       } catch (e) {
-        console.log('Saved offline/local:', e);
+        console.error('Fetch check-in error:', e);
       }
 
       registeredGuest = {
@@ -2496,7 +2499,7 @@
       };
       localStorage.setItem('guest_profile_' + currentProp, JSON.stringify(registeredGuest));
       unlockGuestExperience();
-      showToast('✓ Check-in completato con successo! Accesso sbloccato.');
+      alert('✓ Check-in completato con successo! I tuoi dati sono stati registrati e la guida è ora sbloccata.');
       closeModal();
     }
 
