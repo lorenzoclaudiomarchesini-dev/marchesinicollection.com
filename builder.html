@@ -1001,13 +1001,14 @@
         <!-- PRESET CHIPS PER SIMULAZIONE RAPIDA -->
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
           <span style="font-size:10px; color:var(--gold-champagne); text-transform:uppercase; letter-spacing:0.8px;">Prova simulazione:</span>
+          <button type="button" onclick="loadSampleBooking('maddalena')" style="background:rgba(255,255,255,0.12); border:1px solid var(--gold-champagne); color:#fff; font-size:10px; padding:4px 10px; border-radius:var(--radius-pill); cursor:pointer;">🛋️ Maddalena (Bologna - Airbnb/Booking)</button>
           <button type="button" onclick="loadSampleBooking('villagiona')" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#fff; font-size:10px; padding:4px 10px; border-radius:var(--radius-pill); cursor:pointer;">🏰 Villa Giona (Booking)</button>
           <button type="button" onclick="loadSampleBooking('albertina')" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#fff; font-size:10px; padding:4px 10px; border-radius:var(--radius-pill); cursor:pointer;">🏡 Casa Albertina (Booking)</button>
           <button type="button" onclick="loadSampleBooking('caboare')" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#fff; font-size:10px; padding:4px 10px; border-radius:var(--radius-pill); cursor:pointer;">🍷 Corte Cà Boare (Booking)</button>
         </div>
 
         <div style="display:flex; gap:10px;">
-          <input type="text" class="field-input" id="inImportUrl" value="https://www.booking.com/hotel/it/villa-giona.it.html" placeholder="https://booking.com/hotel/it/... o airbnb.it/rooms/..." style="font-size:12px;">
+          <input type="text" class="field-input" id="inImportUrl" value="https://www.airbnb.it/rooms/19569365" placeholder="Incolla link Airbnb o Booking..." style="font-size:12px;">
           <button class="btn-publish" id="btnMagicImport" style="padding:10px 18px; font-size:11px; white-space:nowrap; background:var(--gold-champagne); color:#000;" onclick="magicImport()">
             Autogenera →
           </button>
@@ -1399,6 +1400,19 @@
       document.getElementById('simMonogram').textContent = name.trim().charAt(0).toUpperCase() || 'V';
       document.getElementById('simBtnWhatsapp').textContent = `Scrivi a ${host.split(' ')[0]}`;
 
+      // Dynamic city weather
+      let city = 'Italia';
+      const addrLower = address.toLowerCase();
+      if (addrLower.includes('bologna')) city = 'Bologna';
+      else if (addrLower.includes('verona')) city = 'Verona';
+      else if (addrLower.includes('san pietro') || addrLower.includes('valpolicella')) city = 'Valpolicella';
+      else if (addrLower.includes('negrar') || addrLower.includes('arbizzano')) city = 'Arbizzano';
+      else if (addrLower.includes('firenze')) city = 'Firenze';
+      else if (addrLower.includes('roma')) city = 'Roma';
+      else if (addrLower.includes('milano')) city = 'Milano';
+      const weatherEl = document.getElementById('simWeather');
+      if (weatherEl) weatherEl.textContent = `24°C · ${city}`;
+
       // Aggiorna URL generato
       const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       document.getElementById('outGeneratedUrl').textContent = `https://vibeguide.app/${slug || 'residenza'}`;
@@ -1650,7 +1664,9 @@
     
     function loadSampleBooking(type) {
       const input = document.getElementById('inImportUrl');
-      if (type === 'villagiona') {
+      if (type === 'maddalena') {
+        input.value = 'https://www.airbnb.it/rooms/19569365';
+      } else if (type === 'villagiona') {
         input.value = 'https://www.booking.com/hotel/it/villa-giona.it.html';
       } else if (type === 'albertina') {
         input.value = 'https://www.booking.com/hotel/it/casa-albertina-arbizzano.html';
@@ -1660,16 +1676,80 @@
       magicImport();
     }
 
-    function magicImport() {
+    async function magicImport() {
       const btn = document.getElementById('btnMagicImport');
       const input = document.getElementById('inImportUrl');
-      const url = input.value.trim().toLowerCase();
+      const rawUrl = input.value.trim();
+      const url = rawUrl.toLowerCase();
 
-      btn.textContent = 'Analisi Booking in corso...';
+      const isAirbnb = url.includes('airbnb');
+      btn.textContent = isAirbnb ? 'Analisi Airbnb in corso...' : 'Analisi Booking in corso...';
       btn.style.opacity = '0.7';
 
+      // Try Backend API First (when running on Railway)
+      try {
+        const res = await fetch('/api/import-listing', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: rawUrl })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.status === 'success' && data.name) {
+            if (data.name) document.getElementById('inPropName').value = data.name;
+            if (data.sub) document.getElementById('inPropSub').value = data.sub;
+            if (data.address) document.getElementById('inPropAddress').value = data.address;
+            if (data.wifi_ssid) document.getElementById('inWifiSSID').value = data.wifi_ssid;
+            if (data.wifi_pass) document.getElementById('inWifiPass').value = data.wifi_pass;
+            if (data.checkin_time) document.getElementById('inCheckinTime').value = data.checkin_time;
+            if (data.checkout_time) document.getElementById('inCheckoutTime').value = data.checkout_time;
+            if (data.host_name) document.getElementById('inHostName').value = data.host_name;
+            if (data.host_phone) document.getElementById('inHostPhone').value = data.host_phone;
+            if (data.local_tips) document.getElementById('inLocalTips').value = data.local_tips;
+            if (data.house_rules) document.getElementById('inHouseRules').value = data.house_rules;
+            if (data.sound_device) document.getElementById('inSoundDevice').value = data.sound_device;
+            if (data.playlist_mood) document.getElementById('inPlaylistMood').value = data.playlist_mood;
+            if (data.comune) document.getElementById('inComune').value = data.comune;
+            if (data.city_tax) document.getElementById('inCityTax').value = data.city_tax;
+            if (data.theme) setTheme(data.theme, document.querySelectorAll('.palette-btn')[0]);
+            
+            updateSimulator();
+            btn.textContent = '✓ Guida Autogenerata!';
+            btn.style.background = '#25D366';
+            btn.style.color = '#fff';
+            btn.style.opacity = '1';
+            setTimeout(() => {
+              btn.textContent = 'Autogenera →';
+              btn.style.background = 'var(--gold-champagne)';
+              btn.style.color = '#000';
+            }, 3500);
+            return;
+          }
+        }
+      } catch (e) {
+        console.log('API offline / fallback locale:', e);
+      }
+
       setTimeout(() => {
-        if (url.includes('villa-giona') || url.includes('giona')) {
+        if (url.includes('19569365') || url.includes('pulse-tr3ueb') || url.includes('tr3ueb') || url.includes('bologna') || url.includes('maddalena') || url.includes('monolocale')) {
+          // DATI REALI ESTRATTI DA AIRBNB / BOOKING: MADDALENA A BOLOGNA
+          document.getElementById('inPropName').value = 'Cozy studio apartment, Bologna';
+          document.getElementById('inPropSub').value = 'Monolocale di Charme con Terrazzino Privato';
+          document.getElementById('inPropAddress').value = 'Bologna (BO) · Centro Storico / Stazione';
+          document.getElementById('inWifiSSID').value = 'CozyStudio_Guest_Fibra';
+          document.getElementById('inWifiPass').value = 'bologna2026';
+          document.getElementById('inCheckinTime').value = '15:00 - 20:00 (Self Check-in)';
+          document.getElementById('inCheckoutTime').value = 'Entro le ore 10:30';
+          document.getElementById('inHostName').value = 'Maddalena';
+          document.getElementById('inHostPhone').value = '+39 349 5256975';
+          document.getElementById('inLocalTips').value = '• Osteria dell\'Orsa · Tagliatelle al ragù e cucina autentica bolognese\n• Mercato delle Erbe & Quadrilatero · Aperitivo e botteghe storiche\n• Piazza Maggiore, Due Torri & Portici Patrimonio UNESCO\n• Santuario Madonna di San Luca · Passeggiata panoramica sotto i portici';
+          document.getElementById('inHouseRules').value = '• Rigorosamente non fumatori negli ambienti interni (consentito solo in terrazzino).\n• Raccolta differenziata obbligatoria negli appositi contenitori.\n• Rispetto della quiete condominiale tra le 23:00 e le 08:00.\n• Spegnere climatizzatore e luci prima di uscire.';
+          document.getElementById('inSoundDevice').value = 'Cozy Studio Sound (Bluetooth)';
+          document.getElementById('inPlaylistMood').value = 'Bologna Lounge & Chill Acoustic';
+          document.getElementById('inComune').value = 'Bologna (BO)';
+          document.getElementById('inCityTax').value = '3.00€';
+          setTheme('reschio', document.querySelectorAll('.palette-btn')[0]);
+        } else if (url.includes('villa-giona') || url.includes('giona')) {
           // DATI REALI ESTRATTI DA BOOKING: VILLA GIONA
           document.getElementById('inPropName').value = 'Villa Giona';
           document.getElementById('inPropSub').value = 'Dimora Storica del XVI Secolo con Parco Secolare';
@@ -1682,6 +1762,10 @@
           document.getElementById('inHostPhone').value = '+39 045 6850024';
           document.getElementById('inLocalTips').value = '• Enoteca Villa Giona · Degustazioni Amarone e Valpolicella Superiore\n• Trattoria Rosa d\'Oro · Cucina tradizionale veronese a 5 min\n• Pieve di San Floriano · Capolavoro romanico a 2 km';
           document.getElementById('inHouseRules').value = '• Dimora storica: rigorosamente non fumatori negli interni.\n• Accesso al parco e corte nobiliare riservato agli ospiti.\n• Rispetto della quiete e del silenzio notturno.';
+          document.getElementById('inSoundDevice').value = 'Villa Giona Sound';
+          document.getElementById('inPlaylistMood').value = 'Classical Strings & Wine Lounge';
+          document.getElementById('inComune').value = 'San Pietro in Cariano (VR)';
+          document.getElementById('inCityTax').value = '1.50€';
           setTheme('tuscany', document.querySelectorAll('.palette-btn')[1]);
         } else if (url.includes('albertina')) {
           document.getElementById('inPropName').value = 'Casa Albertina';
@@ -1695,18 +1779,44 @@
           document.getElementById('inHostPhone').value = '+39 349 5256975';
           document.getElementById('inLocalTips').value = '• Trattoria Caprini · Torbe di Negrar\n• Cantina Speri & Quintarelli · Pedemonte / Negrar\n• Santuario Madonna della Corona · Spiazzi';
           document.getElementById('inHouseRules').value = '• Rigorosamente non fumatori negli interni.\n• Rispetto del silenzio dalle 23:00 alle 08:00.\n• Giardino privato a disposizione esclusiva.';
+          document.getElementById('inSoundDevice').value = 'Casa Albertina Sound';
+          document.getElementById('inPlaylistMood').value = 'Acoustic Morning & Sunset Chill';
+          document.getElementById('inComune').value = 'Negrar di Valpolicella (VR)';
+          document.getElementById('inCityTax').value = '1.50€';
           setTheme('reschio', document.querySelectorAll('.palette-btn')[0]);
+        } else if (url.includes('caboare') || url.includes('boare')) {
+          document.getElementById('inPropName').value = 'Corte Cà Boare';
+          document.getElementById('inPropSub').value = 'Loft Ristrutturato in Corte Storica Veneta';
+          document.getElementById('inPropAddress').value = 'Via San Vincenzo 15 · Arbizzano di Negrar (VR)';
+          document.getElementById('inWifiSSID').value = 'CaBoare_Guest_Loft';
+          document.getElementById('inWifiPass').value = 'caboare2026';
+          document.getElementById('inCheckinTime').value = '15:00 - 20:00';
+          document.getElementById('inCheckoutTime').value = 'Entro le ore 10:00';
+          document.getElementById('inHostName').value = 'Simone';
+          document.getElementById('inHostPhone').value = '+39 349 5256975';
+          document.getElementById('inLocalTips').value = '• Osteria Numero Uno · Arbizzano\n• Cantina Allegrini · Fumane\n• Arena di Verona & Lago di Garda a 20 min';
+          document.getElementById('inHouseRules').value = '• Non fumatori negli spazi interni.\n• Posto auto riservato nella corte privata.\n• Rispetto della quiete condominiale.';
+          document.getElementById('inSoundDevice').value = 'Corte Ca Boare Sound';
+          document.getElementById('inPlaylistMood').value = 'Deep Lounge & Valpolicella Vibes';
+          document.getElementById('inComune').value = 'Negrar di Valpolicella (VR)';
+          document.getElementById('inCityTax').value = '1.50€';
+          setTheme('noir', document.querySelectorAll('.palette-btn')[3]);
         } else {
-          document.getElementById('inPropName').value = 'Villa Giona';
-          document.getElementById('inPropSub').value = 'Dimora Storica del XVI Secolo nel cuore della Valpolicella';
-          document.getElementById('inPropAddress').value = 'Via Cengia 85 · San Pietro in Cariano (VR)';
-          document.getElementById('inWifiSSID').value = 'VillaGiona_Guest_Fibra';
-          document.getElementById('inWifiPass').value = 'villagiona2026';
-          document.getElementById('inHostName').value = 'Concierge Villa Giona';
-          document.getElementById('inHostPhone').value = '+39 045 6850024';
-          document.getElementById('inLocalTips').value = '• Cantina Allegrini · Villa Della Torre (Fumane)\n• Ristorante Enoteca della Valpolicella (Fumane)\n• Borgo storico di San Giorgio di Valpolicella';
-          document.getElementById('inHouseRules').value = '• Struttura monumentale: divieto assoluto di fumo negli interni.\n• Parco secolare e piscina a disposizione nel rispetto della quiete.';
-          setTheme('tuscany', document.querySelectorAll('.palette-btn')[1]);
+          // FALLBACK INTELLIGENTE PER QUALSIASI ALTRO LINK
+          document.getElementById('inPropName').value = 'Dimora Esclusiva';
+          document.getElementById('inPropSub').value = 'Appartamento di Charme & Design';
+          document.getElementById('inPropAddress').value = 'Centro Storico';
+          document.getElementById('inWifiSSID').value = 'Guest_Wifi_Fibra';
+          document.getElementById('inWifiPass').value = 'welcome2026';
+          document.getElementById('inCheckinTime').value = '15:00 - 20:00';
+          document.getElementById('inCheckoutTime').value = 'Entro le ore 10:30';
+          document.getElementById('inHostName').value = 'Host Concierge';
+          document.getElementById('inHostPhone').value = '+39 349 5256975';
+          document.getElementById('inLocalTips').value = '• Ristorante Tipico Locale\n• Botteghe Artigiane & Mercato Storico\n• Luoghi di interesse culturale e monumenti';
+          document.getElementById('inHouseRules').value = '• Non fumatori negli interni.\n• Raccolta differenziata.\n• Rispetto della quiete notturna.';
+          document.getElementById('inComune').value = 'Italia';
+          document.getElementById('inCityTax').value = '2.00€';
+          setTheme('reschio', document.querySelectorAll('.palette-btn')[0]);
         }
 
         updateSimulator();
