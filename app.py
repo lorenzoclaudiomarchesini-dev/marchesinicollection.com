@@ -139,9 +139,9 @@ async def import_listing(req: ImportRequest):
             
             # Follow handoff cookie switch if needed
             if "domain_switch/handoff" in r.text:
-                m_act = re.search(r'action=["'](.*?)["']', r.text)
-                m_ver = re.search(r'name=["']version["']\s+value=["'](.*?)["']', r.text)
-                m_pay = re.search(r'name=["']payload["']\s+value=["'](.*?)["']', r.text)
+                m_act = re.search(r'action=[\"\'](.*?)[\"\']', r.text)
+                m_ver = re.search(r'name=[\"\']version[\"\']\s+value=[\"\'](.*?)[\"\']', r.text)
+                m_pay = re.search(r'name=[\"\']payload[\"\']\s+value=[\"\'](.*?)[\"\']', r.text)
                 if m_act and m_pay:
                     r = s.post(m_act.group(1), data={'version': m_ver.group(1) if m_ver else '1', 'payload': m_pay.group(1)}, timeout=12)
             
