@@ -243,6 +243,85 @@
       </div>
     </div>
 
+    
+    <!-- LINK CONDIVISIONE OSPITI PER I 3 APPARTAMENTI -->
+    <div class="panel-card" style="border: 1px solid var(--gold); background: linear-gradient(145deg, rgba(26,23,21,0.95) 0%, rgba(18,16,14,0.98) 100%);">
+      <div class="panel-header" style="border-bottom: 1px solid rgba(197,168,128,0.2); padding-bottom:12px;">
+        <div>
+          <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:600;">Link Ufficiali Self Check-in</div>
+          <h3 class="panel-title" style="color:#fff; font-size:18px;">I 3 Link Diretti per i Tuoi Ospiti</h3>
+          <p class="panel-subtitle">Invia questo link al cliente prima dell'arrivo: compilerà i dati dei presenti per sbloccare la guida e le istruzioni.</p>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-top:16px;">
+        
+        <!-- CASA ALBERTINA -->
+        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <strong style="color:var(--gold); font-size:15px; font-family:var(--serif);">🏡 Casa Albertina</strong>
+              <span style="font-size:9px; background:rgba(197,168,128,0.15); color:var(--gold); padding:2px 6px; border-radius:4px;">Dimora Indipendente</span>
+            </div>
+            <div style="font-family:monospace; font-size:11px; color:#fff; word-break:break-all; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:6px; margin:8px 0;">
+              https://marchesinicollection.com/guida/albertina
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button class="btn-action-gold" style="flex:1; padding:8px; font-size:11px; justify-content:center;" onclick="copyPropertyLink('https://marchesinicollection.com/guida/albertina', 'Casa Albertina')">
+              📋 Copia Link
+            </button>
+            <button class="btn-table-action" style="padding:8px 12px; font-size:11px;" onclick="window.open('/guida/albertina', '_blank')">
+              Apri ↗
+            </button>
+          </div>
+        </div>
+
+        <!-- CORTE CA BOARE A -->
+        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <strong style="color:var(--gold); font-size:15px; font-family:var(--serif);">🍷 Corte Cà Boare · Apt A</strong>
+              <span style="font-size:9px; background:rgba(197,168,128,0.15); color:var(--gold); padding:2px 6px; border-radius:4px;">Sub 1 · 1 Cam / 4 Letti</span>
+            </div>
+            <div style="font-family:monospace; font-size:11px; color:#fff; word-break:break-all; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:6px; margin:8px 0;">
+              https://marchesinicollection.com/guida/caboare-a
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button class="btn-action-gold" style="flex:1; padding:8px; font-size:11px; justify-content:center;" onclick="copyPropertyLink('https://marchesinicollection.com/guida/caboare-a', 'Corte Cà Boare Apt A')">
+              📋 Copia Link
+            </button>
+            <button class="btn-table-action" style="padding:8px 12px; font-size:11px;" onclick="window.open('/guida/caboare-a', '_blank')">
+              Apri ↗
+            </button>
+          </div>
+        </div>
+
+        <!-- CORTE CA BOARE B -->
+        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+              <strong style="color:var(--gold); font-size:15px; font-family:var(--serif);">🍷 Corte Cà Boare · Apt B</strong>
+              <span style="font-size:9px; background:rgba(197,168,128,0.15); color:var(--gold); padding:2px 6px; border-radius:4px;">Sub 2 · 2 Cam / 5 Letti</span>
+            </div>
+            <div style="font-family:monospace; font-size:11px; color:#fff; word-break:break-all; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:6px; margin:8px 0;">
+              https://marchesinicollection.com/guida/caboare-b
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button class="btn-action-gold" style="flex:1; padding:8px; font-size:11px; justify-content:center;" onclick="copyPropertyLink('https://marchesinicollection.com/guida/caboare-b', 'Corte Cà Boare Apt B')">
+              📋 Copia Link
+            </button>
+            <button class="btn-table-action" style="padding:8px 12px; font-size:11px;" onclick="window.open('/guida/caboare-b', '_blank')">
+              Apri ↗
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- CONFIGURAZIONE CODICI CIN & CIR -->
     <div class="panel-card">
       <div class="panel-header">
@@ -361,6 +440,14 @@
   </div>
 
   <script>
+    
+    function copyPropertyLink(url, name) {
+      const msg = `Gentile Ospite, benvenuto a ${name}!\nPer completare la registrazione obbligatoria dei presenti e accedere alle credenziali Wi-Fi e alla guida della casa, puoi effettuare il check-in rapido qui:\n${url}`;
+      navigator.clipboard.writeText(msg).then(() => {
+        alert('Messaggio con link per ' + name + ' copiato negli appunti! Pronto da incollare su WhatsApp o Booking.');
+      });
+    }
+
     async function loadLiveGuests() {
       try {
         const res = await fetch('/api/ospiti');

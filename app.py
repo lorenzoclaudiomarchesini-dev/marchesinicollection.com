@@ -333,6 +333,43 @@ def serve_static(filename: str):
         return FileResponse(filepath)
     raise HTTPException(status_code=404, detail="File non trovato")
 
+
+# ── Export & Automazioni Questura / ROSS1000 ──────────────────────────────────
+from fastapi.responses import Response, PlainTextResponse
+
+@app.get("/api/export/ross1000-csv")
+def export_ross1000_csv():
+    """Genera il file CSV cumulativo per importazione diretta su ROSS1000"""
+    ospiti = load_ospiti()
+    lines = ["CodiceStruttura,DataArrivo,DataPartenza,TipoAlloggiato,Cognome,Nome,Sesso,DataNascita,Cittadinanza,StatoNascita,ComuneNascita,StatoResidenza,ComuneResidenza"]
+    
+    for g in ospiti:
+        apt = g.get("apt", "")
+        cod_struttura = "Z04845" if "caboare-a" in apt else ("Z12267" if "caboare-b" in apt else "Z00000")
+        arr = g.get("arrival_date", "")
+        dep = g.get("departure_date", "")
+        
+        # Lead guest
+        lead = g.get("lead_guest", {})
+        lines.append(f"{cod_struttura},{arr},{dep},{lead.get('tipo_alloggiato','Capogruppo')},{lead.get('cognome','')},{lead.get('nome','')},{lead.get('sesso','M')},{lead.get('data_nascita','')},{lead.get('cittadinanza','ITALIA')},{lead.get('stato_nascita','ITALIA')},{lead.get('comune_nascita','')},{lead.get('stato_residenza','ITALIA')},{lead.get('comune_residenza','')}")
+        
+        # Additional guests
+        for o in g.get("additional_guests", []):
+            lines.append(f"{cod_struttura},{arr},{dep},{o.get('tipo_alloggiato','Membro Gruppo')},{o.get('cognome','')},{o.get('nome','')},{o.get('sesso','M')},{o.get('data_nascita','')},{o.get('cittadinanza','ITALIA')},{o.get('stato_nascita','ITALIA')},{o.get('comune_nascita','')},ITALIA,")
+
+    content = "\n".join(lines)
+    return Response(
+        content=content,
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=ross1000_movimenti_{datetime.now().strftime('%Y%m%d')}.csv"}
+    )
+
+@app.get("/checkin/{prop}")
+@app.get("/guida/{prop}")
+@app.get("/welcome/{prop}")
+def serve_specific_guide(prop: str):
+    return FileResponse(os.path.join(os.path.dirname(__file__), "guide.html"))
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
