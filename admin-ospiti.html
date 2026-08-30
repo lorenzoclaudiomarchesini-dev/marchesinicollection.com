@@ -223,23 +223,23 @@
 
   <div class="container">
     
-    <!-- STATS -->
+    <!-- STATS (CALCOLATE IN TEMPO REALE DAL DATABASE) -->
     <div class="stats-grid">
       <div class="stat-card">
-        <span class="stat-label">Ospiti Registrati Mese</span>
-        <span class="stat-value">28</span>
+        <span class="stat-label">Ospiti Registrati Totali</span>
+        <span class="stat-value" id="statTotalGuests">0</span>
       </div>
       <div class="stat-card">
-        <span class="stat-label">Trasmessi a Questura</span>
-        <span class="stat-value" style="color:#25D366;">28 / 28</span>
+        <span class="stat-label">Gruppi Soggiorno</span>
+        <span class="stat-value" id="statTotalGroups" style="color:#25D366;">0</span>
       </div>
       <div class="stat-card">
-        <span class="stat-label">Flusso ROSS1000</span>
-        <span class="stat-value" style="color:var(--gold);">Allineato</span>
+        <span class="stat-label">Flusso ROSS1000 / ISTAT</span>
+        <span class="stat-value" id="statRossStatus" style="color:var(--gold);">Pronto</span>
       </div>
       <div class="stat-card">
-        <span class="stat-label">Tassa Soggiorno Negrar</span>
-        <span class="stat-value">42.00 €</span>
+        <span class="stat-label">Imposta Soggiorno Stimata</span>
+        <span class="stat-value" id="statCityTax">0.00 €</span>
       </div>
     </div>
 
@@ -460,11 +460,44 @@
       }
     }
 
+    function updateStatsCards(groups) {
+      let totalGuests = 0;
+      let totalGroups = groups ? groups.length : 0;
+      let totalNightsEstimated = 0;
+
+      if (groups && groups.length > 0) {
+        groups.forEach(g => {
+          const count = g.num_guests || (1 + (g.additional_guests ? g.additional_guests.length : 0));
+          totalGuests += count;
+          totalNightsEstimated += (count * 2); // stima 2 notti per calcolo imposta
+        });
+      }
+
+      document.getElementById('statTotalGuests').textContent = totalGuests;
+      document.getElementById('statTotalGroups').textContent = totalGroups;
+      document.getElementById('statRossStatus').textContent = totalGroups > 0 ? `${totalGroups} Schedine` : '0 Schedine';
+      
+      const taxRate = 1.50; // Negrar di Valpolicella
+      const totalTax = (totalNightsEstimated * taxRate).toFixed(2);
+      document.getElementById('statCityTax').textContent = `${totalTax} €`;
+    }
+
+    async function clearAllTestData() {
+      if (!confirm('Vuoi azzerare tutte le registrazioni di prova e ripartire da zero?')) return;
+      try {
+        await fetch('/api/admin/reset-ospiti', { method: 'POST' });
+        loadLiveGuests();
+      } catch (e) {
+        alert('Errore durante il reset.');
+      }
+    }
+
     function renderGuestTable(groups) {
+      updateStatsCards(groups);
       const tbody = document.getElementById('guestTableBody');
       if (!tbody) return;
       if (!groups || groups.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--mid); padding:24px;">Nessun ospite registrato al momento nel database.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--mid); padding:24px;">Nessun ospite registrato al momento nel database. Effettua un check-in dalla guida per vederlo apparire qui!</td></tr>';
         return;
       }
 

@@ -157,6 +157,11 @@ async def submit_guest_checkin(request_body: dict):
     save_ospiti_list(ospiti)
     return {"status": "ok", "group": entry, "total_groups": len(ospiti)}
 
+@app.post("/api/admin/reset-ospiti")
+def reset_ospiti_database():
+    save_ospiti_list([])
+    return {"status": "ok", "message": "Database ospiti azzerato con successo"}
+
 @app.delete("/api/ospiti/{group_id}")
 def delete_ospite(group_id: str):
     ospiti = load_ospiti()
