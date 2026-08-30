@@ -2347,11 +2347,16 @@
     }
 
     
-    function completeVipCheckin() {
-      // Estrai dati anagrafici dal form o OCR
-      const extractedName = document.getElementById('resName') ? document.getElementById('resName').textContent.trim() : "Enrico";
-      const extractedSurname = document.getElementById('resSurname') ? document.getElementById('resSurname').textContent.trim() : "Marchesini";
-      const extractedDocNum = document.getElementById('resDocNum') ? document.getElementById('resDocNum').textContent.trim() : "CA92841ZZ";
+    async function completeVipCheckin() {
+      const nameEl = document.getElementById('resNameInput') || document.getElementById('resName');
+      const surnameEl = document.getElementById('resSurnameInput') || document.getElementById('resSurname');
+      const citEl = document.getElementById('resCitizenshipInput');
+      const docEl = document.getElementById('resDocNumInput') || document.getElementById('resDocNum');
+
+      const extractedName = (nameEl ? (nameEl.value || nameEl.textContent) : "Alexander").trim();
+      const extractedSurname = (surnameEl ? (surnameEl.value || surnameEl.textContent) : "von Müller").trim();
+      const extractedCitizenship = (citEl ? citEl.value : "Germania (DEU)").trim();
+      const extractedDocNum = (docEl ? (docEl.value || docEl.textContent) : "C4X980211").trim();
 
       registeredGuest = {
         name: extractedName,
@@ -2361,25 +2366,27 @@
 
       localStorage.setItem('guest_profile_' + currentProp, JSON.stringify(registeredGuest));
 
-      // 1. Invia dati al server backend
+      // 1. Invia dati al server backend live
       const guestData = {
         apt: currentProp,
         name: extractedName,
         surname: extractedSurname,
-        citizenship: "ITA",
+        citizenship: extractedCitizenship,
         doc_type: "CARTA_IDENTITA",
         doc_num: extractedDocNum,
-        checkin_date: new Date().toISOString().split('T')[0],
+        checkin_date: new Date().toLocaleDateString('it-IT') + ', ' + new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}),
         timestamp: new Date().toISOString()
       };
 
       try {
-        fetch('/api/guest-checkin', {
+        await fetch('/api/guest-checkin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(guestData)
-        }).catch(e => console.log('Mock checkin saved'));
-      } catch(e){}
+        });
+      } catch(e) {
+        console.log('Saved offline/local:', e);
+      }
 
       // 2. Sblocca la UI
       unlockGuestExperience();
@@ -2478,17 +2485,29 @@
               </div>
               
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:12px; margin-bottom:14px; background:var(--white); padding:12px; border-radius:12px; border:1px solid var(--warm-border);">
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Nome:</span><br><strong id="resName">Alexander</strong></div>
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Cognome:</span><br><strong id="resSurname">von Müller</strong></div>
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">Cittadinanza:</span><br><strong>Germania (DEU)</strong></div>
-                <div><span style="color:var(--mid); font-size:9px; text-transform:uppercase;">N. Documento:</span><br><strong id="resDocNum">C4X980211</strong></div>
+                <div>
+                  <label style="color:var(--mid); font-size:9px; text-transform:uppercase; font-weight:600; display:block; margin-bottom:3px;">Nome:</label>
+                  <input type="text" id="resNameInput" value="Alexander" style="width:100%; border:1px solid #ddd; border-radius:8px; padding:6px 8px; font-size:12px; font-weight:600; color:var(--dark);">
+                </div>
+                <div>
+                  <label style="color:var(--mid); font-size:9px; text-transform:uppercase; font-weight:600; display:block; margin-bottom:3px;">Cognome:</label>
+                  <input type="text" id="resSurnameInput" value="von Müller" style="width:100%; border:1px solid #ddd; border-radius:8px; padding:6px 8px; font-size:12px; font-weight:600; color:var(--dark);">
+                </div>
+                <div>
+                  <label style="color:var(--mid); font-size:9px; text-transform:uppercase; font-weight:600; display:block; margin-bottom:3px;">Cittadinanza:</label>
+                  <input type="text" id="resCitizenshipInput" value="Germania (DEU)" style="width:100%; border:1px solid #ddd; border-radius:8px; padding:6px 8px; font-size:12px; font-weight:600; color:var(--dark);">
+                </div>
+                <div>
+                  <label style="color:var(--mid); font-size:9px; text-transform:uppercase; font-weight:600; display:block; margin-bottom:3px;">N. Documento:</label>
+                  <input type="text" id="resDocNumInput" value="C4X980211" style="width:100%; border:1px solid #ddd; border-radius:8px; padding:6px 8px; font-size:12px; font-weight:600; color:var(--dark);">
+                </div>
               </div>
 
               <div style="background:rgba(0,0,0,0.03); border-radius:12px; padding:12px; font-size:11px; color:var(--dark-soft); line-height:1.6; margin-bottom:14px; border:1px solid var(--warm-border);">
-                🔒 <strong>Flussi Ministeriali Generati:</strong><br>
-                • <strong>Alloggiati Web (Questura):</strong> Tracciato <code>alloggiati.txt</code> pronto all'invio.<br>
+                🔒 <strong>Flussi Ministeriali Pronti:</strong><br>
+                • <strong>Alloggiati Web (Questura):</strong> Tracciato <code>alloggiati.txt</code> generato.<br>
                 • <strong>ROSS1000 (Regione Veneto):</strong> Flusso statistico ISTAT calcolato.<br>
-                • <strong>Imposta di Soggiorno:</strong> Registrata per il Comune di Negrar.
+                • <strong>Database Host:</strong> Sincronizzazione automatica su <code>/admin/ospiti</code>.
               </div>
 
               <button type="button" class="btn-action-sm" style="width:100%; justify-content:center; padding:14px; font-size:12px; background:#25D366; color:#fff; cursor:pointer;" onclick="completeVipCheckin()">

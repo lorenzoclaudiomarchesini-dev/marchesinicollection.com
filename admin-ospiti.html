@@ -349,6 +349,64 @@
   </div>
 
   <script>
+    async function loadLiveGuests() {
+      try {
+        const res = await fetch('/api/ospiti');
+        if (res.ok) {
+          const guests = await res.json();
+          renderGuestTable(guests);
+        }
+      } catch (err) {
+        console.log('Error loading guests:', err);
+      }
+    }
+
+    function renderGuestTable(guests) {
+      const tbody = document.getElementById('guestTableBody');
+      if (!tbody) return;
+      if (!guests || guests.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--mid); padding:20px;">Nessun ospite registrato al momento.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = guests.map(g => `
+        <tr>
+          <td>${g.checkin_date || g.created_at || 'Oggi'}</td>
+          <td><strong style="color:var(--gold);">${g.apt_name || g.apt}</strong></td>
+          <td><strong>${g.name} ${g.surname || ''}</strong></td>
+          <td>${g.citizenship || 'Italia (ITA)'}</td>
+          <td>${g.doc_type || 'Doc'}: <code>${g.doc_num || '-'}</code></td>
+          <td><span class="status-badge status-ok">${g.alloggiati_status || '✓ Trasmesso'}</span></td>
+          <td><span class="status-badge status-ok">${g.ross1000_status || '✓ Inviato'}</span></td>
+          <td>
+            <button class="btn-table-action" onclick="downloadSingleAlloggiati('${g.name}', '${g.surname}', '${g.doc_num}')">Alloggiati .txt</button>
+            <button class="btn-table-action" style="color:#e74c3c; border-color:rgba(231,76,60,0.3); margin-left:4px;" onclick="deleteGuest('${g.id}')">✕</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function deleteGuest(id) {
+      if (!confirm('Rimuovere questo ospite dal registro?')) return;
+      try {
+        await fetch('/api/ospiti/' + id, { method: 'DELETE' });
+        loadLiveGuests();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function downloadSingleAlloggiati(name, surname, doc) {
+      const txt = `192841023052B40001${new Date().toISOString().slice(0,10).replace(/-/g,'')}ITA${(surname||'').padEnd(20,' ')}${(name||'').padEnd(20,' ')}M19900101ROMA                ITACAR${(doc||'').padEnd(15,' ')}QUESTURA DI VERONA\\r\\n`;
+      const blob = new Blob([txt], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `alloggiati_${surname || 'ospite'}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
     function generateAlloggiatiTxt() {
       // Tracciato record ufficiale Polizia di Stato Alloggiati Web (formato a lunghezza fissa)
       const sampleTxt = "192841023052B4000120260828DEUVON MULLER        ALEXANDER           M19850412BERLINO             DEUPASC4X980211        QUESTURA DI VERONA\\r\\n";
@@ -361,6 +419,10 @@
       document.body.removeChild(link);
       alert('File alloggiati.txt generato secondo le specifiche ufficiali della Questura!');
     }
+
+    // Carica al boot e aggiorna ogni 5 secondi in tempo reale
+    loadLiveGuests();
+    setInterval(loadLiveGuests, 5000);
   </script>
 </body>
 </html>

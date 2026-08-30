@@ -1297,6 +1297,13 @@
         </div>
       </div>
 
+      <!-- BOTTONE GENERATORE LINK -->
+      <div style="margin-top:20px; margin-bottom:40px;">
+        <button type="button" class="btn-publish" style="width:100%; justify-content:center; padding:16px; font-size:13px; background:var(--gold-champagne); color:#000; font-weight:600; box-shadow:0 8px 24px rgba(197, 168, 128, 0.25);" onclick="openPublishModal()">
+          🔗 Genera & Pubblica Link Guida Ospite →
+        </button>
+      </div>
+
     </aside>
 
     <!-- RIGHT: LIVE LUXURY IPHONE SIMULATOR -->
@@ -1473,13 +1480,18 @@
       <p class="publish-desc">Il tuo link riservato è pronto per essere inviato via WhatsApp o Booking ai tuoi ospiti. Nessun abbonamento mensile: <strong>29€ una tantum</strong> per sempre.</p>
 
       <div class="generated-url-box">
-        <span class="generated-url" id="outGeneratedUrl">https://vibeguide.app/castello-san-pietro</span>
+        <span class="generated-url" id="outGeneratedUrl">https://marchesinicollection.com/guida/albertina</span>
         <button class="btn-publish" style="padding:7px 16px; font-size:10px;" onclick="copyOutUrl()">Copia Link</button>
       </div>
 
-      <button class="btn-publish" style="width:100%; justify-content:center; padding:16px; font-size:12px; background:var(--gold-champagne); color:#000;" onclick="alert('Integrazione Apple Pay / Carta (29€ una tantum)')">
-        Attiva con Apple Pay / Carta (29€)
-      </button>
+      <div style="display:flex; gap:10px; margin-top:14px;">
+        <button class="btn-publish" style="flex:1; justify-content:center; padding:14px; font-size:11px; background:#fff; color:#000;" onclick="openGeneratedLiveGuide()">
+          🚀 Apri Guida Live
+        </button>
+        <button class="btn-publish" style="flex:1; justify-content:center; padding:14px; font-size:11px; background:var(--gold-champagne); color:#000;" onclick="copyOutUrl()">
+          📋 Copia per Ospite
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1761,7 +1773,11 @@
     function copyOutUrl() {
       const url = document.getElementById('outGeneratedUrl').textContent;
       navigator.clipboard.writeText(url);
-      alert('Link copiato negli appunti.');
+      alert('Link copiato negli appunti: ' + url);
+    }
+    function openGeneratedLiveGuide() {
+      const url = document.getElementById('outGeneratedUrl').textContent;
+      window.open(url, '_blank');
     }
 
     

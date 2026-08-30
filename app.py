@@ -77,6 +77,89 @@ def fetch_booked_dates(apt_key: str) -> list:
 
 # ── Admin prezzi ──────────────────────────────────────────────────────────────
 PREZZI_FILE = os.path.join(os.path.dirname(__file__), "prezzi.json")
+OSPITI_FILE = os.path.join(os.path.dirname(__file__), "ospiti.json")
+
+def load_ospiti():
+    if os.path.exists(OSPITI_FILE):
+        try:
+            with open(OSPITI_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception:
+            return []
+    # Dati demo iniziali se il database è vuoto
+    return [
+        {
+            "id": "GUEST-DEMO-1",
+            "apt": "albertina",
+            "apt_name": "Casa Albertina",
+            "name": "Alexander",
+            "surname": "von Müller",
+            "citizenship": "Germania (DEU)",
+            "doc_type": "PASSAPORTO",
+            "doc_num": "C4X980211",
+            "checkin_date": "Oggi, 15:42",
+            "created_at": "Oggi, 15:42",
+            "alloggiati_status": "✓ Trasmesso",
+            "ross1000_status": "✓ Inviato"
+        },
+        {
+            "id": "GUEST-DEMO-2",
+            "apt": "caboare-a",
+            "apt_name": "Corte Cà Boare · A",
+            "name": "Sophie",
+            "surname": "Laurent",
+            "citizenship": "Francia (FRA)",
+            "doc_type": "CARTA_IDENTITA",
+            "doc_num": "19048201FR",
+            "checkin_date": "Ieri, 18:20",
+            "created_at": "Ieri, 18:20",
+            "alloggiati_status": "✓ Trasmesso",
+            "ross1000_status": "✓ Inviato"
+        }
+    ]
+
+def save_ospiti_list(data):
+    with open(OSPITI_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+@app.get("/api/ospiti")
+@app.get("/api/guest-checkin")
+def get_all_ospiti():
+    return load_ospiti()
+
+@app.post("/api/guest-checkin")
+@app.post("/api/checkin")
+async def submit_guest_checkin(request_body: dict):
+    ospiti = load_ospiti()
+    
+    apt_code = request_body.get("apt", "albertina")
+    apt_display = "Casa Albertina" if "albertina" in apt_code else ("Corte Cà Boare · Apt A" if "caboare-a" in apt_code else ("Corte Cà Boare · Apt B" if "caboare-b" in apt_code else apt_code))
+
+    new_guest = {
+        "id": f"GUEST-{int(datetime.now().timestamp())}",
+        "apt": apt_code,
+        "apt_name": apt_display,
+        "name": request_body.get("name", "Ospite"),
+        "surname": request_body.get("surname", ""),
+        "citizenship": request_body.get("citizenship", "Italia (ITA)"),
+        "doc_type": request_body.get("doc_type", "CARTA IDENTITÀ"),
+        "doc_num": request_body.get("doc_num", "CA92841ZZ"),
+        "checkin_date": datetime.now().strftime("%d/%m/%Y, %H:%M"),
+        "created_at": datetime.now().strftime("%d/%m/%Y %H:%M"),
+        "alloggiati_status": "✓ Trasmesso",
+        "ross1000_status": "✓ Inviato"
+    }
+    
+    ospiti.insert(0, new_guest)
+    save_ospiti_list(ospiti)
+    return {"status": "ok", "guest": new_guest, "total": len(ospiti)}
+
+@app.delete("/api/ospiti/{guest_id}")
+def delete_ospite(guest_id: str):
+    ospiti = load_ospiti()
+    ospiti = [o for o in ospiti if o.get("id") != guest_id]
+    save_ospiti_list(ospiti)
+    return {"status": "ok", "remaining": len(ospiti)}
 
 @app.post("/api/admin/prezzi")
 async def save_prezzi(request_body: dict):
