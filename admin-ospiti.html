@@ -586,12 +586,13 @@ ${url}`;
     }
 
     function downloadQuesturaTxt(groupId) {
-      const sampleTxt = "192841023052B40001" + new Date().toISOString().slice(0,10).replace(/-/g,'') + "ITAMARCHESINI          LORENZO             M19900101NEGRAR DI VALPOLICELLA ITACART12345678       QUESTURA DI VERONA
+      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      const sampleTxt = "192841023052B40001" + dateStr + "ITAMARCHESINI          LORENZO             M19900101NEGRAR DI VALPOLICELLA ITACART12345678       QUESTURA DI VERONA
 ";
       const blob = new Blob([sampleTxt], { type: "text/plain" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `alloggiati_${groupId}_${new Date().toISOString().split('T')[0]}.txt`;
+      link.download = "alloggiati_" + groupId + "_" + dateStr + ".txt";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
