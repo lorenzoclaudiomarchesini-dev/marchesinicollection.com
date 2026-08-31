@@ -424,7 +424,9 @@
 
   </div>
 
-    <script>
+      <script>
+    let currentLoadedGroups = [];
+
     function copyPropertyLink(url, name) {
       const msg = `Gentile Ospite, benvenuto a ${name}!
 Per completare la registrazione obbligatoria dei presenti e accedere alle credenziali Wi-Fi e alla guida della casa, puoi effettuare il check-in rapido qui:
@@ -439,6 +441,7 @@ ${url}`;
         const res = await fetch('/api/ospiti?t=' + Date.now());
         if (res.ok) {
           const guests = await res.json();
+          currentLoadedGroups = guests;
           renderGuestTable(guests);
         } else {
           console.error('Fetch /api/ospiti error:', res.status);
@@ -517,50 +520,20 @@ ${url}`;
               <div style="font-weight:600; color:var(--dark);">${g.arrival_date || g.created_at || 'Oggi'}</div>
               <div style="font-size:10px; color:var(--mid);">Partenza: ${g.departure_date || 'N/D'}</div>
             </td>
-            <td><strong style="color:var(--gold);">${g.apt_name || g.apt}</strong></td>
+            <td><strong style="color:var(--gold); font-size:13px;">${g.apt_name || g.apt}</strong></td>
             <td>
-              <div style="font-weight:700; color:var(--dark); font-size:13px;">${lead.cognome} ${lead.nome}</div>
+              <div style="font-weight:700; color:var(--dark); font-size:14px;">${lead.cognome} ${lead.nome}</div>
               <span style="font-size:9px; background:rgba(197,168,128,0.2); color:var(--dark); padding:2px 6px; border-radius:6px; font-weight:600;">${lead.tipo_alloggiato || 'Capogruppo'} (${totalCount} persone)</span>
             </td>
             <td>${lead.cittadinanza || 'ITALIA'}</td>
-            <td>${lead.tipo_documento || 'Doc'}: <code>${lead.numero_documento || '-'}</code></td>
+            <td>${lead.tipo_documento || 'Doc'}: <code style="font-weight:700; color:#000;">${lead.numero_documento || '-'}</code></td>
             <td><span class="status-badge status-ok">${g.alloggiati_status || '✓ Pronto per Invio'}</span></td>
             <td><span class="status-badge status-ok">${g.ross1000_status || '✓ Pronto per ROSS1000'}</span></td>
             <td>
-              <div style="display:flex; gap:4px; flex-wrap:wrap;">
-                <button class="btn-table-action" onclick="toggleGroupDetails('grp_${idx}')">📋 Dettaglio (${totalCount})</button>
-                <button class="btn-table-action" onclick="downloadQuesturaTxt('${g.id}')">Questura .txt</button>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button class="btn-action-gold" style="padding:6px 12px; font-size:10px;" onclick="openGuestDetailModal(${idx})">📋 Scheda Completa (${totalCount})</button>
+                <button class="btn-table-action" onclick="downloadQuesturaTxt('${g.id}')">📄 Alloggiati .txt</button>
                 <button class="btn-table-action" style="color:#e74c3c; border-color:rgba(231,76,60,0.3);" onclick="deleteGuest('${g.id}')">✕</button>
-              </div>
-            </td>
-          </tr>
-          <tr id="grp_${idx}" style="display:none; background:rgba(0,0,0,0.02);">
-            <td colspan="8" style="padding:16px 20px;">
-              <div style="background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.03);">
-                <div style="font-size:12px; font-weight:700; color:var(--gold); margin-bottom:10px; text-transform:uppercase;">
-                  Scheda Dati Completa per Alloggiati Web & ROSS1000 · ${g.apt_name || g.apt}
-                </div>
-                
-                <div style="margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid #eee;">
-                  <div style="font-size:12px; font-weight:700; color:var(--dark); margin-bottom:4px;">1. Intestatario / Capogruppo: ${lead.cognome} ${lead.nome} (${lead.sesso || 'M'})</div>
-                  <div style="font-size:11px; color:var(--mid); line-height:1.7;">
-                    • <strong>Nascita:</strong> ${lead.data_nascita || '-'} a ${lead.comune_nascita || '-'} (${lead.stato_nascita || lead.cittadinanza || 'ITALIA'})<br>
-                    • <strong>Residenza:</strong> ${lead.comune_residenza || '-'} (${lead.stato_residenza || lead.cittadinanza || 'ITALIA'}) - ${lead.indirizzo_residenza || 'Nessun indirizzo specificato'}<br>
-                    • <strong>Documento:</strong> ${lead.tipo_documento || 'Carta Identità'} N° <code>${lead.numero_documento || '-'}</code> (Rilasciato da: ${lead.comune_rilascio || lead.stato_rilascio || 'Comune'})
-                  </div>
-                </div>
-
-                ${others.length > 0 ? `
-                  <div style="font-size:11px; font-weight:700; color:var(--dark); margin-bottom:6px;">Altri Componenti del Gruppo (${others.length}):</div>
-                  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:8px;">
-                    ${others.map((o, oidx) => `
-                      <div style="background:rgba(0,0,0,0.03); padding:8px 10px; border-radius:8px; font-size:11px; border:1px solid rgba(0,0,0,0.05);">
-                        <strong>${oidx+2}. ${o.cognome} ${o.nome}</strong> (${o.sesso || 'M'})<br>
-                        <span style="color:var(--mid);">Nato il ${o.data_nascita || '-'} a ${o.comune_nascita || o.stato_nascita || '-'} · Cittadinanza: ${o.cittadinanza || 'ITALIA'}</span>
-                      </div>
-                    `).join('')}
-                  </div>
-                ` : '<div style="font-size:11px; color:var(--mid);">Nessun ospite aggiuntivo registrato.</div>'}
               </div>
             </td>
           </tr>
@@ -568,11 +541,81 @@ ${url}`;
       }).join('');
     }
 
-    function toggleGroupDetails(rowId) {
-      const el = document.getElementById(rowId);
-      if (el) {
-        el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
-      }
+    function openGuestDetailModal(idx) {
+      const g = currentLoadedGroups[idx];
+      if (!g) return;
+
+      const lead = g.lead_guest || {};
+      const others = g.additional_guests || [];
+      const totalCount = g.num_guests || (1 + others.length);
+
+      const content = document.getElementById('guestDetailContent');
+      content.innerHTML = `
+        <div style="border-bottom: 2px solid var(--gold); padding-bottom:12px; margin-bottom:16px;">
+          <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:700;">Scheda Ministeriale Ospiti</div>
+          <h2 style="font-family:var(--serif); font-size:24px; color:#111; margin:4px 0;">${g.apt_name || g.apt}</h2>
+          <div style="font-size:12px; color:#666;">
+            📅 Soggiorno: <strong>${g.arrival_date || 'Oggi'} → ${g.departure_date || 'N/D'}</strong> · Totale: <strong>${totalCount} persone registrate</strong>
+          </div>
+        </div>
+
+        <!-- 1. CAPOGRUPPO -->
+        <div style="background:#f9f8f6; border:1px solid #e8e4de; border-radius:14px; padding:18px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+            <strong style="color:var(--gold); font-size:14px; text-transform:uppercase;">1. Intestatario / Capogruppo</strong>
+            <span style="font-size:10px; background:#25D366; color:#fff; padding:2px 8px; border-radius:10px; font-weight:600;">Documento Verificato</span>
+          </div>
+          
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:12px; line-height:1.6;">
+            <div><strong>Cognome:</strong> ${lead.cognome || '-'}</div>
+            <div><strong>Nome:</strong> ${lead.nome || '-'}</div>
+            <div><strong>Sesso:</strong> ${lead.sesso || 'M'}</div>
+            <div><strong>Data di Nascita:</strong> ${lead.data_nascita || '-'}</div>
+            <div><strong>Cittadinanza:</strong> ${lead.cittadinanza || 'ITALIA'}</div>
+            <div><strong>Comune/Stato Nascita:</strong> ${lead.comune_nascita || lead.stato_nascita || '-'}</div>
+            <div><strong>Comune Residenza:</strong> ${lead.comune_residenza || '-'}</div>
+            <div><strong>Indirizzo:</strong> ${lead.indirizzo_residenza || '-'}</div>
+          </div>
+
+          <div style="margin-top:12px; padding-top:10px; border-top:1px dashed #ddd; font-size:12px; background:rgba(0,0,0,0.02); padding:10px; border-radius:8px;">
+            🔒 <strong>Estremi Documento:</strong> ${lead.tipo_documento || 'CARTA DI IDENTITA'} · N° <code style="font-weight:700; font-size:13px; color:#000;">${lead.numero_documento || '-'}</code> (Rilascio: ${lead.comune_rilascio || lead.stato_rilascio || '-'})
+          </div>
+        </div>
+
+        <!-- 2. ALTRI OSPITI -->
+        ${others.length > 0 ? `
+          <div style="margin-bottom:16px;">
+            <div style="font-size:13px; font-weight:700; color:#111; margin-bottom:10px; text-transform:uppercase;">Altri Componenti del Gruppo (${others.length})</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              ${others.map((o, oidx) => `
+                <div style="background:#fff; border:1px solid #e0deda; border-radius:12px; padding:12px 16px; display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:8px; font-size:11px;">
+                  <div><span style="color:#888;">OSPITE ${oidx+2}:</span><br><strong style="font-size:12px;">${o.cognome} ${o.nome}</strong></div>
+                  <div><span style="color:#888;">SESSO / NATO IL:</span><br>${o.sesso || 'M'} · ${o.data_nascita || '-'}</div>
+                  <div><span style="color:#888;">LUOGO NASCITA:</span><br>${o.comune_nascita || o.stato_nascita || '-'}</div>
+                  <div><span style="color:#888;">CITTADINANZA:</span><br>${o.cittadinanza || 'ITALIA'}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : '<div style="font-size:12px; color:#666; margin-bottom:16px;">Nessun componente aggiuntivo registrato.</div>'}
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <a href="/api/export/alloggiati-txt?group_id=${g.id}" target="_blank" class="btn-action-gold" style="flex:1; justify-content:center; text-decoration:none; padding:12px; font-size:12px;">
+            📄 Scarica Alloggiati.txt per Questura
+          </a>
+          <button onclick="closeGuestDetailModal()" class="btn-table-action" style="padding:12px 20px; font-size:12px;">
+            Chiudi
+          </button>
+        </div>
+      `;
+
+      const modal = document.getElementById('guestDetailModal');
+      modal.style.display = 'flex';
+    }
+
+    function closeGuestDetailModal() {
+      const modal = document.getElementById('guestDetailModal');
+      if (modal) modal.style.display = 'none';
     }
 
     async function deleteGuest(id) {
@@ -586,19 +629,11 @@ ${url}`;
     }
 
     function downloadQuesturaTxt(groupId) {
-      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-      const sampleTxt = "192841023052B40001" + dateStr + "ITAMARCHESINI          LORENZO             M19900101NEGRAR DI VALPOLICELLA ITACART12345678       QUESTURA DI VERONA" + String.fromCharCode(13, 10);
-      const blob = new Blob([sampleTxt], { type: "text/plain" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "alloggiati_" + groupId + "_" + dateStr + ".txt";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      window.open('/api/export/alloggiati-txt?group_id=' + groupId, '_blank');
     }
 
     function generateAlloggiatiTxt() {
-      downloadQuesturaTxt('all_guests');
+      window.open('/api/export/alloggiati-txt', '_blank');
     }
 
     // Carica subito e poi ogni 4 secondi
@@ -606,6 +641,19 @@ ${url}`;
     loadLiveGuests();
     setInterval(loadLiveGuests, 4000);
   </script>
+
+
+
+  <!-- MODAL POPUP DETTAGLIO SCHEDA OSPITI -->
+  <div id="guestDetailModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+    <div style="background:#fff; width:100%; max-width:680px; max-height:90vh; border-radius:20px; overflow-y:auto; padding:24px; position:relative; box-shadow:0 25px 60px rgba(0,0,0,0.4);">
+      <button onclick="closeGuestDetailModal()" style="position:absolute; top:16px; right:16px; background:#f0f0f0; border:none; width:36px; height:36px; border-radius:50%; font-size:16px; font-weight:700; cursor:pointer; color:#333;">✕</button>
+      
+      <div id="guestDetailContent">
+        <!-- Popolato via JS -->
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

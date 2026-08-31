@@ -346,10 +346,124 @@ def serve_static(filename: str):
     raise HTTPException(status_code=404, detail="File non trovato")
 
 
-# ── Export & Automazioni Questura / ROSS1000 ──────────────────────────────────
+
+# ── Export & Automazioni Questura (alloggiati.txt) / ROSS1000 ─────────────────
 from fastapi.responses import Response, PlainTextResponse
 
+def format_alloggiati_line(tipo, arrivo, permanenza, cognome, nome, sesso, data_nasc, com_nasc, prov_nasc, stato_nasc, cittadinanza, tipo_doc="", num_doc="", rilascio_doc=""):
+    """Formattazione tracciato record Alloggiati Web Polizia di Stato (lunghezza fissa)"""
+    # tipo: 16=singolo, 17=capofamiglia, 18=capogruppo, 19=membro famiglia, 20=membro gruppo
+    cod_tipo = "16"
+    if tipo == "Capogruppo": cod_tipo = "18"
+    elif tipo == "Capofamiglia": cod_tipo = "17"
+    elif "Membro" in tipo or "Ospite" in tipo: cod_tipo = "20"
+    
+    # Formattazione data arrivo DD/MM/YYYY
+    arr_str = str(arrivo).replace("-", "/").replace(".", "/")
+    if len(arr_str) == 10 and arr_str[4] == "/": # YYYY/MM/DD -> DD/MM/YYYY
+        parts = arr_str.split("/")
+        arr_str = f"{parts[2]}/{parts[1]}/{parts[0]}"
+    
+    # Data nascita DD/MM/YYYY
+    dob_str = str(data_nasc).replace("-", "/").replace(".", "/")
+    if len(dob_str) == 10 and dob_str[4] == "/":
+        parts = dob_str.split("/")
+        dob_str = f"{parts[2]}/{parts[1]}/{parts[0]}"
+    elif not dob_str or len(dob_str) < 8:
+        dob_str = "01/01/1990"
+
+    perm = str(permanenza or "1").zfill(2)[:2]
+    cogn = (cognome or "").upper().ljust(50)[:50]
+    nom = (nome or "").upper().ljust(30)[:30]
+    sex = "1" if sesso == "M" else "2"
+    
+    # Nascita
+    com_n = (com_nasc or "").upper().ljust(30)[:30]
+    prov_n = (prov_nasc or "VR").upper().ljust(2)[:2]
+    stato_n = (stato_nasc or "ITALIA").upper().ljust(30)[:30]
+    cit = (cittadinanza or "ITALIA").upper().ljust(30)[:30]
+    
+    # Documento (solo capogruppo/singolo)
+    t_doc = "IDENT" if "IDENTIT" in (tipo_doc or "").upper() else ("PASSP" if "PASS" in (tipo_doc or "").upper() else "PATEN")
+    t_doc = t_doc.ljust(5)[:5]
+    n_doc = (num_doc or "").upper().replace(" ", "").ljust(20)[:20]
+    ril_doc = (rilascio_doc or "COMUNE").upper().ljust(30)[:30]
+
+    line = f"{cod_tipo}{arr_str}{perm}{cogn}{nom}{sex}{dob_str}{com_n}{prov_n}{stato_n}{cit}{t_doc}{n_doc}{ril_doc}"
+    return line
+
+@app.get("/api/export/alloggiati-txt")
+def export_alloggiati_txt(group_id: str = None):
+    """Genera il file alloggiati.txt reale conforme alla Questura per un gruppo o per tutti"""
+    ospiti = load_ospiti()
+    if group_id:
+        target_groups = [g for g in ospiti if g.get("id") == group_id]
+    else:
+        target_groups = ospiti
+
+    lines = []
+    for g in target_groups:
+        arr = g.get("arrival_date", datetime.now().strftime("%d/%m/%Y"))
+        dep = g.get("departure_date", "")
+        # calcolo permanenza in giorni
+        perm = 2
+        try:
+            if arr and dep:
+                d1 = datetime.strptime(arr.replace("/","-"), "%Y-%m-%d" if "-" in arr else "%d-%m-%Y")
+                d2 = datetime.strptime(dep.replace("/","-"), "%Y-%m-%d" if "-" in dep else "%d-%m-%Y")
+                perm = max(1, (d2 - d1).days)
+        except Exception:
+            perm = 2
+            
+        lead = g.get("lead_guest", {})
+        # riga capogruppo
+        l_line = format_alloggiati_line(
+            tipo=lead.get("tipo_alloggiato", "Capogruppo"),
+            arrivo=arr,
+            permanenza=perm,
+            cognome=lead.get("cognome", ""),
+            nome=lead.get("nome", ""),
+            sesso=lead.get("sesso", "M"),
+            data_nasc=lead.get("data_nascita", "01/01/1990"),
+            com_nasc=lead.get("comune_nascita", ""),
+            prov_nasc="CH" if "Casalincontrada" in str(lead.get("comune_residenza","")) else "VR",
+            stato_nasc=lead.get("stato_nascita", "ITALIA"),
+            cittadinanza=lead.get("cittadinanza", "ITALIA"),
+            tipo_doc=lead.get("tipo_documento", "CARTA DI IDENTITA'"),
+            num_doc=lead.get("numero_documento", ""),
+            rilascio_doc=lead.get("comune_rilascio", lead.get("stato_rilascio", "COMUNE"))
+        )
+        lines.append(l_line)
+        
+        # righe membri aggiuntivi
+        for o in g.get("additional_guests", []):
+            o_line = format_alloggiati_line(
+                tipo=o.get("tipo_alloggiato", "Membro Gruppo"),
+                arrivo=arr,
+                permanenza=perm,
+                cognome=o.get("cognome", ""),
+                nome=o.get("nome", ""),
+                sesso=o.get("sesso", "M"),
+                data_nasc=o.get("data_nascita", "01/01/1990"),
+                com_nasc=o.get("comune_nascita", ""),
+                prov_nasc="",
+                stato_nasc=o.get("stato_nascita", o.get("cittadinanza", "ITALIA")),
+                cittadinanza=o.get("cittadinanza", "ITALIA")
+            )
+            lines.append(o_line)
+
+    content = "
+".join(lines) + "
+"
+    fn_name = f"alloggiati_{group_id or 'tutti'}_{datetime.now().strftime('%Y%m%d_%H%M')}.txt"
+    return Response(
+        content=content,
+        media_type="text/plain",
+        headers={"Content-Disposition": f"attachment; filename={fn_name}"}
+    )
+
 @app.get("/api/export/ross1000-csv")
+
 def export_ross1000_csv():
     """Genera il file CSV cumulativo per importazione diretta su ROSS1000"""
     ospiti = load_ospiti()
