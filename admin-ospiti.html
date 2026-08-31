@@ -587,8 +587,7 @@ ${url}`;
 
     function downloadQuesturaTxt(groupId) {
       const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-      const sampleTxt = "192841023052B40001" + dateStr + "ITAMARCHESINI          LORENZO             M19900101NEGRAR DI VALPOLICELLA ITACART12345678       QUESTURA DI VERONA
-";
+      const sampleTxt = "192841023052B40001" + dateStr + "ITAMARCHESINI          LORENZO             M19900101NEGRAR DI VALPOLICELLA ITACART12345678       QUESTURA DI VERONA" + String.fromCharCode(13, 10);
       const blob = new Blob([sampleTxt], { type: "text/plain" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
