@@ -2,7 +2,10 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1b1714">
   <title>Marchesini Collection · Arbizzano di Negrar, Verona</title>
   <meta name="description" content="Marchesini Collection — Appartamenti di charme ad Arbizzano di Negrar, nel cuore della Valpolicella veronese.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -645,6 +648,138 @@
       .form-grid { grid-template-columns: 1fr; }
       .footer-bottom { flex-direction: column; gap: 12px; }
     }
+
+    /* ══════════════════════════════════
+       OTTIMIZZAZIONE IPHONE / SAFARI MOBILE
+    ══════════════════════════════════ */
+    * { -webkit-tap-highlight-color: transparent; }
+    html { -webkit-text-size-adjust: 100%; }
+    input, select, textarea, button { font-family: inherit; -webkit-appearance: none; }
+
+    /* Indicatori carosello recensioni */
+    .review-dots {
+      display: none;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 16px;
+    }
+    .review-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.16);
+      transition: all 0.3s ease;
+    }
+    .review-dot.active {
+      width: 22px;
+      border-radius: 3px;
+      background: var(--dark);
+    }
+
+    @media (max-width: 768px) {
+      body { overflow-x: hidden; }
+      nav { padding-top: env(safe-area-inset-top); }
+
+      /* Sezione recensioni */
+      #reviews { padding: 72px 24px !important; }
+      #reviews .label { font-size: 9px; }
+      #reviews h2 { font-size: 32px !important; margin-bottom: 20px !important; }
+
+      /* Punteggi 10 / 9.7 affiancati e leggibili */
+      #reviews .scores-row { gap: 0 !important; width: 100%; }
+
+      .review-dots { display: flex; }
+
+      .reviews-grid {
+        margin-left: -24px !important;
+        margin-right: -24px !important;
+        padding-left: 24px !important;
+        padding-right: 24px !important;
+        scroll-padding-left: 24px;
+      }
+      .reviews-grid > div {
+        box-shadow: 0 6px 24px rgba(27,23,20,0.08);
+      }
+      .reviews-grid > div p {
+        font-size: 14px !important;
+        line-height: 1.75 !important;
+      }
+      .reviews-nav { margin-top: 4px !important; }
+
+      /* Input touch-friendly (evita zoom automatico Safari) */
+      input, select, textarea { font-size: 16px !important; }
+
+      /* Bottoni comodi al pollice */
+      .btn, .btn-dark, .btn-outline, button[type="submit"] {
+        min-height: 46px;
+      }
+
+      footer { padding-bottom: calc(24px + env(safe-area-inset-bottom)) !important; }
+    }
+
+    @media (max-width: 430px) {
+      #reviews { padding: 60px 20px !important; }
+      .reviews-grid { margin-left: -20px !important; margin-right: -20px !important; padding-left: 20px !important; padding-right: 20px !important; }
+      .reviews-grid > div { min-width: calc(100vw - 40px) !important; max-width: calc(100vw - 40px) !important; }
+    }
+
+
+    /* ── HEADER PUNTEGGI RECENSIONI SU MOBILE ── */
+    @media (max-width: 768px) {
+      #reviews .scores-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 !important;
+        width: 100%;
+        max-width: 340px;
+        margin: 0 auto;
+        background: var(--white);
+        border: 1px solid var(--warm-gray);
+        border-radius: 16px;
+        padding: 18px 8px;
+      }
+      #reviews .scores-row > div {
+        padding: 0 12px !important;
+      }
+      #reviews .scores-row > div:first-child {
+        border-right: 1px solid var(--warm-gray) !important;
+      }
+      #reviews .scores-row > div > div:first-child {
+        font-size: 42px !important;
+      }
+      #reviews .scores-row > div > div:last-child {
+        font-size: 8px !important;
+        letter-spacing: 1.2px !important;
+        margin-top: 6px !important;
+        line-height: 1.4;
+      }
+
+      /* Barre valutazioni per categoria più leggibili */
+      .score-bars-grid > div > div:nth-child(2) {
+        height: 3px !important;
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .score-bars-grid > div > div:nth-child(2) > div {
+        border-radius: 2px;
+      }
+      .score-bars-grid > div > div:first-child { font-size: 11px !important; }
+      .score-bars-grid > div > div:last-child { font-size: 13px !important; font-weight: 500 !important; }
+
+      /* Galleria e territorio su iPhone */
+      .gallery-strip { grid-template-columns: repeat(2,1fr) !important; gap: 2px; }
+      #territorio > div:first-child { padding: 0 24px 48px !important; }
+      #territorio { padding-top: 72px !important; }
+
+      /* Lightbox iPhone friendly */
+      .lb-close { top: calc(16px + env(safe-area-inset-top)) !important; right: 20px !important; font-size: 28px !important; }
+      .lb-prev, .lb-next { font-size: 26px !important; padding: 14px !important; }
+      .lightbox img { max-width: 94vw !important; max-height: 78vh !important; }
+
+      /* Menu mobile con safe area */
+      .mobile-menu { padding-top: calc(24px + env(safe-area-inset-top)) !important; }
+      .mobile-close { top: calc(20px + env(safe-area-inset-top)) !important; }
+    }
+
   </style>
 </head>
 <body>
@@ -880,7 +1015,7 @@
       <div style="text-align:center;margin-bottom:80px;">
         <span class="label">Ospiti</span>
         <h2 style="font-family:var(--serif);font-size:clamp(32px,4vw,52px);font-weight:300;color:var(--dark);margin-bottom:24px;">Cosa dicono di <em>noi</em></h2>
-        <div style="display:inline-flex;align-items:center;gap:24px;">
+        <div class="scores-row" style="display:inline-flex;align-items:center;gap:24px;">
           <div style="text-align:center;padding:0 32px;border-right:1px solid var(--warm-gray);">
             <div style="font-family:var(--serif);font-size:64px;font-weight:300;color:var(--dark);line-height:1;">10</div>
             <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-top:4px;">Corte Cà Boare</div>
@@ -896,7 +1031,7 @@
       <!-- SCORE BARS CCB -->
       <div style="margin-bottom:56px;">
         <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-bottom:16px;">Corte Cà Boare · Valutazioni per categoria</div>
-        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:20px;">
+        <div class="score-bars-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:20px;">
           <div><div style="font-family:var(--sans);font-size:10px;font-weight:300;color:var(--mid);margin-bottom:6px;">Staff</div><div style="height:1px;background:var(--warm-gray);margin-bottom:5px;"><div style="height:100%;width:100%;background:var(--dark);"></div></div><div style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--dark);">10</div></div>
           <div><div style="font-family:var(--sans);font-size:10px;font-weight:300;color:var(--mid);margin-bottom:6px;">Pulizia</div><div style="height:1px;background:var(--warm-gray);margin-bottom:5px;"><div style="height:100%;width:100%;background:var(--dark);"></div></div><div style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--dark);">10</div></div>
           <div><div style="font-family:var(--sans);font-size:10px;font-weight:300;color:var(--mid);margin-bottom:6px;">Posizione</div><div style="height:1px;background:var(--warm-gray);margin-bottom:5px;"><div style="height:100%;width:95%;background:var(--dark);"></div></div><div style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--dark);">9.5</div></div>
@@ -909,7 +1044,7 @@
       <!-- SCORE BARS CA -->
       <div style="margin-bottom:72px;">
         <div style="font-family:var(--sans);font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-bottom:16px;">Casa Albertina · Valutazioni per categoria</div>
-        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:20px;">
+        <div class="score-bars-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:20px;">
           <div><div style="font-family:var(--sans);font-size:10px;font-weight:300;color:var(--mid);margin-bottom:6px;">Staff</div><div style="height:1px;background:var(--warm-gray);margin-bottom:5px;"><div style="height:100%;width:99%;background:var(--dark);"></div></div><div style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--dark);">9.9</div></div>
           <div><div style="font-family:var(--sans);font-size:10px;font-weight:300;color:var(--mid);margin-bottom:6px;">Pulizia</div><div style="height:1px;background:var(--warm-gray);margin-bottom:5px;"><div style="height:100%;width:99%;background:var(--dark);"></div></div><div style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--dark);">9.9</div></div>
           <div><div style="font-family:var(--sans);font-size:10px;font-weight:300;color:var(--mid);margin-bottom:6px;">Posizione</div><div style="height:1px;background:var(--warm-gray);margin-bottom:5px;"><div style="height:100%;width:98%;background:var(--dark);"></div></div><div style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--dark);">9.8</div></div>
@@ -1643,145 +1778,95 @@
   }
   function formatDate(str){const[y,m,d]=str.split('-');return`${d}/${m}/${y}`;}
 
-  function scrollReviews(gridId, dir) {
-    const grid = document.getElementById(gridId);
-    if (!grid) return;
-    const cardWidth = grid.querySelector('div')?.offsetWidth || 300;
-    grid.scrollBy({ left: dir * (cardWidth + 2), behavior: 'smooth' });
-  }
 
 
-  // ── MOBILE REVIEWS CAROUSEL ─────────────────────────────────────────────
+  // ── MOBILE REVIEWS CAROUSEL (ottimizzato iPhone) ────────────────────────
   function initMobileReviews() {
-    if (window.innerWidth > 768) return;
+    const isMobile = window.innerWidth <= 768;
+
     ['grid-ccb', 'grid-ca'].forEach(id => {
       const grid = document.getElementById(id);
       if (!grid) return;
-      grid.style.display = 'flex';
-      grid.style.overflowX = 'auto';
-      grid.style.scrollSnapType = 'x mandatory';
-      grid.style.webkitOverflowScrolling = 'touch';
-      grid.style.scrollbarWidth = 'none';
-      grid.querySelectorAll(':scope > div').forEach(card => {
-        card.style.minWidth = '92vw';
-        card.style.overflow = 'hidden';
-        card.style.flexShrink = '0';
-        card.style.scrollSnapAlign = 'start';
-      });
+      const cards = grid.querySelectorAll(':scope > div');
+
+      if (isMobile) {
+        grid.style.display = 'flex';
+        grid.style.overflowX = 'auto';
+        grid.style.scrollSnapType = 'x mandatory';
+        grid.style.webkitOverflowScrolling = 'touch';
+        grid.style.scrollbarWidth = 'none';
+        grid.style.gap = '12px';
+        grid.style.paddingBottom = '4px';
+        cards.forEach(card => {
+          card.style.minWidth = 'calc(100vw - 48px)';
+          card.style.maxWidth = 'calc(100vw - 48px)';
+          card.style.flexShrink = '0';
+          card.style.scrollSnapAlign = 'center';
+          card.style.borderRadius = '18px';
+          card.style.padding = '26px 22px';
+          card.style.display = 'flex';
+          card.style.flexDirection = 'column';
+          card.style.justifyContent = 'space-between';
+        });
+        buildReviewDots(grid, id);
+      } else {
+        grid.style.display = 'grid';
+        grid.style.gridTemplateColumns = 'repeat(3,1fr)';
+        grid.style.overflowX = 'visible';
+        grid.style.gap = '2px';
+        cards.forEach(card => {
+          card.style.minWidth = '';
+          card.style.maxWidth = '';
+          card.style.borderRadius = '';
+          card.style.padding = '36px 32px';
+        });
+        const dots = document.getElementById('dots-' + id);
+        if (dots) dots.remove();
+      }
     });
+
     document.querySelectorAll('.reviews-nav').forEach(nav => {
-      nav.style.display = 'flex';
+      nav.style.display = isMobile ? 'flex' : 'none';
     });
     document.querySelectorAll('.score-bars-grid').forEach(el => {
-      el.style.gridTemplateColumns = 'repeat(3,1fr)';
+      el.style.gridTemplateColumns = isMobile ? 'repeat(2,1fr)' : 'repeat(6,1fr)';
+      el.style.gap = isMobile ? '16px 20px' : '20px';
     });
   }
-  document.addEventListener('DOMContentLoaded', initMobileReviews);
-  window.addEventListener('resize', initMobileReviews);
 
-
-  // ── LINGUA ──────────────────────────────────────────────────────────────
-  const TRANSLATIONS = {
-    it: {
-      nav_strutture: 'Le Strutture', nav_galleria: 'Galleria', nav_recensioni: 'Recensioni',
-      nav_dove: 'Dove Siamo', nav_instagram: 'Instagram', nav_prenota: 'Prenota',
-      hero_location: 'Arbizzano di Negrar · Valpolicella · Verona',
-      hero_title: 'Marchesini<br><em>Collection</em>',
-      hero_sub: 'Appartamenti di charme nel cuore della Valpolicella',
-      btn_scopri: 'Scopri le strutture', btn_prenota: 'Prenota ora',
-      intro_label: 'La nostra storia',
-      intro_title: 'Dimore di charme<br>nel cuore della <em>Valpolicella</em>',
-      intro_text: 'Tre propriet\u00e0 curate nei minimi dettagli, immerse nella campagna veronese. Un\u2019ospitalit\u00e0 autentica che coniuga il comfort contemporaneo con l\u2019anima rurale del territorio.',
-      booking_title: 'Richiedi <em>disponibilità</em>',
-      booking_sub: 'Tariffe migliori · Nessuna commissione · Risposta entro 24 ore',
-    },
-    en: {
-      nav_strutture: 'Our Properties', nav_galleria: 'Gallery', nav_recensioni: 'Reviews',
-      nav_dove: 'Location', nav_instagram: 'Instagram', nav_prenota: 'Book Now',
-      hero_location: 'Arbizzano di Negrar · Valpolicella · Verona',
-      hero_title: 'Marchesini<br><em>Collection</em>',
-      hero_sub: 'Charming apartments in the heart of Valpolicella',
-      btn_scopri: 'Discover our properties', btn_prenota: 'Book now',
-      intro_label: 'Our story',
-      intro_title: 'Charming residences<br>in the heart of <em>Valpolicella</em>',
-      intro_text: 'Three properties cared for in every detail, nestled in the Veronese countryside. Authentic hospitality blending contemporary comfort with the rural soul of the territory.',
-      booking_title: 'Check <em>availability</em>',
-      booking_sub: 'Best rates · No commission · Reply within 24 hours',
-    },
-    de: {
-      nav_strutture: 'Unterkünfte', nav_galleria: 'Galerie', nav_recensioni: 'Bewertungen',
-      nav_dove: 'Lage', nav_instagram: 'Instagram', nav_prenota: 'Buchen',
-      hero_location: 'Arbizzano di Negrar · Valpolicella · Verona',
-      hero_title: 'Marchesini<br><em>Collection</em>',
-      hero_sub: 'Charmante Apartments im Herzen der Valpolicella',
-      btn_scopri: 'Unterkünfte entdecken', btn_prenota: 'Jetzt buchen',
-      intro_label: 'Unsere Geschichte',
-      intro_title: 'Charmante Residenzen<br>im Herzen der <em>Valpolicella</em>',
-      intro_text: 'Drei sorgfältig gepflegte Immobilien inmitten der Weinberge bei Verona. Authentische Gastfreundschaft, die modernen Komfort mit der ländlichen Seele des Gebiets verbindet.',
-      booking_title: 'Verfügbarkeit <em>anfragen</em>',
-      booking_sub: 'Beste Preise · Keine Provision · Antwort innerhalb 24 Stunden',
+  function buildReviewDots(grid, id) {
+    const cards = grid.querySelectorAll(':scope > div');
+    let dots = document.getElementById('dots-' + id);
+    if (!dots) {
+      dots = document.createElement('div');
+      dots.id = 'dots-' + id;
+      dots.className = 'review-dots';
+      grid.parentNode.insertBefore(dots, grid.nextSibling);
     }
-  };
+    dots.innerHTML = Array.from(cards).map((c, i) =>
+      '<span class="review-dot' + (i === 0 ? ' active' : '') + '"></span>'
+    ).join('');
 
-  let currentLang = 'it';
-
-  function setLang(lang) {
-    currentLang = lang;
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('lang-'+lang)?.classList.add('active');
-    const t = TRANSLATIONS[lang];
-    if (!t) return;
-    // Navbar
-    const navLinks = document.querySelectorAll('.nav-links a');
-    if (navLinks[0]) navLinks[0].textContent = t.nav_strutture;
-    if (navLinks[1]) navLinks[1].textContent = t.nav_galleria;
-    if (navLinks[2]) navLinks[2].textContent = t.nav_recensioni;
-    if (navLinks[3]) navLinks[3].textContent = t.nav_dove;
-    if (navLinks[4]) navLinks[4].textContent = t.nav_instagram;
-    if (navLinks[5]) navLinks[5].textContent = t.nav_prenota;
-    // Hero
-    const heroLoc = document.querySelector('.hero-location');
-    if (heroLoc) heroLoc.textContent = t.hero_location;
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) heroTitle.innerHTML = t.hero_title;
-    const heroSub = document.querySelector('.hero-sub');
-    if (heroSub) heroSub.textContent = t.hero_sub;
-    const heroCtas = document.querySelectorAll('.hero-ctas .btn-light');
-    if (heroCtas[0]) heroCtas[0].textContent = t.btn_scopri;
-    if (heroCtas[1]) heroCtas[1].textContent = t.btn_prenota;
-    // Booking
-    const bookTitle = document.querySelector('.booking-header h2');
-    if (bookTitle) bookTitle.innerHTML = t.booking_title;
-    const bookSub = document.querySelector('.booking-header p');
-    if (bookSub) bookSub.textContent = t.booking_sub;
-  }
-
-  // ── MOBILE REVIEWS CAROUSEL ──────────────────────────────────────────────
-  function initMobileReviews() {
-    if (window.innerWidth > 768) return;
-    ['grid-ccb', 'grid-ca'].forEach(id => {
-      const grid = document.getElementById(id);
-      if (!grid) return;
-      grid.style.display = 'flex';
-      grid.style.overflowX = 'auto';
-      grid.style.scrollSnapType = 'x mandatory';
-      grid.style.webkitOverflowScrolling = 'touch';
-      grid.querySelectorAll(':scope > div').forEach(card => {
-        card.style.minWidth = '92vw';
-        card.style.overflow = 'hidden';
-        card.style.flexShrink = '0';
-        card.style.scrollSnapAlign = 'start';
+    grid.onscroll = () => {
+      const w = cards[0] ? cards[0].offsetWidth + 12 : 1;
+      const active = Math.round(grid.scrollLeft / w);
+      dots.querySelectorAll('.review-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === active);
       });
-    });
-    document.querySelectorAll('.reviews-nav').forEach(nav => nav.style.display = 'flex');
+    };
   }
 
   function scrollReviews(gridId, dir) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
-    const cardWidth = grid.querySelector('div')?.offsetWidth || 300;
-    grid.scrollBy({ left: dir * (cardWidth + 2), behavior: 'smooth' });
+    const card = grid.querySelector(':scope > div');
+    const step = (card ? card.offsetWidth : 300) + 12;
+    grid.scrollBy({ left: dir * step, behavior: 'smooth' });
   }
+
+  window.addEventListener('resize', initMobileReviews);
+  window.addEventListener('orientationchange', () => setTimeout(initMobileReviews, 300));
+
 
   // ── INIT ────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
