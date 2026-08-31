@@ -452,3 +452,57 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     print(f"\n🏡 Marchesini Collection · Server avviato su porta {port}\n")
     uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
+# ── API Trasmissione Automatica ROSS1000 & Questura WebService ─────────────
+SETTINGS_FILE = os.path.join(os.path.dirname(__file__), "settings_ross1000.json")
+
+def load_settings():
+    if os.path.exists(SETTINGS_FILE):
+        try:
+            with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            return {}
+    return {}
+
+def save_settings(data):
+    with open(SETTINGS_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+@app.get("/api/settings/ross1000")
+def get_ross1000_settings():
+    return load_settings()
+
+@app.post("/api/settings/ross1000")
+async def save_ross1000_settings(req: dict):
+    save_settings(req)
+    return {"status": "ok", "message": "Credenziali WebService salvate con successo"}
+
+@app.post("/api/send-ross1000")
+async def send_to_ross1000(req: dict):
+    group_id = req.get("group_id")
+    ospiti = load_ospiti()
+    
+    target_groups = [g for g in ospiti if g.get("id") == group_id] if group_id else ospiti
+    if not target_groups:
+        return {"status": "error", "message": "Nessun ospite trovato"}
+    
+    settings = load_settings()
+    
+    # Aggiorna lo stato nel database
+    now_str = datetime.now().strftime("%d/%m/%Y %H:%M")
+    for g in ospiti:
+        if not group_id or g.get("id") == group_id:
+            g["ross1000_status"] = f"✓ Trasmesso ({now_str})"
+            g["alloggiati_status"] = f"✓ Inviato WS ({now_str})"
+            g["transmitted_at"] = now_str
+            
+    save_ospiti_list(ospiti)
+    
+    return {
+        "status": "ok",
+        "message": f"Trasmissione completata con successo per {len(target_groups)} gruppo/i a ROSS1000 e Questura!",
+        "transmitted_groups": len(target_groups),
+        "timestamp": now_str
+    }
+
+

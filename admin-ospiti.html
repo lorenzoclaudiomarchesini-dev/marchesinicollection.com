@@ -281,6 +281,7 @@
       <div class="header-sub">Questura Alloggiati Web · ROSS1000 Veneto · Imposta di Soggiorno</div>
     </div>
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendAllToRoss1000()">🚀 Invia Tutti a ROSS1000</button>
       <button class="btn-action-gold" onclick="openManualGuestModal()">➕ Inserisci Ospite</button>
       <button class="btn-action-gold" style="background:#fff; color:#000;" onclick="generateAlloggiatiTxt()">📄 Scarica Alloggiati.txt</button>
       <button class="btn-outline-white" onclick="downloadRoss1000Txt()">📊 ROSS1000 (.txt)</button>
@@ -382,6 +383,60 @@
             <button class="btn-table-action" style="padding:8px 12px; font-size:11px;" onclick="window.open('/guida/caboare-b', '_blank')">
               Apri ↗
             </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    
+    <!-- CONFIGURAZIONE WEBSERVICE API AUTOMAZIONE (ROSS1000 & QUESTURA WS-KEY) -->
+    <div class="panel-card" style="border: 1px solid var(--border-gold); background: linear-gradient(145deg, rgba(22,19,16,0.98) 0%, rgba(14,12,10,0.98) 100%);">
+      <div class="panel-header" style="border-bottom: 1px solid var(--border); padding-bottom:14px;">
+        <div>
+          <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:700;">Automazione WebService & API</div>
+          <h3 class="panel-title" style="color:#fff; font-size:20px; margin-top:2px;">Integrazione Diretta ROSS1000 Veneto & Questura</h3>
+          <p class="panel-subtitle">Configura le credenziali di accesso per inviare le schedine con 1 solo click senza dover compilare manualmente i portali.</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-action-gold" onclick="saveWebServiceSettings()">💾 Salva Credenziali API</button>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:16px;">
+        
+        <!-- CREDENZIALI ROSS1000 -->
+        <div class="cin-box">
+          <div class="cin-prop-name">🔑 Accesso ROSS1000 Veneto</div>
+          <div class="field-group">
+            <label>Username Portale ROSS1000</label>
+            <input type="text" class="field-input" id="ws_ross_user" placeholder="es. user_marchesini">
+          </div>
+          <div class="field-group">
+            <label>Password / API Token ROSS1000</label>
+            <input type="password" class="field-input" id="ws_ross_pass" placeholder="••••••••••••">
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:6px; line-height:1.4;">
+            ℹ️ Utilizzato per trasmettere i flussi turistici ISTAT e il calcolo dell'Imposta di Soggiorno.
+          </div>
+        </div>
+
+        <!-- WS-KEY QUESTURA BRIDGE -->
+        <div class="cin-box">
+          <div class="cin-prop-name">🛡️ Alloggiati Web (WS-KEY Polizia di Stato)</div>
+          <div class="field-group">
+            <label>WS-KEY (Chiave WebService Questura)</label>
+            <input type="text" class="field-input" id="ws_questura_key" placeholder="es. A9B8C7D6E5F4G3H2">
+          </div>
+          <div class="field-group">
+            <label>Modalità Trasmissione</label>
+            <select class="field-input" id="ws_send_mode">
+              <option value="ross1000_bridge" selected>🔗 ROSS1000 con Inoltro Automatico a Questura</option>
+              <option value="direct_alloggiati">⚡ Invio Diretto Alloggiati Web</option>
+            </select>
+          </div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:6px; line-height:1.4;">
+            ℹ️ Con il WS-KEY attivo, la Regione Veneto inoltra automaticamente le schedine alla Questura competente.
           </div>
         </div>
 
@@ -728,8 +783,9 @@ ${url}`;
             <td><span class="status-badge status-ok">${g.ross1000_status || '✓ Pronto per ROSS1000'}</span></td>
             <td>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button class="btn-action-gold" style="padding:6px 12px; font-size:10px; background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendGuestToRoss1000('${g.id}')">🚀 Invia ROSS1000 & Questura</button>
                 <button class="btn-action-gold" style="padding:6px 12px; font-size:10px;" onclick="openGuestDetailModal(${idx})">📋 Scheda Completa (${totalCount})</button>
-                <button class="btn-table-action" onclick="copyGuestDataFormatted(${idx})">📋 Copia Testo</button>
+                <button class="btn-table-action" onclick="copyGuestDataFormatted(${idx})">📋 Copia Dati</button>
                 <button class="btn-table-action" onclick="downloadQuesturaTxt('${g.id}')">📄 .txt Questura</button>
                 <button class="btn-table-action" style="color:#e74c3c; border-color:rgba(231,76,60,0.3);" onclick="deleteGuest('${g.id}')" title="Elimina">✕</button>
               </div>
@@ -901,7 +957,88 @@ Tipo Alloggiato: ${o.tipo_alloggiato || 'Membro Gruppo'}
     }
 
     // Carica subito e poi ogni 4 secondi
-    document.addEventListener('DOMContentLoaded', loadLiveGuests);
+    
+    async function loadWebServiceSettings() {
+      try {
+        const res = await fetch('/api/settings/ross1000');
+        if (res.ok) {
+          const s = await res.json();
+          if (s.ross_user) document.getElementById('ws_ross_user').value = s.ross_user;
+          if (s.ross_pass) document.getElementById('ws_ross_pass').value = s.ross_pass;
+          if (s.questura_key) document.getElementById('ws_questura_key').value = s.questura_key;
+          if (s.send_mode) document.getElementById('ws_send_mode').value = s.send_mode;
+        }
+      } catch(e){}
+    }
+
+    async function saveWebServiceSettings() {
+      const payload = {
+        ross_user: document.getElementById('ws_ross_user').value.trim(),
+        ross_pass: document.getElementById('ws_ross_pass').value.trim(),
+        questura_key: document.getElementById('ws_questura_key').value.trim(),
+        send_mode: document.getElementById('ws_send_mode').value
+      };
+      try {
+        const res = await fetch('/api/settings/ross1000', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          showToast('✓ Credenziali WebService salvate con successo!');
+        }
+      } catch(e) {
+        alert('Errore nel salvataggio credenziali');
+      }
+    }
+
+    async function sendGuestToRoss1000(groupId) {
+      if (!confirm('Vuoi inviare direttamente i dati di questa registrazione a ROSS1000 Veneto e Questura?')) return;
+      showToast('🚀 Trasmissione WebService in corso...');
+      try {
+        const res = await fetch('/api/send-ross1000', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ group_id: groupId })
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          showToast('✓ Dati trasmessi con successo a ROSS1000 & Questura!');
+          loadLiveGuests();
+        } else {
+          alert('Errore: ' + data.message);
+        }
+      } catch(e) {
+        alert('Errore di connessione WebService');
+      }
+    }
+
+    async function sendAllToRoss1000() {
+      if (!confirm('Vuoi trasmettere tutti gli ospiti in attesa a ROSS1000 Veneto e Questura?')) return;
+      showToast('🚀 Trasmissione cumulativa in corso...');
+      try {
+        const res = await fetch('/api/send-ross1000', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          showToast('✓ ' + data.message);
+          loadLiveGuests();
+        } else {
+          alert('Errore: ' + data.message);
+        }
+      } catch(e) {
+        alert('Errore di connessione WebService');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadLiveGuests();
+      loadWebServiceSettings();
+    });
+
     loadLiveGuests();
     setInterval(loadLiveGuests, 4000);
   </script>
