@@ -1,1 +1,72 @@
-[]
+[
+  {
+    "id": "GRP-1725450000",
+    "apt": "caboare-b",
+    "apt_name": "Corte Cà Boare · Apt B (Sub 2)",
+    "num_guests": 5,
+    "arrival_date": "04/09/2026",
+    "departure_date": "06/09/2026",
+    "created_at": "31/08/2026, 21:15",
+    "lead_guest": {
+      "tipo_alloggiato": "Capogruppo",
+      "cognome": "MELENA",
+      "nome": "LUCREZIA",
+      "sesso": "F",
+      "data_nascita": "15/05/1988",
+      "cittadinanza": "ITALIA",
+      "stato_nascita": "ITALIA",
+      "comune_nascita": "Guardiagrele",
+      "stato_residenza": "ITALIA",
+      "comune_residenza": "Casalincontrada",
+      "indirizzo_residenza": "Casalincontrada (CH)",
+      "tipo_documento": "CARTA DI IDENTITA'",
+      "numero_documento": "CA99139ZR",
+      "stato_rilascio": "ITALIA",
+      "comune_rilascio": "Casalincontrada"
+    },
+    "additional_guests": [
+      {
+        "tipo_alloggiato": "Membro Gruppo",
+        "cognome": "CAVALLO",
+        "nome": "GIANCARLO",
+        "sesso": "M",
+        "data_nascita": "10/08/1985",
+        "cittadinanza": "ITALIA",
+        "stato_nascita": "ITALIA",
+        "comune_nascita": "Casalincontrada"
+      },
+      {
+        "tipo_alloggiato": "Membro Gruppo",
+        "cognome": "CAVALLO",
+        "nome": "TOMMASO",
+        "sesso": "M",
+        "data_nascita": "12/04/2012",
+        "cittadinanza": "ITALIA",
+        "stato_nascita": "ITALIA",
+        "comune_nascita": "Casalincontrada"
+      },
+      {
+        "tipo_alloggiato": "Membro Gruppo",
+        "cognome": "CAVALLO",
+        "nome": "ELEONORA",
+        "sesso": "F",
+        "data_nascita": "20/09/2014",
+        "cittadinanza": "ITALIA",
+        "stato_nascita": "ITALIA",
+        "comune_nascita": "Casalincontrada"
+      },
+      {
+        "tipo_alloggiato": "Membro Gruppo",
+        "cognome": "CAVALLO",
+        "nome": "ISABELLA",
+        "sesso": "F",
+        "data_nascita": "05/11/2018",
+        "cittadinanza": "ITALIA",
+        "stato_nascita": "ITALIA",
+        "comune_nascita": "Casalincontrada"
+      }
+    ],
+    "alloggiati_status": "✓ Pronto per Invio",
+    "ross1000_status": "✓ Pronto per ROSS1000"
+  }
+]
