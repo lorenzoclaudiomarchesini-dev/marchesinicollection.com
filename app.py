@@ -272,17 +272,46 @@ def export_alloggiati_txt(group_id: str = None):
             )
             lines.append(o_line)
 
-    content = "
-".join(lines) + "
-"
+    crlf = chr(13) + chr(10)
+    content = crlf.join(lines) + (crlf if lines else "")
     fn_name = f"alloggiati_{group_id or 'tutti'}_{datetime.now().strftime('%Y%m%d_%H%M')}.txt"
     return Response(
         content=content,
-        media_type="text/plain",
+        media_type="text/plain; charset=utf-8",
         headers={"Content-Disposition": f"attachment; filename={fn_name}"}
     )
 
-# ── Export ROSS1000 CSV ──────────────────────────────────────────────────────
+# ── Export ROSS1000 TXT / CSV ────────────────────────────────────────────────
+@app.get("/api/export/ross1000-txt")
+def export_ross1000_txt(group_id: str = None):
+    ospiti = load_ospiti()
+    if group_id:
+        target_groups = [g for g in ospiti if g.get("id") == group_id]
+    else:
+        target_groups = ospiti
+
+    lines = []
+    for g in target_groups:
+        apt = g.get("apt", "")
+        cod_struttura = "Z04845" if "caboare-a" in apt else ("Z12267" if "caboare-b" in apt else "Z00000")
+        arr = g.get("arrival_date", "")
+        dep = g.get("departure_date", "")
+        lead = g.get("lead_guest", {})
+        lines.append(f"STRUTTURA: {cod_struttura} ({g.get('apt_name', apt)})")
+        lines.append(f"SOGGIORNO: Arrivo {arr} - Partenza {dep}")
+        lines.append(f"CAPOGRUPPO: {lead.get('cognome','')} {lead.get('nome','')} | Sesso: {lead.get('sesso','M')} | Nato: {lead.get('data_nascita','')} a {lead.get('comune_nascita', lead.get('stato_nascita','ITALIA'))} | Citt: {lead.get('cittadinanza','ITALIA')} | Doc: {lead.get('tipo_documento','')} N° {lead.get('numero_documento','')} (Rilascio: {lead.get('comune_rilascio', lead.get('stato_rilascio',''))}) | Residenza: {lead.get('comune_residenza','')} {lead.get('indirizzo_residenza','')}")
+        for idx, o in enumerate(g.get("additional_guests", []), 2):
+            lines.append(f"OSPITE {idx}: {o.get('cognome','')} {o.get('nome','')} | Sesso: {o.get('sesso','M')} | Nato: {o.get('data_nascita','')} a {o.get('comune_nascita', o.get('stato_nascita','ITALIA'))} | Citt: {o.get('cittadinanza','ITALIA')}")
+        lines.append("-" * 60)
+
+    lf = chr(10)
+    content = lf.join(lines)
+    return Response(
+        content=content,
+        media_type="text/plain; charset=utf-8",
+        headers={"Content-Disposition": f"attachment; filename=ross1000_riepilogo_{datetime.now().strftime('%Y%m%d_%H%M')}.txt"}
+    )
+
 @app.get("/api/export/ross1000-csv")
 def export_ross1000_csv():
     ospiti = load_ospiti()
@@ -300,15 +329,14 @@ def export_ross1000_csv():
         for o in g.get("additional_guests", []):
             lines.append(f"{cod_struttura},{arr},{dep},{o.get('tipo_alloggiato','Membro Gruppo')},{o.get('cognome','')},{o.get('nome','')},{o.get('sesso','M')},{o.get('data_nascita','')},{o.get('cittadinanza','ITALIA')},{o.get('stato_nascita','ITALIA')},{o.get('comune_nascita','')},ITALIA,")
 
-    content = "
-".join(lines)
+    lf = chr(10)
+    content = lf.join(lines)
     return Response(
         content=content,
-        media_type="text/csv",
+        media_type="text/csv; charset=utf-8",
         headers={"Content-Disposition": f"attachment; filename=ross1000_movimenti_{datetime.now().strftime('%Y%m%d')}.csv"}
     )
 
-# ── API Import Listing (Airbnb & Booking) ────────────────────────────────────
 class ImportRequest(BaseModel):
     url: str
 
