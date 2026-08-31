@@ -92,10 +92,22 @@ def save_ospiti_list(data):
     with open(OSPITI_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+@app.get("/admin/ospiti")
+@app.get("/admin-ospiti")
+def serve_admin_ospiti():
+    return FileResponse(
+        os.path.join(os.path.dirname(__file__), "admin-ospiti.html"),
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+    )
+
 @app.get("/api/ospiti")
 @app.get("/api/guest-checkin")
 def get_all_ospiti():
-    return load_ospiti()
+    return Response(
+        content=json.dumps(load_ospiti(), ensure_ascii=False),
+        media_type="application/json",
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+    )
 
 @app.post("/api/guest-checkin")
 @app.post("/api/checkin")
