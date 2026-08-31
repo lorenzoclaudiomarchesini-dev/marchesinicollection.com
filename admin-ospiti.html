@@ -281,8 +281,9 @@
       <div class="header-sub">Questura Alloggiati Web · ROSS1000 Veneto · Imposta di Soggiorno</div>
     </div>
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
-      <button class="btn-action-gold" onclick="generateAlloggiatiTxt()">📄 Scarica Alloggiati.txt (Questura)</button>
-      <button class="btn-outline-white" onclick="downloadRoss1000Txt()">📊 Scarica ROSS1000 (.txt)</button>
+      <button class="btn-action-gold" onclick="openManualGuestModal()">➕ Inserisci Ospite</button>
+      <button class="btn-action-gold" style="background:#fff; color:#000;" onclick="generateAlloggiatiTxt()">📄 Scarica Alloggiati.txt</button>
+      <button class="btn-outline-white" onclick="downloadRoss1000Txt()">📊 ROSS1000 (.txt)</button>
       <button class="btn-outline-white" onclick="downloadRoss1000Csv()">📈 ROSS1000 (.csv)</button>
     </div>
   </header>
@@ -513,6 +514,100 @@
   <script>
     let currentLoadedGroups = [];
 
+    function openManualGuestModal() {
+      const today = new Date().toISOString().split('T')[0];
+      const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+      document.getElementById('m_arrival').value = today;
+      document.getElementById('m_departure').value = tomorrow;
+      document.getElementById('manualGuestModal').style.display = 'flex';
+    }
+
+    function closeManualGuestModal() {
+      document.getElementById('manualGuestModal').style.display = 'none';
+    }
+
+    function closeManualGuestModalOnBackdrop(e) {
+      if (e.target.id === 'manualGuestModal') closeManualGuestModal();
+    }
+
+    async function handleManualGuestSubmit(e) {
+      e.preventDefault();
+      const apt = document.getElementById('m_apt').value;
+      const arrival = document.getElementById('m_arrival').value;
+      const departure = document.getElementById('m_departure').value;
+      const surname = document.getElementById('m_surname').value.trim();
+      const name = document.getElementById('m_name').value.trim();
+      const sex = document.getElementById('m_sex').value;
+      const dob = document.getElementById('m_dob').value;
+      const cit = document.getElementById('m_citizenship').value.trim() || 'ITALIA';
+      const birth = document.getElementById('m_birthplace').value.trim();
+      const res = document.getElementById('m_residence').value.trim();
+      const docType = document.getElementById('m_doctype').value;
+      const docNum = document.getElementById('m_docnum').value.trim();
+      const docIssue = document.getElementById('m_docissue').value.trim();
+
+      const payload = {
+        apt: apt,
+        num_guests: 1,
+        arrival_date: arrival,
+        departure_date: departure,
+        lead_guest: {
+          tipo_alloggiato: "Capogruppo",
+          cognome: surname,
+          nome: name,
+          sesso: sex,
+          data_nascita: dob,
+          cittadinanza: cit,
+          stato_nascita: cit,
+          comune_nascita: birth,
+          stato_residenza: cit,
+          comune_residenza: res,
+          tipo_documento: docType,
+          numero_documento: docNum,
+          comune_rilascio: docIssue,
+          stato_rilascio: cit
+        },
+        additional_guests: []
+      };
+
+      try {
+        const res = await fetch('/api/guest-checkin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          showToast('✓ Ospite registrato con successo nel database!');
+          closeManualGuestModal();
+          loadLiveGuests();
+        } else {
+          alert('Errore nel salvataggio');
+        }
+      } catch(err) {
+        alert('Errore di rete');
+      }
+    }
+
+    async function restoreFromLocalCache() {
+      const cached = localStorage.getItem('admin_ospiti_cache');
+      if (!cached) return;
+      try {
+        const list = JSON.parse(cached);
+        for (const item of list) {
+          await fetch('/api/guest-checkin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(item)
+          });
+        }
+        showToast('✓ ' + list.length + ' registrazioni ripristinate con successo sul server!');
+        loadLiveGuests();
+      } catch(e) {
+        alert('Errore durante il ripristino dalla cache');
+      }
+    }
+
+
     function showToast(msg) {
       const t = document.getElementById('toastBox');
       const tm = document.getElementById('toastMsg');
@@ -538,6 +633,9 @@ ${url}`;
         if (res.ok) {
           const guests = await res.json();
           currentLoadedGroups = guests;
+          if (guests && guests.length > 0) {
+            localStorage.setItem('admin_ospiti_cache', JSON.stringify(guests));
+          }
           renderGuestTable(guests);
         } else {
           console.error('Fetch /api/ospiti error:', res.status);
@@ -807,6 +905,117 @@ Tipo Alloggiato: ${o.tipo_alloggiato || 'Membro Gruppo'}
     loadLiveGuests();
     setInterval(loadLiveGuests, 4000);
   </script>
+
+
+  <!-- MODAL INSERIMENTO MANUALE OSPITE -->
+  <div id="manualGuestModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(12px); z-index:9999; align-items:center; justify-content:center; padding:16px;" onclick="closeManualGuestModalOnBackdrop(event)">
+    <div style="background:var(--surface); border:1px solid var(--gold); width:100%; max-width:720px; max-height:92vh; border-radius:24px; overflow-y:auto; padding:28px; position:relative; box-shadow:0 25px 90px rgba(0,0,0,0.95); color:var(--text);">
+      <button onclick="closeManualGuestModal()" style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.08); border:1px solid var(--border); width:36px; height:36px; border-radius:50%; font-size:16px; font-weight:700; cursor:pointer; color:#fff; display:flex; align-items:center; justify-content:center;">✕</button>
+      
+      <div style="border-bottom: 1px solid var(--border-gold); padding-bottom:14px; margin-bottom:20px;">
+        <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:700;">Inserimento Rapido / Recupero</div>
+        <h2 style="font-family:var(--serif); font-size:26px; color:#fff; font-weight:600; margin-top:2px;">Nuova Registrazione Ospite</h2>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:3px;">Inserisci qui i dati ricevuti via WhatsApp, Booking o documento cartaceo.</p>
+      </div>
+
+      <form id="manualGuestForm" onsubmit="handleManualGuestSubmit(event)">
+        <!-- STRUTTURA & DATE -->
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:16px;">
+          <div style="font-size:11px; font-weight:700; color:var(--gold); text-transform:uppercase; margin-bottom:10px;">1. Alloggio e Date</div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px;">
+            <div class="field-group">
+              <label>Struttura *</label>
+              <select id="m_apt" class="field-input" style="font-weight:600;">
+                <option value="caboare-b" selected>🍷 Corte Cà Boare · Apt B (Sub 2)</option>
+                <option value="caboare-a">🍷 Corte Cà Boare · Apt A (Sub 1)</option>
+                <option value="albertina">🏡 Casa Albertina</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Data Arrivo *</label>
+              <input type="date" id="m_arrival" class="field-input" required>
+            </div>
+            <div class="field-group">
+              <label>Data Partenza *</label>
+              <input type="date" id="m_departure" class="field-input" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- DATI CAPOGRUPPO -->
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:16px;">
+          <div style="font-size:11px; font-weight:700; color:var(--gold); text-transform:uppercase; margin-bottom:10px;">2. Dati Capogruppo / Intestatario</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px;">
+            <div class="field-group">
+              <label>Cognome *</label>
+              <input type="text" id="m_surname" class="field-input" placeholder="es. Rossi" required>
+            </div>
+            <div class="field-group">
+              <label>Nome *</label>
+              <input type="text" id="m_name" class="field-input" placeholder="es. Mario" required>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:10px;">
+            <div class="field-group">
+              <label>Sesso</label>
+              <select id="m_sex" class="field-input">
+                <option value="M">Maschio (M)</option>
+                <option value="F">Femmina (F)</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Data di Nascita *</label>
+              <input type="date" id="m_dob" class="field-input" required>
+            </div>
+            <div class="field-group">
+              <label>Cittadinanza</label>
+              <input type="text" id="m_citizenship" class="field-input" value="ITALIA">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px;">
+            <div class="field-group">
+              <label>Comune/Stato Nascita</label>
+              <input type="text" id="m_birthplace" class="field-input" placeholder="es. Verona">
+            </div>
+            <div class="field-group">
+              <label>Comune Residenza</label>
+              <input type="text" id="m_residence" class="field-input" placeholder="es. Negrar di Valpolicella">
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+            <div class="field-group">
+              <label>Tipo Documento</label>
+              <select id="m_doctype" class="field-input">
+                <option value="CARTA DI IDENTITA'" selected>Carta di Identità</option>
+                <option value="PASSAPORTO">Passaporto</option>
+                <option value="PATENTE">Patente di Guida</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Numero Documento *</label>
+              <input type="text" id="m_docnum" class="field-input" placeholder="es. CA12345AA" required>
+            </div>
+            <div class="field-group">
+              <label>Comune / Ente Rilascio</label>
+              <input type="text" id="m_docissue" class="field-input" placeholder="es. Comune di Verona">
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button type="submit" class="btn-action-gold" style="flex:1; justify-content:center; padding:12px;">
+            💾 Salva e Registra Ospite
+          </button>
+          <button type="button" onclick="closeManualGuestModal()" class="btn-table-action" style="padding:12px 20px;">
+            Annulla
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
 </body>
 </html>

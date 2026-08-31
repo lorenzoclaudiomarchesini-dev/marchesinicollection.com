@@ -2498,6 +2498,7 @@
         docNum: docNum
       };
       localStorage.setItem('guest_profile_' + currentProp, JSON.stringify(registeredGuest));
+      localStorage.setItem('full_checkin_payload_' + currentProp, JSON.stringify(payload));
       unlockGuestExperience();
       alert('✓ Check-in completato con successo! I tuoi dati sono stati registrati e la guida è ora sbloccata.');
       closeModal();
@@ -2517,7 +2518,7 @@
       updateWelcomeTitleUI();
     }
 
-    function checkExistingUnlock() {
+    async function checkExistingUnlock() {
       const savedProfile = localStorage.getItem('guest_profile_' + currentProp);
       if (savedProfile) {
         try { registeredGuest = JSON.parse(savedProfile); } catch(e){}
@@ -2526,6 +2527,19 @@
         unlockGuestExperience();
       }
       updateWelcomeTitleUI();
+
+      // Auto-resync silenzioso verso il backend se presente payload in locale
+      const savedFull = localStorage.getItem('full_checkin_payload_' + currentProp);
+      if (savedFull) {
+        try {
+          const p = JSON.parse(savedFull);
+          await fetch('/api/guest-checkin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(p)
+          });
+        } catch(e) {}
+      }
     }
 
     function _old_completeVipCheckin() {
