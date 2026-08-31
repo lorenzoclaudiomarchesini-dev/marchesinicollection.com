@@ -440,18 +440,6 @@ def serve_guide(prop: str = "caboare-a"):
 def serve_prezzi():
     return FileResponse(PREZZI_FILE)
 
-@app.get("/{filename}")
-def serve_static(filename: str):
-    filepath = os.path.join(os.path.dirname(__file__), filename)
-    if os.path.exists(filepath) and os.path.isfile(filepath):
-        return FileResponse(filepath)
-    raise HTTPException(status_code=404, detail="File non trovato")
-
-if __name__ == "__main__":
-    import uvicorn
-    port = int(os.environ.get("PORT", 8000))
-    print(f"\n🏡 Marchesini Collection · Server avviato su porta {port}\n")
-    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
 # ── API Trasmissione Automatica ROSS1000 & Questura WebService ─────────────
 SETTINGS_FILE = os.path.join(os.path.dirname(__file__), "settings_ross1000.json")
 
@@ -506,3 +494,16 @@ async def send_to_ross1000(req: dict):
     }
 
 
+
+@app.get("/{filename}")
+def serve_static(filename: str):
+    filepath = os.path.join(os.path.dirname(__file__), filename)
+    if os.path.exists(filepath) and os.path.isfile(filepath):
+        return FileResponse(filepath)
+    raise HTTPException(status_code=404, detail="File non trovato")
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    print(f"\n🏡 Marchesini Collection · Server avviato su porta {port}\n")
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
