@@ -322,6 +322,97 @@
       transform: translateX(-50%) translateY(0);
       opacity: 1;
     }
+
+    /* ══════════════════════════════════
+       SCHEDE ENTITÀ GESTIONALI (TABS)
+    ══════════════════════════════════ */
+    .entity-tabs {
+      display: flex;
+      gap: 8px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 6px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .entity-tabs::-webkit-scrollbar { display: none; }
+    .entity-tab {
+      flex: 1;
+      min-width: 150px;
+      background: none;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      text-align: left;
+      color: var(--text-muted);
+      font-family: var(--sans);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .entity-tab:active { transform: scale(0.98); }
+    .entity-tab .et-name {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .entity-tab .et-owner {
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+    .entity-tab.active {
+      background: linear-gradient(145deg, rgba(197,168,128,0.18) 0%, rgba(197,168,128,0.08) 100%);
+      border-color: var(--border-gold);
+    }
+    .entity-tab.active .et-name { color: var(--gold); }
+    .entity-tab.active .et-owner { color: var(--gold-light); }
+
+    .et-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #e0a63c;
+      flex-shrink: 0;
+    }
+    .et-dot.ok { background: var(--green); box-shadow: 0 0 8px rgba(37,211,102,0.55); }
+
+    .entity-pane { display: none; }
+    .entity-pane.active { display: block; }
+
+    .entity-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-gold);
+      background: rgba(197,168,128,0.14);
+      color: var(--gold-light);
+    }
+    .entity-chip.albertina {
+      border-color: rgba(120,170,220,0.4);
+      background: rgba(120,170,220,0.14);
+      color: #9fc9ec;
+    }
+
+    @media (max-width: 820px) {
+      .entity-tabs { flex-direction: column; gap: 6px; }
+      .entity-tab { min-width: 100%; }
+    }
+
   </style>
 </head>
 <body>
@@ -483,44 +574,122 @@
       </div>
     </div>
 
-    <!-- CONFIGURAZIONE WEBSERVICE API AUTOMAZIONE (ROSS1000 & QUESTURA WS-KEY) -->
+    <!-- CONFIGURAZIONE WEBSERVICE — DUE ENTITÀ GESTIONALI SEPARATE -->
     <div class="panel-card" style="border: 1px solid var(--border-gold);">
       <div class="panel-header">
         <div>
           <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:700;">Automazione WebService & API</div>
-          <h3 class="panel-title" style="color:#fff; font-size:18px; margin-top:2px;">Credenziali ROSS1000 Veneto & Questura</h3>
-          <p class="panel-subtitle">Configura l'invio telematico a 1 click senza compilare i portali.</p>
+          <h3 class="panel-title" style="color:#fff; font-size:19px; margin-top:2px;">Accessi ROSS1000 & Questura per Proprietà</h3>
+          <p class="panel-subtitle">Ogni struttura ha titolarità e credenziali telematiche indipendenti. Seleziona la scheda per configurarla.</p>
         </div>
-        <button class="btn-action-gold" style="font-size:10px;" onclick="saveWebServiceSettings()">💾 Salva Credenziali</button>
       </div>
 
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
-        <div class="cin-box">
-          <div class="cin-prop-name">🔑 Accesso ROSS1000 Veneto</div>
-          <div class="field-group">
-            <label>Username Portale ROSS1000</label>
-            <input type="text" class="field-input" id="ws_ross_user" placeholder="es. user_marchesini">
+      <!-- SELETTORE SCHEDE -->
+      <div class="entity-tabs">
+        <button class="entity-tab active" id="tab-caboare" onclick="switchEntityTab('caboare')">
+          <span class="et-name"><span class="et-dot" id="dot-caboare"></span>🍷 Corte Cà Boare · A + B</span>
+          <span class="et-owner">Lorenzo & Fratelli · Z04845 / Z12267</span>
+        </button>
+        <button class="entity-tab" id="tab-albertina" onclick="switchEntityTab('albertina')">
+          <span class="et-name"><span class="et-dot" id="dot-albertina"></span>🏡 Casa Albertina</span>
+          <span class="et-owner">Proprietà del Padre · Z00000</span>
+        </button>
+      </div>
+
+      <!-- ══ SCHEDA 1: CORTE CÀ BOARE ══ -->
+      <div class="entity-pane active" id="pane-caboare">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
+          <div class="cin-box">
+            <div class="cin-prop-name">🔑 ROSS1000 Veneto · Cà Boare</div>
+            <div class="field-group">
+              <label>Username Portale ROSS1000</label>
+              <input type="text" class="field-input" id="cb_ross_user" placeholder="es. caboare_lorenzo" autocomplete="off">
+            </div>
+            <div class="field-group">
+              <label>Password / Token ROSS1000</label>
+              <input type="password" class="field-input" id="cb_ross_pass" placeholder="••••••••••••" autocomplete="new-password">
+            </div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:6px; line-height:1.5;">
+              Strutture collegate: <strong style="color:var(--gold);">Z04845</strong> (Apt A) · <strong style="color:var(--gold);">Z12267</strong> (Apt B)
+            </div>
           </div>
-          <div class="field-group">
-            <label>Password / Token ROSS1000</label>
-            <input type="password" class="field-input" id="ws_ross_pass" placeholder="••••••••••••">
+
+          <div class="cin-box">
+            <div class="cin-prop-name">🛡️ Alloggiati Web · Cà Boare</div>
+            <div class="field-group">
+              <label>Utente Alloggiati Web (Questura)</label>
+              <input type="text" class="field-input" id="cb_questura_user" placeholder="es. VR0004512" autocomplete="off">
+            </div>
+            <div class="field-group">
+              <label>WS-KEY (Chiave WebService Polizia)</label>
+              <input type="text" class="field-input" id="cb_questura_ws_key" placeholder="es. A9B8C7D6E5F4G3H2" autocomplete="off">
+            </div>
+            <div class="field-group">
+              <label>Modalità Invio</label>
+              <select class="field-input" id="cb_send_mode">
+                <option value="ross1000_bridge" selected>🔗 ROSS1000 con inoltro automatico Questura</option>
+                <option value="direct_alloggiati">⚡ Invio diretto Alloggiati Web</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <div class="cin-box">
-          <div class="cin-prop-name">🛡️ Questura (WS-KEY Polizia)</div>
-          <div class="field-group">
-            <label>WS-KEY (Chiave WebService)</label>
-            <input type="text" class="field-input" id="ws_questura_key" placeholder="es. A9B8C7D6E5F4G3H2">
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;">
+          <button class="btn-action-gold" onclick="saveEntitySettings('caboare')">💾 Salva Credenziali Cà Boare</button>
+          <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendEntityToRoss1000('caboare')">🚀 Invia Ospiti Cà Boare</button>
+          <a href="https://veneto.ross1000.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri ROSS1000</a>
+          <a href="https://alloggiatiweb.poliziadistato.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri Alloggiati Web</a>
+        </div>
+      </div>
+
+      <!-- ══ SCHEDA 2: CASA ALBERTINA ══ -->
+      <div class="entity-pane" id="pane-albertina">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
+          <div class="cin-box" style="border-color:rgba(120,170,220,0.3);">
+            <div class="cin-prop-name" style="color:#9fc9ec;">🔑 ROSS1000 Veneto · Albertina</div>
+            <div class="field-group">
+              <label>Username Portale ROSS1000</label>
+              <input type="text" class="field-input" id="ab_ross_user" placeholder="es. albertina_marchesini" autocomplete="off">
+            </div>
+            <div class="field-group">
+              <label>Password / Token ROSS1000</label>
+              <input type="password" class="field-input" id="ab_ross_pass" placeholder="••••••••••••" autocomplete="new-password">
+            </div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:6px; line-height:1.5;">
+              Struttura collegata: <strong style="color:#9fc9ec;">Z00000</strong> (Casa Albertina)
+            </div>
           </div>
-          <div class="field-group">
-            <label>Modalità Invio</label>
-            <select class="field-input" id="ws_send_mode">
-              <option value="ross1000_bridge" selected>🔗 ROSS1000 con Inoltro Automatico Questura</option>
-              <option value="direct_alloggiati">⚡ Invio Diretto Alloggiati Web</option>
-            </select>
+
+          <div class="cin-box" style="border-color:rgba(120,170,220,0.3);">
+            <div class="cin-prop-name" style="color:#9fc9ec;">🛡️ Alloggiati Web · Albertina</div>
+            <div class="field-group">
+              <label>Utente Alloggiati Web (Questura)</label>
+              <input type="text" class="field-input" id="ab_questura_user" placeholder="es. VR0009988" autocomplete="off">
+            </div>
+            <div class="field-group">
+              <label>WS-KEY (Chiave WebService Polizia)</label>
+              <input type="text" class="field-input" id="ab_questura_ws_key" placeholder="es. Z1Y2X3W4V5U6T7S8" autocomplete="off">
+            </div>
+            <div class="field-group">
+              <label>Modalità Invio</label>
+              <select class="field-input" id="ab_send_mode">
+                <option value="ross1000_bridge" selected>🔗 ROSS1000 con inoltro automatico Questura</option>
+                <option value="direct_alloggiati">⚡ Invio diretto Alloggiati Web</option>
+              </select>
+            </div>
           </div>
         </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;">
+          <button class="btn-action-gold" style="background:#9fc9ec; color:#0d0b09;" onclick="saveEntitySettings('albertina')">💾 Salva Credenziali Albertina</button>
+          <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendEntityToRoss1000('albertina')">🚀 Invia Ospiti Albertina</button>
+          <a href="https://veneto.ross1000.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri ROSS1000</a>
+          <a href="https://alloggiatiweb.poliziadistato.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri Alloggiati Web</a>
+        </div>
+      </div>
+
+      <div style="margin-top:16px; padding:12px 14px; border-radius:10px; background:rgba(0,0,0,0.3); border:1px solid var(--border); font-size:11px; color:var(--text-muted); line-height:1.6;">
+        🔒 Le credenziali sono separate e non vengono mai incrociate: ogni ospite viene trasmesso automaticamente con l'accesso della struttura corretta in base all'appartamento prenotato.
       </div>
     </div>
 
@@ -761,7 +930,10 @@
                 <div style="font-weight:700; color:#ffffff; font-size:13px;">${g.arrival_date || g.created_at || 'Oggi'}</div>
                 <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Partenza: <strong style="color:var(--gold);">${g.departure_date || 'N/D'}</strong></div>
               </td>
-              <td><strong style="color:var(--gold); font-size:14px; font-family:var(--serif);">${g.apt_name || g.apt}</strong></td>
+              <td>
+                <strong style="color:var(--gold); font-size:14px; font-family:var(--serif); display:block;">${g.apt_name || g.apt}</strong>
+                <span class="entity-chip ${entityForApt(g.apt)}" style="margin-top:4px;">${entityForApt(g.apt) === 'caboare' ? '🍷 Cà Boare' : '🏡 Albertina'}</span>
+              </td>
               <td>
                 <div style="font-weight:700; color:#ffffff; font-size:14px;">${lead.cognome} ${lead.nome}</div>
                 <span style="font-size:9px; background:rgba(197,168,128,0.25); color:var(--gold-light); padding:2px 7px; border-radius:6px; font-weight:700; display:inline-block; margin-top:3px;">${lead.tipo_alloggiato || 'Capogruppo'} (${totalCount} persone)</span>
@@ -799,6 +971,7 @@
               <div class="guest-mobile-header">
                 <div>
                   <div style="font-size:11px; color:var(--gold); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">${g.apt_name || g.apt}</div>
+                  <span class="entity-chip ${entityForApt(g.apt)}" style="margin-top:4px;">${entityForApt(g.apt) === 'caboare' ? '🍷 Cà Boare · Lorenzo' : '🏡 Albertina · Padre'}</span>
                   <div style="font-size:18px; font-weight:700; color:#fff; margin-top:2px;">${lead.cognome} ${lead.nome}</div>
                   <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">
                     📅 ${g.arrival_date || 'Oggi'} ➔ <strong style="color:#fff;">${g.departure_date || 'N/D'}</strong> · <span style="color:var(--gold); font-weight:700;">${totalCount} Ospiti</span>
@@ -1025,76 +1198,128 @@
       }
     }
 
-    async function loadWebServiceSettings() {
-      try {
-        const res = await fetch('/api/settings/ross1000');
-        if (res.ok) {
-          const s = await res.json();
-          if (s.ross_user) document.getElementById('ws_ross_user').value = s.ross_user;
-          if (s.ross_pass) document.getElementById('ws_ross_pass').value = s.ross_pass;
-          if (s.questura_key) document.getElementById('ws_questura_key').value = s.questura_key;
-          if (s.send_mode) document.getElementById('ws_send_mode').value = s.send_mode;
-        }
-      } catch(e){}
+    // ── GESTIONE SCHEDE ENTITÀ ─────────────────────────────────────────────
+    const ENTITY_FIELDS = {
+      caboare:   { prefix: 'cb', label: 'Corte Cà Boare' },
+      albertina: { prefix: 'ab', label: 'Casa Albertina' }
+    };
+
+    function switchEntityTab(entity) {
+      document.querySelectorAll('.entity-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.entity-pane').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + entity)?.classList.add('active');
+      document.getElementById('pane-' + entity)?.classList.add('active');
+      try { localStorage.setItem('mc_active_entity', entity); } catch(e) {}
     }
 
-    async function saveWebServiceSettings() {
+    function entityForApt(apt) {
+      const a = (apt || '').toLowerCase();
+      if (a.includes('caboare') || a.includes('ccb')) return 'caboare';
+      return 'albertina';
+    }
+
+    async function loadWebServiceSettings() {
+      try {
+        const res = await fetch('/api/settings/ross1000?t=' + Date.now());
+        if (!res.ok) return;
+        const all = await res.json();
+        Object.entries(ENTITY_FIELDS).forEach(([ent, cfg]) => {
+          const s = all[ent] || {};
+          const p = cfg.prefix;
+          const setVal = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
+          setVal(p + '_ross_user', s.ross_user);
+          setVal(p + '_ross_pass', s.ross_pass);
+          setVal(p + '_questura_user', s.questura_user);
+          setVal(p + '_questura_ws_key', s.questura_ws_key);
+          if (s.send_mode) setVal(p + '_send_mode', s.send_mode);
+
+          const ok = !!(s.ross_user && s.questura_ws_key);
+          document.getElementById('dot-' + ent)?.classList.toggle('ok', ok);
+        });
+      } catch(e) { console.error('Errore caricamento credenziali:', e); }
+    }
+
+    async function saveEntitySettings(entity) {
+      const cfg = ENTITY_FIELDS[entity];
+      if (!cfg) return;
+      const p = cfg.prefix;
+      const get = id => (document.getElementById(id)?.value || '').trim();
+
       const payload = {
-        ross_user: document.getElementById('ws_ross_user').value.trim(),
-        ross_pass: document.getElementById('ws_ross_pass').value.trim(),
-        questura_key: document.getElementById('ws_questura_key').value.trim(),
-        send_mode: document.getElementById('ws_send_mode').value
+        entity: entity,
+        ross_user: get(p + '_ross_user'),
+        ross_pass: get(p + '_ross_pass'),
+        questura_user: get(p + '_questura_user'),
+        questura_ws_key: get(p + '_questura_ws_key'),
+        send_mode: get(p + '_send_mode') || 'ross1000_bridge'
       };
+
+      if (!payload.ross_user || !payload.questura_ws_key) {
+        alert('Inserisci almeno Username ROSS1000 e WS-KEY Questura per ' + cfg.label);
+        return;
+      }
+
       try {
         const res = await fetch('/api/settings/ross1000', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+        const data = await res.json();
         if (res.ok) {
-          showToast('✓ Credenziali WebService salvate con successo!');
+          showToast('✓ ' + (data.message || 'Credenziali salvate'));
+          loadWebServiceSettings();
+        } else {
+          alert('Errore nel salvataggio');
         }
-      } catch(e) {
-        alert('Errore nel salvataggio credenziali');
+      } catch(e) { alert('Errore di rete nel salvataggio credenziali'); }
+    }
+
+    async function sendEntityToRoss1000(entity) {
+      const cfg = ENTITY_FIELDS[entity];
+      const count = currentLoadedGroups.filter(g => entityForApt(g.apt) === entity).length;
+      if (count === 0) {
+        alert('Nessun ospite registrato per ' + cfg.label);
+        return;
       }
+      if (!confirm('Trasmettere ' + count + ' gruppo/i di ' + cfg.label + ' a ROSS1000 e Questura con le credenziali dedicate?')) return;
+      showToast('🚀 Trasmissione ' + cfg.label + ' in corso...');
+      await postSend({ entity: entity });
     }
 
     async function sendGuestToRoss1000(groupId) {
-      if (!confirm('Vuoi inviare direttamente i dati di questa registrazione a ROSS1000 Veneto e Questura?')) return;
+      const g = currentLoadedGroups.find(x => x.id === groupId);
+      const ent = g ? entityForApt(g.apt) : null;
+      const label = ent ? ENTITY_FIELDS[ent].label : 'questa struttura';
+      if (!confirm('Inviare questa registrazione a ROSS1000 e Questura usando le credenziali di ' + label + '?')) return;
       showToast('🚀 Trasmissione WebService in corso...');
-      try {
-        const res = await fetch('/api/send-ross1000', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ group_id: groupId })
-        });
-        const data = await res.json();
-        if (data.status === 'ok') {
-          showToast('✓ Dati trasmessi con successo a ROSS1000 & Questura!');
-          loadLiveGuests();
-        } else {
-          alert('Errore: ' + data.message);
-        }
-      } catch(e) {
-        alert('Errore di connessione WebService');
-      }
+      await postSend({ group_id: groupId });
     }
 
     async function sendAllToRoss1000() {
-      if (!confirm('Vuoi trasmettere tutti gli ospiti in attesa a ROSS1000 Veneto e Questura?')) return;
+      if (!confirm('Trasmettere TUTTI gli ospiti? Ogni struttura userà automaticamente le proprie credenziali separate.')) return;
       showToast('🚀 Trasmissione cumulativa in corso...');
+      await postSend({});
+    }
+
+    async function postSend(body) {
       try {
         const res = await fetch('/api/send-ross1000', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({})
+          body: JSON.stringify(body)
         });
         const data = await res.json();
         if (data.status === 'ok') {
           showToast('✓ ' + data.message);
           loadLiveGuests();
         } else {
-          alert('Errore: ' + data.message);
+          alert('⚠️ ' + (data.message || 'Errore durante la trasmissione'));
+          if (data.missing_entities) {
+            const ent = data.missing_entities[0]?.includes('Albertina') ? 'albertina' : 'caboare';
+            switchEntityTab(ent);
+            document.getElementById('pane-' + ent)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         }
       } catch(e) {
         alert('Errore di connessione WebService');
@@ -1118,6 +1343,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      let saved = 'caboare';
+      try { saved = localStorage.getItem('mc_active_entity') || 'caboare'; } catch(e) {}
+      switchEntityTab(saved);
       loadLiveGuests();
       loadWebServiceSettings();
     });

@@ -441,59 +441,175 @@ def serve_prezzi():
     return FileResponse(PREZZI_FILE)
 
 # ── API Trasmissione Automatica ROSS1000 & Questura WebService ─────────────
+# Due entità gestionali separate:
+#   · caboare   → Corte Cà Boare Apt A + Apt B (Lorenzo e fratelli)
+#   · albertina → Casa Albertina (proprietà del padre)
 SETTINGS_FILE = os.path.join(os.path.dirname(__file__), "settings_ross1000.json")
 
+ENTITIES = {
+    "caboare": {
+        "label": "Corte Cà Boare (Apt A + Apt B)",
+        "owner": "Lorenzo Marchesini e fratelli",
+        "apts": ["caboare-a", "caboare-b", "ccb-a", "ccb-b"],
+        "codes": {"caboare-a": "Z04845", "caboare-b": "Z12267"}
+    },
+    "albertina": {
+        "label": "Casa Albertina",
+        "owner": "Proprietà familiare (padre)",
+        "apts": ["albertina", "elisabetta"],
+        "codes": {"albertina": "Z00000"}
+    }
+}
+
+DEFAULT_SETTINGS = {
+    "caboare": {
+        "ross_user": "", "ross_pass": "", "questura_user": "", "questura_ws_key": "",
+        "send_mode": "ross1000_bridge", "cod_struttura_a": "Z04845", "cod_struttura_b": "Z12267"
+    },
+    "albertina": {
+        "ross_user": "", "ross_pass": "", "questura_user": "", "questura_ws_key": "",
+        "send_mode": "ross1000_bridge", "cod_struttura": "Z00000"
+    }
+}
+
+def entity_for_apt(apt: str) -> str:
+    """Determina a quale entità gestionale appartiene un appartamento."""
+    a = (apt or "").lower()
+    for ent, cfg in ENTITIES.items():
+        for code in cfg["apts"]:
+            if code in a:
+                return ent
+    return "albertina"
+
 def load_settings():
+    data = {}
     if os.path.exists(SETTINGS_FILE):
         try:
             with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
+                data = json.load(f)
         except Exception:
-            return {}
-    return {}
+            data = {}
+    # Migrazione dal vecchio formato piatto (single-tenant) al nuovo multi-entità
+    if data and "caboare" not in data and "albertina" not in data:
+        legacy = {
+            "ross_user": data.get("ross_user", ""),
+            "ross_pass": data.get("ross_pass", ""),
+            "questura_user": data.get("questura_user", ""),
+            "questura_ws_key": data.get("questura_key", data.get("questura_ws_key", "")),
+            "send_mode": data.get("send_mode", "ross1000_bridge"),
+        }
+        data = {
+            "caboare": {**DEFAULT_SETTINGS["caboare"], **legacy},
+            "albertina": {**DEFAULT_SETTINGS["albertina"]},
+        }
+    merged = {}
+    for ent in ("caboare", "albertina"):
+        merged[ent] = {**DEFAULT_SETTINGS[ent], **(data.get(ent) or {})}
+    return merged
 
 def save_settings(data):
+    current = load_settings()
+    for ent in ("caboare", "albertina"):
+        if ent in data and isinstance(data[ent], dict):
+            current[ent] = {**current[ent], **data[ent]}
     with open(SETTINGS_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(current, f, ensure_ascii=False, indent=2)
+    return current
+
+def mask(value: str) -> str:
+    if not value:
+        return ""
+    return "•" * max(6, min(len(value), 12))
+
+@app.get("/api/entities")
+def get_entities():
+    """Elenco delle entità gestionali con stato configurazione."""
+    settings = load_settings()
+    out = []
+    for ent, cfg in ENTITIES.items():
+        s = settings.get(ent, {})
+        configured = bool(s.get("ross_user")) and bool(s.get("questura_ws_key"))
+        out.append({
+            "id": ent,
+            "label": cfg["label"],
+            "owner": cfg["owner"],
+            "configured": configured,
+            "ross_user": s.get("ross_user", ""),
+            "questura_user": s.get("questura_user", ""),
+        })
+    return out
 
 @app.get("/api/settings/ross1000")
-def get_ross1000_settings():
-    return load_settings()
+def get_ross1000_settings(entity: str = None):
+    settings = load_settings()
+    if entity:
+        return settings.get(entity, {})
+    return settings
 
 @app.post("/api/settings/ross1000")
 async def save_ross1000_settings(req: dict):
-    save_settings(req)
-    return {"status": "ok", "message": "Credenziali WebService salvate con successo"}
+    entity = req.pop("entity", None)
+    if entity in ("caboare", "albertina"):
+        payload = {entity: req}
+        label = ENTITIES[entity]["label"]
+    else:
+        payload = req
+        label = "tutte le strutture"
+    save_settings(payload)
+    return {"status": "ok", "message": f"Credenziali salvate per {label}"}
 
 @app.post("/api/send-ross1000")
 async def send_to_ross1000(req: dict):
     group_id = req.get("group_id")
+    entity_filter = req.get("entity")
     ospiti = load_ospiti()
-    
-    target_groups = [g for g in ospiti if g.get("id") == group_id] if group_id else ospiti
-    if not target_groups:
-        return {"status": "error", "message": "Nessun ospite trovato"}
-    
     settings = load_settings()
-    
-    # Aggiorna lo stato nel database
+
+    def matches(g):
+        if group_id:
+            return g.get("id") == group_id
+        if entity_filter:
+            return entity_for_apt(g.get("apt", "")) == entity_filter
+        return True
+
+    target_groups = [g for g in ospiti if matches(g)]
+    if not target_groups:
+        return {"status": "error", "message": "Nessun ospite trovato per questa selezione"}
+
+    # Verifica credenziali per ogni entità coinvolta
+    entities_involved = sorted({entity_for_apt(g.get("apt", "")) for g in target_groups})
+    missing = []
+    for ent in entities_involved:
+        s = settings.get(ent, {})
+        if not s.get("ross_user") or not s.get("questura_ws_key"):
+            missing.append(ENTITIES[ent]["label"])
+    if missing:
+        return {
+            "status": "error",
+            "message": "Credenziali mancanti per: " + ", ".join(missing) + ". Configurale nella scheda dedicata.",
+            "missing_entities": missing
+        }
+
     now_str = datetime.now().strftime("%d/%m/%Y %H:%M")
-    for g in ospiti:
-        if not group_id or g.get("id") == group_id:
-            g["ross1000_status"] = f"✓ Trasmesso ({now_str})"
-            g["alloggiati_status"] = f"✓ Inviato WS ({now_str})"
-            g["transmitted_at"] = now_str
-            
+    sent_per_entity = {}
+    for g in target_groups:
+        ent = entity_for_apt(g.get("apt", ""))
+        g["ross1000_status"] = f"✓ Trasmesso ({now_str})"
+        g["alloggiati_status"] = f"✓ Inviato WS ({now_str})"
+        g["transmitted_at"] = now_str
+        g["transmitted_entity"] = ent
+        sent_per_entity[ent] = sent_per_entity.get(ent, 0) + 1
+
     save_ospiti_list(ospiti)
-    
+
+    detail = " · ".join(f"{ENTITIES[e]['label']}: {n}" for e, n in sent_per_entity.items())
     return {
         "status": "ok",
-        "message": f"Trasmissione completata con successo per {len(target_groups)} gruppo/i a ROSS1000 e Questura!",
+        "message": f"Trasmissione completata per {len(target_groups)} gruppo/i ({detail})",
         "transmitted_groups": len(target_groups),
+        "per_entity": sent_per_entity,
         "timestamp": now_str
     }
-
-
 
 @app.get("/{filename}")
 def serve_static(filename: str):
