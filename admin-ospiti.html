@@ -611,7 +611,8 @@
               <input type="password" class="field-input" id="cb_ross_pass" placeholder="••••••••••••" autocomplete="new-password">
             </div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:6px; line-height:1.5;">
-              Strutture collegate: <strong style="color:var(--gold);">Z04845</strong> (Apt A) · <strong style="color:var(--gold);">Z12267</strong> (Apt B)
+              Strutture collegate: <strong style="color:var(--gold);">Z04845</strong> (Apt A) · <strong style="color:var(--gold);">Z12267</strong> (Apt B)<br>
+              <span id="status-caboare" style="font-weight:700;">⚠ Da configurare</span>
             </div>
           </div>
 
@@ -657,7 +658,8 @@
               <input type="password" class="field-input" id="ab_ross_pass" placeholder="••••••••••••" autocomplete="new-password">
             </div>
             <div style="font-size:10px; color:var(--text-muted); margin-top:6px; line-height:1.5;">
-              Struttura collegata: <strong style="color:#9fc9ec;">Z00000</strong> (Casa Albertina)
+              Struttura collegata: <strong style="color:#9fc9ec;">Z00000</strong> (Casa Albertina)<br>
+              <span id="status-albertina" style="font-weight:700;">⚠ Da configurare</span>
             </div>
           </div>
 
@@ -1399,6 +1401,8 @@
       return 'albertina';
     }
 
+    const MASK_TOKEN = '********';
+
     async function loadWebServiceSettings() {
       try {
         const res = await fetch('/api/settings/ross1000?t=' + Date.now());
@@ -1407,18 +1411,41 @@
         Object.entries(ENTITY_FIELDS).forEach(([ent, cfg]) => {
           const s = all[ent] || {};
           const p = cfg.prefix;
-          const setVal = (id, v) => { const el = document.getElementById(id); if (el && v) el.value = v; };
+          const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+
           setVal(p + '_ross_user', s.ross_user);
-          setVal(p + '_ross_pass', s.ross_pass);
           setVal(p + '_questura_user', s.questura_user);
-          setVal(p + '_questura_ws_key', s.questura_ws_key);
           if (s.send_mode) setVal(p + '_send_mode', s.send_mode);
 
-          const ok = !!(s.ross_user && s.questura_ws_key);
+          // Campi segreti: mostra la maschera se già salvati sul server
+          [['_ross_pass', 'ross_pass'], ['_questura_ws_key', 'questura_ws_key']].forEach(([suffix, key]) => {
+            const el = document.getElementById(p + suffix);
+            if (!el) return;
+            const isSet = s[key + '_set'];
+            el.value = isSet ? MASK_TOKEN : '';
+            el.dataset.masked = isSet ? '1' : '0';
+            el.placeholder = isSet ? 'Salvata · digita per sostituire' : el.dataset.ph || el.placeholder;
+            if (!el.dataset.ph) el.dataset.ph = el.placeholder;
+          });
+
+          const ok = !!(s.ross_user && s.questura_ws_key_set);
           document.getElementById('dot-' + ent)?.classList.toggle('ok', ok);
+          const badge = document.getElementById('status-' + ent);
+          if (badge) {
+            badge.textContent = ok ? '✓ Credenziali configurate' : '⚠ Da configurare';
+            badge.style.color = ok ? 'var(--green)' : '#e0a63c';
+          }
         });
       } catch(e) { console.error('Errore caricamento credenziali:', e); }
     }
+
+    // Al focus su un campo mascherato lo svuota per la nuova digitazione
+    document.addEventListener('focusin', e => {
+      if (e.target.dataset?.masked === '1' && e.target.value === MASK_TOKEN) {
+        e.target.value = '';
+        e.target.dataset.masked = '0';
+      }
+    });
 
     async function saveEntitySettings(entity) {
       const cfg = ENTITY_FIELDS[entity];
@@ -1429,14 +1456,25 @@
       const payload = {
         entity: entity,
         ross_user: get(p + '_ross_user'),
-        ross_pass: get(p + '_ross_pass'),
         questura_user: get(p + '_questura_user'),
-        questura_ws_key: get(p + '_questura_ws_key'),
         send_mode: get(p + '_send_mode') || 'ross1000_bridge'
       };
 
-      if (!payload.ross_user || !payload.questura_ws_key) {
-        alert('Inserisci almeno Username ROSS1000 e WS-KEY Questura per ' + cfg.label);
+      // Invia i segreti solo se realmente modificati (mai la maschera)
+      const pass = get(p + '_ross_pass');
+      const wskey = get(p + '_questura_ws_key');
+      if (pass && pass !== MASK_TOKEN) payload.ross_pass = pass;
+      if (wskey && wskey !== MASK_TOKEN) payload.questura_ws_key = wskey;
+
+      const wsAlreadySet = document.getElementById(p + '_questura_ws_key')?.dataset.masked === '1'
+                           || wskey === MASK_TOKEN;
+
+      if (!payload.ross_user) {
+        alert('Inserisci lo Username ROSS1000 per ' + cfg.label);
+        return;
+      }
+      if (!payload.questura_ws_key && !wsAlreadySet) {
+        alert('Inserisci la WS-KEY Questura per ' + cfg.label);
         return;
       }
 
@@ -1449,7 +1487,7 @@
         const data = await res.json();
         if (res.ok) {
           showToast('✓ ' + (data.message || 'Credenziali salvate'));
-          loadWebServiceSettings();
+          await loadWebServiceSettings();
         } else {
           alert('Errore nel salvataggio');
         }

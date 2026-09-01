@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, Response, PlainTextResponse
 from pydantic import BaseModel
-import math, re, io, os, json
+import math, re, io, os, json, uuid
 from datetime import datetime
 
 try:
@@ -123,7 +123,10 @@ async def submit_guest_checkin(request_body: dict):
     elif "elisabetta" in apt_code:
         apt_display = "Casa Elisabetta"
 
-    group_id = f"GRP-{int(datetime.now().timestamp())}"
+    existing_ids = {o.get("id") for o in ospiti}
+    group_id = f"GRP-{int(datetime.now().timestamp())}-{uuid.uuid4().hex[:6].upper()}"
+    while group_id in existing_ids:
+        group_id = f"GRP-{int(datetime.now().timestamp())}-{uuid.uuid4().hex[:6].upper()}"
     arrival = request_body.get("arrival_date") or datetime.now().strftime("%d/%m/%Y")
     departure = request_body.get("departure_date") or ""
     num_guests = int(request_body.get("num_guests", 1))
@@ -616,22 +619,56 @@ def get_entities():
         })
     return out
 
+SECRET_FIELDS = ("ross_pass", "questura_ws_key")
+MASK_TOKEN = "********"
+
+def safe_settings(settings: dict) -> dict:
+    """Restituisce le impostazioni con i campi sensibili mascherati."""
+    out = {}
+    for ent, cfg in settings.items():
+        safe = dict(cfg)
+        for field in SECRET_FIELDS:
+            if safe.get(field):
+                safe[field] = MASK_TOKEN
+                safe[field + "_set"] = True
+            else:
+                safe[field] = ""
+                safe[field + "_set"] = False
+        out[ent] = safe
+    return out
+
 @app.get("/api/settings/ross1000")
 def get_ross1000_settings(entity: str = None):
-    settings = load_settings()
+    settings = safe_settings(load_settings())
     if entity:
         return settings.get(entity, {})
-    return settings
+    return Response(
+        content=json.dumps(settings, ensure_ascii=False),
+        media_type="application/json",
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+    )
 
 @app.post("/api/settings/ross1000")
 async def save_ross1000_settings(req: dict):
     entity = req.pop("entity", None)
+    current = load_settings()
+
+    def clean(ent: str, data: dict) -> dict:
+        """Ignora i campi segreti se contengono ancora la maschera."""
+        out = {}
+        for k, v in data.items():
+            if k in SECRET_FIELDS and (v == MASK_TOKEN or not str(v).strip()):
+                continue  # mantiene il valore già salvato
+            out[k] = v
+        return out
+
     if entity in ("caboare", "albertina"):
-        payload = {entity: req}
+        payload = {entity: clean(entity, req)}
         label = ENTITIES[entity]["label"]
     else:
-        payload = req
+        payload = {e: clean(e, d) for e, d in req.items() if isinstance(d, dict)}
         label = "tutte le strutture"
+
     save_settings(payload)
     return {"status": "ok", "message": f"Credenziali salvate per {label}"}
 
