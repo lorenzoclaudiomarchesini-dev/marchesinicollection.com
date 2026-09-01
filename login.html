@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0d0b09">
+  <title>Accesso Riservato · Marchesini Collection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #0d0b09;
+      --surface: #171412;
+      --card: #221e1a;
+      --gold: #c5a880;
+      --border: rgba(255,255,255,0.12);
+      --border-gold: rgba(197,168,128,0.35);
+      --text-muted: #a3988c;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: var(--sans);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
+      background-image: radial-gradient(circle at 50% 0%, rgba(197,168,128,0.10) 0%, transparent 60%);
+    }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface);
+      border: 1px solid var(--border-gold);
+      border-radius: 24px;
+      padding: 36px 28px;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.8);
+    }
+    .brand {
+      text-align: center;
+      margin-bottom: 28px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-name {
+      font-family: var(--serif);
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .brand-sub {
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 6px;
+    }
+    .lock-icon {
+      width: 52px; height: 52px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: rgba(197,168,128,0.12);
+      border: 1px solid var(--border-gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: 21px;
+      font-weight: 500;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .pw-wrap { position: relative; }
+    input[type="password"], input[type="text"] {
+      width: 100%;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 46px 14px 14px;
+      color: #fff;
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s;
+    }
+    input:focus { border-color: var(--gold); }
+    .toggle-pw {
+      position: absolute;
+      right: 10px; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none;
+      cursor: pointer;
+      font-size: 15px;
+      color: var(--text-muted);
+      padding: 6px;
+    }
+    .btn-login {
+      width: 100%;
+      margin-top: 18px;
+      background: var(--gold);
+      color: #0d0b09;
+      border: none;
+      border-radius: 9999px;
+      padding: 15px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+      min-height: 48px;
+    }
+    .btn-login:active { transform: scale(0.98); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+    .error-msg {
+      display: none;
+      margin-top: 14px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      background: rgba(231,76,60,0.14);
+      border: 1px solid rgba(231,76,60,0.4);
+      color: #f0857a;
+      font-size: 12px;
+      text-align: center;
+    }
+    .error-msg.show { display: block; }
+    .footer-note {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.7;
+    }
+    .footer-note a { color: var(--gold); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-name">Marchesini Collection</div>
+      <div class="brand-sub">Portale Gestione Ospiti</div>
+    </div>
+
+    <div class="lock-icon">🔐</div>
+    <h1>Accesso Riservato</h1>
+    <p class="subtitle">Area protetta contenente dati personali degli ospiti.<br>Inserisci la password per continuare.</p>
+
+    <form id="loginForm" onsubmit="doLogin(event)">
+      <label for="pw">Password di Accesso</label>
+      <div class="pw-wrap">
+        <input type="password" id="pw" autocomplete="current-password" placeholder="••••••••••••" required autofocus>
+        <button type="button" class="toggle-pw" onclick="togglePw()" aria-label="Mostra password">👁</button>
+      </div>
+      <button type="submit" class="btn-login" id="btnLogin">Accedi al Portale</button>
+      <div class="error-msg" id="errorMsg"></div>
+    </form>
+
+    <div class="footer-note">
+      Sessione valida 12 ore · Dati trattati ai sensi del GDPR<br>
+      <a href="/">← Torna al sito marchesinicollection.com</a>
+    </div>
+  </div>
+
+  <script>
+    function togglePw() {
+      const el = document.getElementById('pw');
+      el.type = el.type === 'password' ? 'text' : 'password';
+    }
+
+    function nextUrl() {
+      const p = new URLSearchParams(location.search).get('next');
+      if (p && p.startsWith('/')) return p;
+      return '/admin/ospiti';
+    }
+
+    async function doLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnLogin');
+      const err = document.getElementById('errorMsg');
+      const pw = document.getElementById('pw').value;
+
+      err.classList.remove('show');
+      btn.disabled = true;
+      btn.textContent = 'Verifica in corso...';
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pw })
+        });
+        const data = await res.json();
+        if (res.ok && data.status === 'ok') {
+          btn.textContent = '✓ Accesso consentito';
+          location.href = nextUrl();
+        } else {
+          err.textContent = data.message || 'Password non corretta';
+          err.classList.add('show');
+          document.getElementById('pw').value = '';
+          document.getElementById('pw').focus();
+          btn.disabled = false;
+          btn.textContent = 'Accedi al Portale';
+        }
+      } catch (ex) {
+        err.textContent = 'Errore di connessione. Riprova.';
+        err.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Accedi al Portale';
+      }
+    }
+  </script>
+
+</body>
+</html>

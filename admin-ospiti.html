@@ -428,6 +428,7 @@
       <button class="btn-outline-white" onclick="generateAlloggiatiTxt()">📄 .txt Questura</button>
       <button class="btn-outline-white" onclick="downloadRoss1000Txt()">📊 ROSS1000 .txt</button>
       <button class="btn-outline-white" onclick="downloadRoss1000Csv()">📈 ROSS1000 .csv</button>
+      <button class="btn-outline-white" style="border-color:rgba(231,76,60,0.35); color:#f0857a;" onclick="doLogout()">⏏ Esci</button>
     </div>
   </header>
 
@@ -599,46 +600,75 @@
 
       <!-- ══ SCHEDA 1: CORTE CÀ BOARE ══ -->
       <div class="entity-pane active" id="pane-caboare">
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
-          <div class="cin-box">
-            <div class="cin-prop-name">🔑 ROSS1000 Veneto · Cà Boare</div>
-            <div class="field-group">
-              <label>Username Portale ROSS1000</label>
-              <input type="text" class="field-input" id="cb_ross_user" placeholder="Username ROSS1000" autocomplete="off">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
+
+          <!-- ALLOGGIATI WEB — AUTOMATIZZABILE -->
+          <div class="cin-box" style="border-color:rgba(37,211,102,0.3);">
+            <div class="cin-prop-name" style="color:var(--green);">🛡️ Alloggiati Web · Automatico</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px; line-height:1.5;">
+              Credenziali generate nel portale della Polizia di Stato, <strong style="color:#fff;">indipendenti da SPID</strong>. Consentono l'invio telematico automatico.
             </div>
             <div class="field-group">
-              <label>Password / Token ROSS1000</label>
-              <input type="password" class="field-input" id="cb_ross_pass" placeholder="••••••••••••" autocomplete="new-password">
+              <label>Utente Alloggiati Web</label>
+              <input type="text" class="field-input" id="cb_alloggiati_user" placeholder="Codice utente struttura" autocomplete="off">
             </div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:6px; line-height:1.5;">
-              Strutture collegate: <strong style="color:var(--gold);">Z04845</strong> (Apt A) · <strong style="color:var(--gold);">Z12267</strong> (Apt B)<br>
+            <div class="field-group">
+              <label>Password Alloggiati Web</label>
+              <input type="password" class="field-input" id="cb_alloggiati_pass" placeholder="Password portale" autocomplete="new-password">
+            </div>
+            <div class="field-group">
+              <label>WS-KEY (Chiave WebService)</label>
+              <input type="text" class="field-input" id="cb_questura_ws_key" placeholder="Chiave WS-KEY" autocomplete="off">
+            </div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:4px;">
               <span id="status-caboare" style="font-weight:700;">⚠ Da configurare</span>
             </div>
           </div>
 
-          <div class="cin-box">
-            <div class="cin-prop-name">🛡️ Alloggiati Web · Cà Boare</div>
+          <!-- ROSS1000 — SPID/CIE -->
+          <div class="cin-box" style="border-color:var(--border-gold);">
+            <div class="cin-prop-name" style="color:var(--border-gold);">🔑 ROSS1000 Veneto · Accesso</div>
             <div class="field-group">
-              <label>Utente Alloggiati Web (Questura)</label>
-              <input type="text" class="field-input" id="cb_questura_user" placeholder="Codice utente Alloggiati Web" autocomplete="off">
-            </div>
-            <div class="field-group">
-              <label>WS-KEY (Chiave WebService Polizia)</label>
-              <input type="text" class="field-input" id="cb_questura_ws_key" placeholder="Chiave WS-KEY" autocomplete="off">
-            </div>
-            <div class="field-group">
-              <label>Modalità Invio</label>
-              <select class="field-input" id="cb_send_mode">
-                <option value="ross1000_bridge" selected>🔗 ROSS1000 con inoltro automatico Questura</option>
-                <option value="direct_alloggiati">⚡ Invio diretto Alloggiati Web</option>
+              <label>Modalità di Accesso al Portale</label>
+              <select class="field-input" id="cb_ross_mode" onchange="toggleRossMode('cb')">
+                <option value="spid_manual" selected>🪪 SPID / CIE — Caricamento file assistito</option>
+                <option value="service_account">⚙️ Utenza tecnica dedicata (se rilasciata)</option>
               </select>
             </div>
+
+            <div id="cb_spid_box" style="background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:10px; padding:12px; margin-top:8px;">
+              <div style="font-size:11px; color:#ffd48a; font-weight:700; margin-bottom:6px;">🪪 Accesso con identità digitale</div>
+              <div style="font-size:10px; color:var(--text-muted); line-height:1.6;">
+                SPID e CIE sono legati a una <strong style="color:#fff;">persona fisica</strong> e non possono essere delegati a un software: per legge richiedono autenticazione a due fattori sul tuo dispositivo.<br><br>
+                Il portale prepara il <strong style="color:#fff;">file conforme al tracciato ROSS1000</strong>: ti basta accedere con SPID e caricarlo nella sezione <em>Upload</em>. Tempo richiesto: circa 30 secondi.
+              </div>
+              <div class="field-group" style="margin-top:10px; margin-bottom:0;">
+                <label>Intestatario SPID (promemoria)</label>
+                <input type="text" class="field-input" id="cb_ross_spid_holder" placeholder="Nome del titolare abilitato" autocomplete="off">
+              </div>
+            </div>
+
+            <div id="cb_svc_box" style="display:none; margin-top:8px;">
+              <div class="field-group">
+                <label>Username Utenza Tecnica ROSS1000</label>
+                <input type="text" class="field-input" id="cb_ross_user" placeholder="Username tecnico" autocomplete="off">
+              </div>
+              <div class="field-group">
+                <label>Password Utenza Tecnica</label>
+                <input type="password" class="field-input" id="cb_ross_pass" placeholder="Password tecnica" autocomplete="new-password">
+              </div>
+              <div style="font-size:10px; color:var(--text-muted); line-height:1.5;">
+                Da richiedere all'assistenza ROSS1000 come utenza applicativa per struttura.
+              </div>
+            </div>
+
+            <div style="font-size:10px; color:var(--text-muted); margin-top:8px; line-height:1.5;">Strutture: <strong style="color:var(--gold);">Z04845</strong> (Apt A) · <strong style="color:var(--gold);">Z12267</strong> (Apt B)</div>
           </div>
         </div>
-
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;">
-          <button class="btn-action-gold" onclick="saveEntitySettings('caboare')">💾 Salva Credenziali Cà Boare</button>
-          <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendEntityToRoss1000('caboare')">🚀 Invia Ospiti Cà Boare</button>
+          <button class="btn-action-gold" onclick="saveEntitySettings('caboare')">💾 Salva Credenziali</button>
+          <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendEntityToRoss1000('caboare')">🛡️ Invia a Questura</button>
+          <button class="btn-action-gold" style="background:#ffd48a;" onclick="downloadRossPackage('caboare')">🪪 File per ROSS1000 (SPID)</button>
           <a href="https://veneto.ross1000.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri ROSS1000</a>
           <a href="https://alloggiatiweb.poliziadistato.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri Alloggiati Web</a>
         </div>
@@ -646,46 +676,75 @@
 
       <!-- ══ SCHEDA 2: CASA ALBERTINA ══ -->
       <div class="entity-pane" id="pane-albertina">
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
-          <div class="cin-box" style="border-color:rgba(120,170,220,0.3);">
-            <div class="cin-prop-name" style="color:#9fc9ec;">🔑 ROSS1000 Veneto · Albertina</div>
-            <div class="field-group">
-              <label>Username Portale ROSS1000</label>
-              <input type="text" class="field-input" id="ab_ross_user" placeholder="Username ROSS1000" autocomplete="off">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
+
+          <!-- ALLOGGIATI WEB — AUTOMATIZZABILE -->
+          <div class="cin-box" style="border-color:rgba(37,211,102,0.3);">
+            <div class="cin-prop-name" style="color:var(--green);">🛡️ Alloggiati Web · Automatico</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-bottom:10px; line-height:1.5;">
+              Credenziali generate nel portale della Polizia di Stato, <strong style="color:#fff;">indipendenti da SPID</strong>. Consentono l'invio telematico automatico.
             </div>
             <div class="field-group">
-              <label>Password / Token ROSS1000</label>
-              <input type="password" class="field-input" id="ab_ross_pass" placeholder="••••••••••••" autocomplete="new-password">
+              <label>Utente Alloggiati Web</label>
+              <input type="text" class="field-input" id="ab_alloggiati_user" placeholder="Codice utente struttura" autocomplete="off">
             </div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:6px; line-height:1.5;">
-              Struttura collegata: <strong style="color:#9fc9ec;">Z00000</strong> (Casa Albertina)<br>
+            <div class="field-group">
+              <label>Password Alloggiati Web</label>
+              <input type="password" class="field-input" id="ab_alloggiati_pass" placeholder="Password portale" autocomplete="new-password">
+            </div>
+            <div class="field-group">
+              <label>WS-KEY (Chiave WebService)</label>
+              <input type="text" class="field-input" id="ab_questura_ws_key" placeholder="Chiave WS-KEY" autocomplete="off">
+            </div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:4px;">
               <span id="status-albertina" style="font-weight:700;">⚠ Da configurare</span>
             </div>
           </div>
 
+          <!-- ROSS1000 — SPID/CIE -->
           <div class="cin-box" style="border-color:rgba(120,170,220,0.3);">
-            <div class="cin-prop-name" style="color:#9fc9ec;">🛡️ Alloggiati Web · Albertina</div>
+            <div class="cin-prop-name" style="color:rgba(120,170,220,1);">🔑 ROSS1000 Veneto · Accesso</div>
             <div class="field-group">
-              <label>Utente Alloggiati Web (Questura)</label>
-              <input type="text" class="field-input" id="ab_questura_user" placeholder="Codice utente Alloggiati Web" autocomplete="off">
-            </div>
-            <div class="field-group">
-              <label>WS-KEY (Chiave WebService Polizia)</label>
-              <input type="text" class="field-input" id="ab_questura_ws_key" placeholder="Chiave WS-KEY" autocomplete="off">
-            </div>
-            <div class="field-group">
-              <label>Modalità Invio</label>
-              <select class="field-input" id="ab_send_mode">
-                <option value="ross1000_bridge" selected>🔗 ROSS1000 con inoltro automatico Questura</option>
-                <option value="direct_alloggiati">⚡ Invio diretto Alloggiati Web</option>
+              <label>Modalità di Accesso al Portale</label>
+              <select class="field-input" id="ab_ross_mode" onchange="toggleRossMode('ab')">
+                <option value="spid_manual" selected>🪪 SPID / CIE — Caricamento file assistito</option>
+                <option value="service_account">⚙️ Utenza tecnica dedicata (se rilasciata)</option>
               </select>
             </div>
+
+            <div id="ab_spid_box" style="background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:10px; padding:12px; margin-top:8px;">
+              <div style="font-size:11px; color:#ffd48a; font-weight:700; margin-bottom:6px;">🪪 Accesso con identità digitale</div>
+              <div style="font-size:10px; color:var(--text-muted); line-height:1.6;">
+                SPID e CIE sono legati a una <strong style="color:#fff;">persona fisica</strong> e non possono essere delegati a un software: per legge richiedono autenticazione a due fattori sul tuo dispositivo.<br><br>
+                Il portale prepara il <strong style="color:#fff;">file conforme al tracciato ROSS1000</strong>: ti basta accedere con SPID e caricarlo nella sezione <em>Upload</em>. Tempo richiesto: circa 30 secondi.
+              </div>
+              <div class="field-group" style="margin-top:10px; margin-bottom:0;">
+                <label>Intestatario SPID (promemoria)</label>
+                <input type="text" class="field-input" id="ab_ross_spid_holder" placeholder="Nome del titolare abilitato" autocomplete="off">
+              </div>
+            </div>
+
+            <div id="ab_svc_box" style="display:none; margin-top:8px;">
+              <div class="field-group">
+                <label>Username Utenza Tecnica ROSS1000</label>
+                <input type="text" class="field-input" id="ab_ross_user" placeholder="Username tecnico" autocomplete="off">
+              </div>
+              <div class="field-group">
+                <label>Password Utenza Tecnica</label>
+                <input type="password" class="field-input" id="ab_ross_pass" placeholder="Password tecnica" autocomplete="new-password">
+              </div>
+              <div style="font-size:10px; color:var(--text-muted); line-height:1.5;">
+                Da richiedere all'assistenza ROSS1000 come utenza applicativa per struttura.
+              </div>
+            </div>
+
+            <div style="font-size:10px; color:var(--text-muted); margin-top:8px; line-height:1.5;">Struttura: <strong style="color:#9fc9ec;">Z00000</strong> (Casa Albertina)</div>
           </div>
         </div>
-
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;">
-          <button class="btn-action-gold" style="background:#9fc9ec; color:#0d0b09;" onclick="saveEntitySettings('albertina')">💾 Salva Credenziali Albertina</button>
-          <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendEntityToRoss1000('albertina')">🚀 Invia Ospiti Albertina</button>
+          <button class="btn-action-gold" style="background:#9fc9ec; color:#0d0b09;" onclick="saveEntitySettings('albertina')">💾 Salva Credenziali</button>
+          <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendEntityToRoss1000('albertina')">🛡️ Invia a Questura</button>
+          <button class="btn-action-gold" style="background:#ffd48a;" onclick="downloadRossPackage('albertina')">🪪 File per ROSS1000 (SPID)</button>
           <a href="https://veneto.ross1000.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri ROSS1000</a>
           <a href="https://alloggiatiweb.poliziadistato.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri Alloggiati Web</a>
         </div>
@@ -867,6 +926,7 @@
     async function loadLiveGuests() {
       try {
         const res = await fetch('/api/ospiti?t=' + Date.now());
+        if (res.status === 401) { location.href = '/login'; return; }
         if (res.ok) {
           const guests = await res.json();
           currentLoadedGroups = guests;
@@ -1322,6 +1382,7 @@
     async function loadCodiciStrutture(showMsg) {
       try {
         const res = await fetch('/api/settings/codici?t=' + Date.now());
+        if (res.status === 401) { location.href = '/login'; return; }
         if (!res.ok) return;
         const data = await res.json();
         Object.entries(CODICI_MAP).forEach(([key, ids]) => {
@@ -1403,9 +1464,18 @@
 
     const MASK_TOKEN = '********';
 
+    function toggleRossMode(prefix) {
+      const mode = document.getElementById(prefix + '_ross_mode')?.value;
+      const spid = document.getElementById(prefix + '_spid_box');
+      const svc = document.getElementById(prefix + '_svc_box');
+      if (spid) spid.style.display = mode === 'spid_manual' ? 'block' : 'none';
+      if (svc) svc.style.display = mode === 'service_account' ? 'block' : 'none';
+    }
+
     async function loadWebServiceSettings() {
       try {
         const res = await fetch('/api/settings/ross1000?t=' + Date.now());
+        if (res.status === 401) { location.href = '/login'; return; }
         if (!res.ok) return;
         const all = await res.json();
         Object.entries(ENTITY_FIELDS).forEach(([ent, cfg]) => {
@@ -1413,33 +1483,33 @@
           const p = cfg.prefix;
           const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
 
+          setVal(p + '_alloggiati_user', s.alloggiati_user);
           setVal(p + '_ross_user', s.ross_user);
-          setVal(p + '_questura_user', s.questura_user);
-          if (s.send_mode) setVal(p + '_send_mode', s.send_mode);
+          setVal(p + '_ross_spid_holder', s.ross_spid_holder);
+          if (s.ross_mode) setVal(p + '_ross_mode', s.ross_mode);
+          toggleRossMode(p);
 
-          // Campi segreti: mostra la maschera se già salvati sul server
-          [['_ross_pass', 'ross_pass'], ['_questura_ws_key', 'questura_ws_key']].forEach(([suffix, key]) => {
+          [['_alloggiati_pass','alloggiati_pass'], ['_questura_ws_key','questura_ws_key'], ['_ross_pass','ross_pass']].forEach(([suffix, key]) => {
             const el = document.getElementById(p + suffix);
             if (!el) return;
             const isSet = s[key + '_set'];
             el.value = isSet ? MASK_TOKEN : '';
             el.dataset.masked = isSet ? '1' : '0';
-            el.placeholder = isSet ? 'Salvata · digita per sostituire' : el.dataset.ph || el.placeholder;
             if (!el.dataset.ph) el.dataset.ph = el.placeholder;
+            el.placeholder = isSet ? 'Salvata · digita per sostituire' : el.dataset.ph;
           });
 
-          const ok = !!(s.ross_user && s.questura_ws_key_set);
+          const ok = !!(s.alloggiati_user && s.questura_ws_key_set);
           document.getElementById('dot-' + ent)?.classList.toggle('ok', ok);
           const badge = document.getElementById('status-' + ent);
           if (badge) {
-            badge.textContent = ok ? '✓ Credenziali configurate' : '⚠ Da configurare';
+            badge.textContent = ok ? '✓ Invio automatico attivo' : '⚠ Da configurare';
             badge.style.color = ok ? 'var(--green)' : '#e0a63c';
           }
         });
       } catch(e) { console.error('Errore caricamento credenziali:', e); }
     }
 
-    // Al focus su un campo mascherato lo svuota per la nuova digitazione
     document.addEventListener('focusin', e => {
       if (e.target.dataset?.masked === '1' && e.target.value === MASK_TOKEN) {
         e.target.value = '';
@@ -1455,28 +1525,21 @@
 
       const payload = {
         entity: entity,
+        alloggiati_user: get(p + '_alloggiati_user'),
+        ross_mode: get(p + '_ross_mode') || 'spid_manual',
         ross_user: get(p + '_ross_user'),
-        questura_user: get(p + '_questura_user'),
-        send_mode: get(p + '_send_mode') || 'ross1000_bridge'
+        ross_spid_holder: get(p + '_ross_spid_holder'),
+        send_mode: 'direct_alloggiati'
       };
 
-      // Invia i segreti solo se realmente modificati (mai la maschera)
-      const pass = get(p + '_ross_pass');
-      const wskey = get(p + '_questura_ws_key');
-      if (pass && pass !== MASK_TOKEN) payload.ross_pass = pass;
-      if (wskey && wskey !== MASK_TOKEN) payload.questura_ws_key = wskey;
+      [['_alloggiati_pass','alloggiati_pass'], ['_questura_ws_key','questura_ws_key'], ['_ross_pass','ross_pass']].forEach(([suffix, key]) => {
+        const v = get(p + suffix);
+        if (v && v !== MASK_TOKEN) payload[key] = v;
+      });
 
-      const wsAlreadySet = document.getElementById(p + '_questura_ws_key')?.dataset.masked === '1'
-                           || wskey === MASK_TOKEN;
-
-      if (!payload.ross_user) {
-        alert('Inserisci lo Username ROSS1000 per ' + cfg.label);
-        return;
-      }
-      if (!payload.questura_ws_key && !wsAlreadySet) {
-        alert('Inserisci la WS-KEY Questura per ' + cfg.label);
-        return;
-      }
+      const wsSet = document.getElementById(p + '_questura_ws_key')?.dataset.masked === '1';
+      if (!payload.alloggiati_user) { alert('Inserisci l\'Utente Alloggiati Web per ' + cfg.label); return; }
+      if (!payload.questura_ws_key && !wsSet) { alert('Inserisci la WS-KEY Questura per ' + cfg.label); return; }
 
       try {
         const res = await fetch('/api/settings/ross1000', {
@@ -1484,14 +1547,42 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+        if (res.status === 401) { location.href = '/login'; return; }
         const data = await res.json();
         if (res.ok) {
           showToast('✓ ' + (data.message || 'Credenziali salvate'));
           await loadWebServiceSettings();
-        } else {
-          alert('Errore nel salvataggio');
-        }
+        } else { alert('Errore nel salvataggio'); }
       } catch(e) { alert('Errore di rete nel salvataggio credenziali'); }
+    }
+
+    function downloadRossPackage(entity) {
+      window.open('/api/ross1000-package?entity=' + entity, '_blank');
+      setTimeout(() => {
+        if (confirm('File ROSS1000 scaricato.\n\nDopo averlo caricato su veneto.ross1000.it (accesso SPID → sezione Upload), vuoi segnare questi movimenti come CARICATI?')) {
+          markRossUploaded(entity);
+        }
+      }, 1200);
+    }
+
+    async function markRossUploaded(entity) {
+      try {
+        const res = await fetch('/api/mark-ross1000-uploaded', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ entity: entity })
+        });
+        if (res.status === 401) { location.href = '/login'; return; }
+        const data = await res.json();
+        showToast('✓ ' + data.message);
+        loadLiveGuests();
+      } catch(e) { alert('Errore aggiornamento stato'); }
+    }
+
+    async function doLogout() {
+      if (!confirm('Uscire dal portale?')) return;
+      try { await fetch('/api/logout', { method: 'POST' }); } catch(e) {}
+      location.href = '/login';
     }
 
     async function sendEntityToRoss1000(entity) {
@@ -1501,7 +1592,7 @@
         alert('Nessun ospite registrato per ' + cfg.label);
         return;
       }
-      if (!confirm('Trasmettere ' + count + ' gruppo/i di ' + cfg.label + ' a ROSS1000 e Questura con le credenziali dedicate?')) return;
+      if (!confirm('Trasmettere ' + count + ' gruppo/i di ' + cfg.label + ' alla Questura via WebService?\n\nROSS1000 richiede il caricamento del file con accesso SPID.')) return;
       showToast('🚀 Trasmissione ' + cfg.label + ' in corso...');
       await postSend({ entity: entity });
     }
@@ -1528,6 +1619,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body)
         });
+        if (res.status === 401) { location.href = '/login'; return; }
         const data = await res.json();
         if (data.status === 'ok') {
           showToast('✓ ' + data.message);

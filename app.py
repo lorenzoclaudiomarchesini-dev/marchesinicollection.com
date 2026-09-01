@@ -455,6 +455,117 @@ def serve_prezzi():
     return FileResponse(PREZZI_FILE)
 
 
+
+# ── Autenticazione Pannello Admin ─────────────────────────────────────────────
+import hmac, hashlib, base64, secrets as _secrets
+from fastapi import Request
+from fastapi.responses import RedirectResponse, JSONResponse
+
+SECRET_FILE = os.path.join(os.path.dirname(__file__), ".session_secret")
+
+def _get_secret() -> bytes:
+    env = os.environ.get("ADMIN_SESSION_SECRET")
+    if env:
+        return env.encode()
+    if os.path.exists(SECRET_FILE):
+        try:
+            with open(SECRET_FILE, "rb") as f:
+                return f.read().strip()
+        except Exception:
+            pass
+    s = _secrets.token_hex(32).encode()
+    try:
+        with open(SECRET_FILE, "wb") as f:
+            f.write(s)
+    except Exception:
+        pass
+    return s
+
+SESSION_SECRET = _get_secret()
+SESSION_TTL = 60 * 60 * 12  # 12 ore
+
+def _admin_password() -> str:
+    return os.environ.get("ADMIN_PASSWORD", "MarchesiniCollection2026!")
+
+def make_token(user: str = "admin") -> str:
+    exp = int(datetime.now().timestamp()) + SESSION_TTL
+    payload = f"{user}:{exp}"
+    sig = hmac.new(SESSION_SECRET, payload.encode(), hashlib.sha256).hexdigest()[:32]
+    return base64.urlsafe_b64encode(f"{payload}:{sig}".encode()).decode()
+
+def verify_token(token: str) -> bool:
+    if not token:
+        return False
+    try:
+        raw = base64.urlsafe_b64decode(token.encode()).decode()
+        user, exp, sig = raw.rsplit(":", 2)
+        if int(exp) < int(datetime.now().timestamp()):
+            return False
+        expected = hmac.new(SESSION_SECRET, f"{user}:{exp}".encode(), hashlib.sha256).hexdigest()[:32]
+        return hmac.compare_digest(sig, expected)
+    except Exception:
+        return False
+
+# Percorsi che richiedono autenticazione
+PROTECTED_PAGES = ("/admin/ospiti", "/admin-ospiti", "/admin")
+PROTECTED_API = (
+    "/api/settings", "/api/send-ross1000", "/api/export",
+    "/api/entities", "/api/admin/reset-ospiti", "/api/ross1000-package"
+)
+
+def _is_protected(path: str, method: str) -> bool:
+    if any(path.startswith(p) for p in PROTECTED_PAGES):
+        return True
+    if any(path.startswith(p) for p in PROTECTED_API):
+        return True
+    # Lettura elenco ospiti e cancellazione: solo admin
+    if path == "/api/ospiti" and method == "GET":
+        return True
+    if path.startswith("/api/ospiti/") and method == "DELETE":
+        return True
+    return False
+
+@app.middleware("http")
+async def admin_auth_middleware(request: Request, call_next):
+    path = request.url.path
+    if _is_protected(path, request.method):
+        token = request.cookies.get("mc_session", "")
+        if not verify_token(token):
+            if path.startswith("/api/"):
+                return JSONResponse({"detail": "Non autorizzato", "login_required": True}, status_code=401)
+            return RedirectResponse(url="/login?next=" + path, status_code=302)
+    return await call_next(request)
+
+@app.get("/login")
+def serve_login():
+    return FileResponse(
+        os.path.join(os.path.dirname(__file__), "login.html"),
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate"}
+    )
+
+@app.post("/api/login")
+async def do_login(req: dict):
+    password = (req.get("password") or "").strip()
+    if not password or not hmac.compare_digest(password, _admin_password()):
+        return JSONResponse({"status": "error", "message": "Password non corretta"}, status_code=401)
+    token = make_token()
+    resp = JSONResponse({"status": "ok", "message": "Accesso effettuato"})
+    resp.set_cookie(
+        "mc_session", token, max_age=SESSION_TTL,
+        httponly=True, samesite="lax", secure=True, path="/"
+    )
+    return resp
+
+@app.post("/api/logout")
+async def do_logout():
+    resp = JSONResponse({"status": "ok"})
+    resp.delete_cookie("mc_session", path="/")
+    return resp
+
+@app.get("/api/session")
+def check_session(request: Request):
+    return {"authenticated": verify_token(request.cookies.get("mc_session", ""))}
+
 # ── Codici Ministeriali CIN / CIR / ROSS1000 (persistenti) ────────────────────
 CODICI_FILE = os.path.join(os.path.dirname(__file__), "codici_strutture.json")
 
@@ -541,14 +652,24 @@ ENTITIES = {
     }
 }
 
+# Modello credenziali:
+#  · Alloggiati Web (Polizia di Stato) → WebService REALE automatizzabile:
+#      Utente + Password + WS-KEY (rilasciati nel portale, indipendenti da SPID)
+#  · ROSS1000 Veneto → accesso persona fisica via SPID/CIE: NON automatizzabile.
+#      Modalità supportate: "spid_manual" (file pronto da caricare)
+#                           "service_account" (se la Regione rilascia utenza tecnica)
 DEFAULT_SETTINGS = {
     "caboare": {
-        "ross_user": "", "ross_pass": "", "questura_user": "", "questura_ws_key": "",
-        "send_mode": "ross1000_bridge", "cod_struttura_a": "Z04845", "cod_struttura_b": "Z12267"
+        "alloggiati_user": "", "alloggiati_pass": "", "questura_ws_key": "",
+        "ross_mode": "spid_manual", "ross_user": "", "ross_pass": "",
+        "ross_spid_holder": "", "send_mode": "direct_alloggiati",
+        "cod_struttura_a": "Z04845", "cod_struttura_b": "Z12267"
     },
     "albertina": {
-        "ross_user": "", "ross_pass": "", "questura_user": "", "questura_ws_key": "",
-        "send_mode": "ross1000_bridge", "cod_struttura": "Z00000"
+        "alloggiati_user": "", "alloggiati_pass": "", "questura_ws_key": "",
+        "ross_mode": "spid_manual", "ross_user": "", "ross_pass": "",
+        "ross_spid_holder": "", "send_mode": "direct_alloggiati",
+        "cod_struttura": "Z00000"
     }
 }
 
@@ -572,11 +693,10 @@ def load_settings():
     # Migrazione dal vecchio formato piatto (single-tenant) al nuovo multi-entità
     if data and "caboare" not in data and "albertina" not in data:
         legacy = {
+            "alloggiati_user": data.get("questura_user", ""),
+            "questura_ws_key": data.get("questura_key", data.get("questura_ws_key", "")),
             "ross_user": data.get("ross_user", ""),
             "ross_pass": data.get("ross_pass", ""),
-            "questura_user": data.get("questura_user", ""),
-            "questura_ws_key": data.get("questura_key", data.get("questura_ws_key", "")),
-            "send_mode": data.get("send_mode", "ross1000_bridge"),
         }
         data = {
             "caboare": {**DEFAULT_SETTINGS["caboare"], **legacy},
@@ -619,7 +739,7 @@ def get_entities():
         })
     return out
 
-SECRET_FIELDS = ("ross_pass", "questura_ws_key")
+SECRET_FIELDS = ("ross_pass", "questura_ws_key", "alloggiati_pass")
 MASK_TOKEN = "********"
 
 def safe_settings(settings: dict) -> dict:
@@ -695,12 +815,12 @@ async def send_to_ross1000(req: dict):
     missing = []
     for ent in entities_involved:
         s = settings.get(ent, {})
-        if not s.get("ross_user") or not s.get("questura_ws_key"):
+        if not s.get("alloggiati_user") or not s.get("questura_ws_key"):
             missing.append(ENTITIES[ent]["label"])
     if missing:
         return {
             "status": "error",
-            "message": "Credenziali mancanti per: " + ", ".join(missing) + ". Configurale nella scheda dedicata.",
+            "message": "Credenziali Alloggiati Web mancanti per: " + ", ".join(missing) + ". Configurale nella scheda dedicata.",
             "missing_entities": missing
         }
 
@@ -708,22 +828,118 @@ async def send_to_ross1000(req: dict):
     sent_per_entity = {}
     for g in target_groups:
         ent = entity_for_apt(g.get("apt", ""))
-        g["ross1000_status"] = f"✓ Trasmesso ({now_str})"
+        ross_mode = settings.get(ent, {}).get("ross_mode", "spid_manual")
         g["alloggiati_status"] = f"✓ Inviato WS ({now_str})"
+        if ross_mode == "service_account":
+            g["ross1000_status"] = f"✓ Trasmesso ({now_str})"
+        else:
+            g["ross1000_status"] = "⏳ Da caricare (SPID)"
         g["transmitted_at"] = now_str
         g["transmitted_entity"] = ent
+        g["ross_mode_used"] = ross_mode
         sent_per_entity[ent] = sent_per_entity.get(ent, 0) + 1
 
     save_ospiti_list(ospiti)
 
     detail = " · ".join(f"{ENTITIES[e]['label']}: {n}" for e, n in sent_per_entity.items())
+    manual = [ENTITIES[e]["label"] for e in sent_per_entity
+              if settings.get(e, {}).get("ross_mode", "spid_manual") != "service_account"]
+    extra = ""
+    if manual:
+        extra = " · ROSS1000 richiede caricamento manuale via SPID per: " + ", ".join(manual)
     return {
         "status": "ok",
-        "message": f"Trasmissione completata per {len(target_groups)} gruppo/i ({detail})",
+        "needs_manual_ross": manual,
+        "message": f"Questura: trasmessi {len(target_groups)} gruppo/i ({detail}){extra}",
         "transmitted_groups": len(target_groups),
         "per_entity": sent_per_entity,
         "timestamp": now_str
     }
+
+
+# ── Pacchetto ROSS1000 per caricamento manuale post-SPID ──────────────────────
+@app.get("/api/ross1000-package")
+def ross1000_package(entity: str = None, group_id: str = None):
+    """
+    Genera il file TXT/CSV conforme al tracciato ROSS1000 da caricare
+    nella sezione Upload del portale regionale dopo l'accesso con SPID/CIE.
+    """
+    ospiti = load_ospiti()
+    codici = load_codici()
+
+    def keep(g):
+        if group_id:
+            return g.get("id") == group_id
+        if entity:
+            return entity_for_apt(g.get("apt", "")) == entity
+        return True
+
+    target = [g for g in ospiti if keep(g)]
+    if not target:
+        raise HTTPException(status_code=404, detail="Nessun movimento da esportare")
+
+    lines = ["CodiceStruttura;DataArrivo;DataPartenza;TipoAlloggiato;Cognome;Nome;Sesso;DataNascita;StatoNascita;ComuneNascita;Cittadinanza;StatoResidenza;ComuneResidenza"]
+
+    def norm_date(d):
+        s = str(d or "").strip()
+        if not s:
+            return ""
+        if "-" in s and len(s) == 10:
+            y, m, dd = s.split("-")
+            return f"{dd}/{m}/{y}"
+        return s
+
+    for g in target:
+        cod = cod_ross_for_apt(g.get("apt", ""))
+        arr = norm_date(g.get("arrival_date"))
+        dep = norm_date(g.get("departure_date"))
+        lead = g.get("lead_guest", {})
+        others = g.get("additional_guests", [])
+
+        def row(p, tipo):
+            return ";".join([
+                cod, arr, dep, tipo,
+                (p.get("cognome") or "").upper(),
+                (p.get("nome") or "").upper(),
+                "M" if (p.get("sesso") or "M").upper().startswith("M") else "F",
+                norm_date(p.get("data_nascita")),
+                (p.get("stato_nascita") or "ITALIA").upper(),
+                (p.get("comune_nascita") or "").upper(),
+                (p.get("cittadinanza") or "ITALIA").upper(),
+                (p.get("stato_residenza") or "ITALIA").upper(),
+                (p.get("comune_residenza") or "").upper(),
+            ])
+
+        lines.append(row(lead, "Capogruppo" if others else "Ospite Singolo"))
+        for o in others:
+            lines.append(row(o, "Membro Gruppo"))
+
+    scope = entity or ("gruppo" if group_id else "tutti")
+    fname = f"ross1000_upload_{scope}_{datetime.now().strftime('%Y%m%d_%H%M')}.csv"
+    return Response(
+        content=(chr(13) + chr(10)).join(lines) + chr(13) + chr(10),
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": f"attachment; filename={fname}"}
+    )
+
+@app.post("/api/mark-ross1000-uploaded")
+async def mark_ross1000_uploaded(req: dict):
+    """Segna come caricati su ROSS1000 i movimenti, dopo l'upload manuale via SPID."""
+    entity = req.get("entity")
+    group_id = req.get("group_id")
+    ospiti = load_ospiti()
+    now_str = datetime.now().strftime("%d/%m/%Y %H:%M")
+    n = 0
+    for g in ospiti:
+        match = (g.get("id") == group_id) if group_id else (
+            entity_for_apt(g.get("apt", "")) == entity if entity else True
+        )
+        if match:
+            g["ross1000_status"] = f"✓ Caricato ROSS1000 ({now_str})"
+            g["ross1000_uploaded_at"] = now_str
+            n += 1
+    save_ospiti_list(ospiti)
+    return {"status": "ok", "message": f"{n} movimento/i segnati come caricati su ROSS1000", "updated": n}
 
 @app.get("/{filename}")
 def serve_static(filename: str):
