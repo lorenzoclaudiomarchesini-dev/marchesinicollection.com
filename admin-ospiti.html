@@ -426,7 +426,8 @@
       <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendAllToRoss1000()">🚀 Invia Tutti a ROSS1000</button>
       <button class="btn-action-gold" onclick="openManualGuestModal()">➕ Inserisci Ospite</button>
       <button class="btn-outline-white" onclick="generateAlloggiatiTxt()">📄 .txt Questura</button>
-      <button class="btn-outline-white" onclick="downloadRoss1000Txt()">📊 ROSS1000</button>
+      <button class="btn-outline-white" onclick="downloadRoss1000Txt()">📊 ROSS1000 .txt</button>
+      <button class="btn-outline-white" onclick="downloadRoss1000Csv()">📈 ROSS1000 .csv</button>
     </div>
   </header>
 
@@ -693,35 +694,42 @@
       </div>
     </div>
 
-    <!-- CONFIGURAZIONE CODICI CIN & CIR -->
+    <!-- CONFIGURAZIONE CODICI CIN & CIR (SALVATAGGIO PERSISTENTE) -->
     <div class="panel-card">
       <div class="panel-header">
         <div>
           <h3 class="panel-title" style="font-size:18px;">Codici Ministeriali Strutture (CIN & CIR)</h3>
-          <p class="panel-subtitle">Identificativi per trasmissione telematica</p>
+          <p class="panel-subtitle">Identificativi per la trasmissione telematica · <span id="codiciSavedAt" style="color:var(--gold);">—</span></p>
         </div>
-        <button class="btn-action-gold" style="padding:6px 14px; font-size:10px;" onclick="showToast('Codici CIN e CIR salvati!')">Salva</button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-outline-white" style="padding:7px 12px; font-size:10px;" onclick="loadCodiciStrutture(true)">↻ Ricarica</button>
+          <button class="btn-action-gold" id="btnSaveCodici" style="padding:7px 16px; font-size:10px;" onclick="saveCodiciStrutture()">💾 Salva Codici</button>
+        </div>
       </div>
 
       <div class="cin-grid">
         <div class="cin-box">
           <div class="cin-prop-name">Corte Cà Boare · Apt A (Sub 1)</div>
-          <div class="field-group"><label>CIN</label><input type="text" class="field-input" id="cin_caboare_a" value="IT023052B4Q2BSNY8G"></div>
-          <div class="field-group"><label>CIR</label><input type="text" class="field-input" id="cir_caboare_a" value="023052-LOC-00300"></div>
-          <div class="field-group"><label>Codice ROSS1000</label><input type="text" class="field-input" id="cod_caboare_a" value="Z04845"></div>
+          <div class="field-group"><label>CIN (Codice Identificativo Nazionale)</label><input type="text" class="field-input codice-input" id="cin_caboare_a" placeholder="IT0230520000000000" autocapitalize="characters" spellcheck="false"></div>
+          <div class="field-group"><label>CIR (Codice Regione)</label><input type="text" class="field-input codice-input" id="cir_caboare_a" placeholder="023052-LOC-00000" autocapitalize="characters" spellcheck="false"></div>
+          <div class="field-group"><label>Codice Struttura ROSS1000</label><input type="text" class="field-input codice-input" id="cod_caboare_a" placeholder="Z00000" autocapitalize="characters" spellcheck="false"></div>
         </div>
         <div class="cin-box">
           <div class="cin-prop-name">Corte Cà Boare · Apt B (Sub 2)</div>
-          <div class="field-group"><label>CIN</label><input type="text" class="field-input" id="cin_caboare_b" value="IT023052C23TVFPRG9"></div>
-          <div class="field-group"><label>CIR</label><input type="text" class="field-input" id="cir_caboare_b" value="023052-LOC-00432"></div>
-          <div class="field-group"><label>Codice ROSS1000</label><input type="text" class="field-input" id="cod_caboare_b" value="Z12267"></div>
+          <div class="field-group"><label>CIN (Codice Identificativo Nazionale)</label><input type="text" class="field-input codice-input" id="cin_caboare_b" placeholder="IT0230520000000000" autocapitalize="characters" spellcheck="false"></div>
+          <div class="field-group"><label>CIR (Codice Regione)</label><input type="text" class="field-input codice-input" id="cir_caboare_b" placeholder="023052-LOC-00000" autocapitalize="characters" spellcheck="false"></div>
+          <div class="field-group"><label>Codice Struttura ROSS1000</label><input type="text" class="field-input codice-input" id="cod_caboare_b" placeholder="Z00000" autocapitalize="characters" spellcheck="false"></div>
         </div>
-        <div class="cin-box">
-          <div class="cin-prop-name">Casa Albertina</div>
-          <div class="field-group"><label>CIN</label><input type="text" class="field-input" id="cin_albertina" value="IT023052B4ZZZZZZZZ"></div>
-          <div class="field-group"><label>CIR</label><input type="text" class="field-input" id="cir_albertina" value="023052-LOC-00000"></div>
-          <div class="field-group"><label>Codice ROSS1000</label><input type="text" class="field-input" id="cod_albertina" value="Z00000"></div>
+        <div class="cin-box" style="border-color:rgba(120,170,220,0.3);">
+          <div class="cin-prop-name" style="color:#9fc9ec;">Casa Albertina</div>
+          <div class="field-group"><label>CIN (Codice Identificativo Nazionale)</label><input type="text" class="field-input codice-input" id="cin_albertina" placeholder="IT0230520000000000" autocapitalize="characters" spellcheck="false"></div>
+          <div class="field-group"><label>CIR (Codice Regione)</label><input type="text" class="field-input codice-input" id="cir_albertina" placeholder="023052-LOC-00000" autocapitalize="characters" spellcheck="false"></div>
+          <div class="field-group"><label>Codice Struttura ROSS1000</label><input type="text" class="field-input codice-input" id="cod_albertina" placeholder="Z00000" autocapitalize="characters" spellcheck="false"></div>
         </div>
+      </div>
+
+      <div style="margin-top:14px; padding:11px 14px; border-radius:10px; background:rgba(0,0,0,0.3); border:1px solid var(--border); font-size:11px; color:var(--text-muted); line-height:1.6;">
+        💾 I codici vengono salvati sul server e restano memorizzati anche dopo il refresh o la chiusura del browser. Il Codice Struttura ROSS1000 viene usato automaticamente negli export.
       </div>
     </div>
 
@@ -799,6 +807,19 @@
             <div class="field-group"><label>Numero Documento *</label><input type="text" id="m_docnum" class="field-input" placeholder="CA12345AA" required></div>
           </div>
           <div class="field-group" style="margin-top:8px;"><label>Ente/Comune Rilascio</label><input type="text" id="m_docissue" class="field-input" placeholder="Comune di Verona"></div>
+        </div>
+
+        <!-- ALTRI COMPONENTI DEL GRUPPO -->
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; margin-bottom:14px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+            <div style="font-size:11px; font-weight:700; color:var(--gold); text-transform:uppercase;">3. Altri Componenti</div>
+            <div style="display:flex; gap:6px;">
+              <button type="button" class="btn-table-action" style="padding:5px 10px;" onclick="removeExtraGuestRow()">−</button>
+              <button type="button" class="btn-action-gold" style="padding:5px 12px; font-size:10px;" onclick="addExtraGuestRow()">＋ Aggiungi Ospite</button>
+            </div>
+          </div>
+          <div id="m_extraGuests" style="display:flex; flex-direction:column; gap:10px;"></div>
+          <div id="m_extraEmpty" style="font-size:11px; color:var(--text-muted);">Nessun componente aggiuntivo · Ospite singolo</div>
         </div>
 
         <div style="display:flex; gap:8px; margin-top:16px;">
@@ -1118,6 +1139,7 @@
       const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
       document.getElementById('m_arrival').value = today;
       document.getElementById('m_departure').value = tomorrow;
+      resetExtraGuests();
       document.getElementById('manualGuestModal').style.display = 'flex';
     }
 
@@ -1131,43 +1153,50 @@
 
     async function handleManualGuestSubmit(e) {
       e.preventDefault();
-      const apt = document.getElementById('m_apt').value;
-      const arrival = document.getElementById('m_arrival').value;
-      const departure = document.getElementById('m_departure').value;
-      const surname = document.getElementById('m_surname').value.trim();
-      const name = document.getElementById('m_name').value.trim();
-      const sex = document.getElementById('m_sex').value;
-      const dob = document.getElementById('m_dob').value;
-      const cit = document.getElementById('m_citizenship').value.trim() || 'ITALIA';
-      const birth = document.getElementById('m_birthplace').value.trim();
-      const res = document.getElementById('m_residence').value.trim();
-      const docType = document.getElementById('m_doctype').value;
-      const docNum = document.getElementById('m_docnum').value.trim();
-      const docIssue = document.getElementById('m_docissue').value.trim();
+      const get = id => (document.getElementById(id)?.value || '').trim();
+
+      const apt = get('m_apt');
+      const arrival = get('m_arrival');
+      const departure = get('m_departure');
+      const surname = get('m_surname');
+      const name = get('m_name');
+      const docNum = get('m_docnum');
+
+      if (!surname || !name) { alert('Cognome e Nome del capogruppo sono obbligatori'); return; }
+      if (!docNum) { alert('Il numero del documento è obbligatorio'); return; }
+      if (!arrival || !departure) { alert('Inserisci le date di arrivo e partenza'); return; }
+      if (new Date(departure) <= new Date(arrival)) { alert('La data di partenza deve essere successiva all\'arrivo'); return; }
+
+      const cit = get('m_citizenship') || 'ITALIA';
+      const others = collectExtraGuests();
 
       const payload = {
         apt: apt,
-        num_guests: 1,
+        num_guests: 1 + others.length,
         arrival_date: arrival,
         departure_date: departure,
         lead_guest: {
-          tipo_alloggiato: "Capogruppo",
-          cognome: surname,
-          nome: name,
-          sesso: sex,
-          data_nascita: dob,
+          tipo_alloggiato: others.length > 0 ? 'Capogruppo' : 'Ospite Singolo',
+          cognome: surname.toUpperCase(),
+          nome: name.toUpperCase(),
+          sesso: get('m_sex') || 'M',
+          data_nascita: get('m_dob'),
           cittadinanza: cit,
           stato_nascita: cit,
-          comune_nascita: birth,
+          comune_nascita: get('m_birthplace'),
           stato_residenza: cit,
-          comune_residenza: res,
-          tipo_documento: docType,
-          numero_documento: docNum,
-          comune_rilascio: docIssue,
+          comune_residenza: get('m_residence'),
+          indirizzo_residenza: get('m_residence'),
+          tipo_documento: get('m_doctype'),
+          numero_documento: docNum.toUpperCase().replace(/\s+/g, ''),
+          comune_rilascio: get('m_docissue'),
           stato_rilascio: cit
         },
-        additional_guests: []
+        additional_guests: others
       };
+
+      const btn = document.querySelector('#manualGuestForm button[type="submit"]');
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ Salvataggio...'; }
 
       try {
         const res = await fetch('/api/guest-checkin', {
@@ -1176,14 +1205,18 @@
           body: JSON.stringify(payload)
         });
         if (res.ok) {
-          showToast('✓ Ospite registrato con successo!');
+          showToast('✓ Registrazione salvata: ' + payload.num_guests + ' ospite/i');
           closeManualGuestModal();
+          document.getElementById('manualGuestForm').reset();
+          resetExtraGuests();
           loadLiveGuests();
         } else {
-          alert('Errore nel salvataggio');
+          alert('Errore nel salvataggio della registrazione');
         }
       } catch(err) {
-        alert('Errore di rete');
+        alert('Errore di rete: registrazione non salvata');
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '💾 Salva Ospite'; }
       }
     }
 
@@ -1197,6 +1230,154 @@
         console.error(e);
       }
     }
+
+
+
+    // ── COMPONENTI AGGIUNTIVI NEL MODULO MANUALE ──────────────────────────
+    let extraGuestCount = 0;
+
+    function addExtraGuestRow() {
+      if (extraGuestCount >= 8) { showToast('Massimo 8 componenti aggiuntivi'); return; }
+      extraGuestCount++;
+      const n = extraGuestCount;
+      const wrap = document.getElementById('m_extraGuests');
+      const row = document.createElement('div');
+      row.className = 'extra-guest-row';
+      row.dataset.idx = n;
+      row.style.cssText = 'background:rgba(0,0,0,0.28); border:1px solid var(--border); border-radius:12px; padding:12px;';
+      row.innerHTML = `
+        <div style="font-size:9px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gold-light); margin-bottom:8px;">Ospite ${n + 1}</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+          <div class="field-group" style="margin-bottom:0;"><label>Cognome</label><input type="text" class="field-input xg-surname" placeholder="Cognome"></div>
+          <div class="field-group" style="margin-bottom:0;"><label>Nome</label><input type="text" class="field-input xg-name" placeholder="Nome"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+          <div class="field-group" style="margin-bottom:0;">
+            <label>Sesso</label>
+            <select class="field-input xg-sex"><option value="M">M</option><option value="F">F</option></select>
+          </div>
+          <div class="field-group" style="margin-bottom:0;"><label>Data di Nascita</label><input type="date" class="field-input xg-dob"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div class="field-group" style="margin-bottom:0;"><label>Luogo Nascita</label><input type="text" class="field-input xg-birth" placeholder="Comune / Stato"></div>
+          <div class="field-group" style="margin-bottom:0;"><label>Cittadinanza</label><input type="text" class="field-input xg-cit" value="ITALIA"></div>
+        </div>
+      `;
+      wrap.appendChild(row);
+      updateExtraEmptyLabel();
+    }
+
+    function removeExtraGuestRow() {
+      const rows = document.querySelectorAll('.extra-guest-row');
+      if (rows.length === 0) return;
+      rows[rows.length - 1].remove();
+      extraGuestCount = Math.max(0, extraGuestCount - 1);
+      updateExtraEmptyLabel();
+    }
+
+    function updateExtraEmptyLabel() {
+      const n = document.querySelectorAll('.extra-guest-row').length;
+      const el = document.getElementById('m_extraEmpty');
+      if (el) el.style.display = n === 0 ? 'block' : 'none';
+    }
+
+    function resetExtraGuests() {
+      const wrap = document.getElementById('m_extraGuests');
+      if (wrap) wrap.innerHTML = '';
+      extraGuestCount = 0;
+      updateExtraEmptyLabel();
+    }
+
+    function collectExtraGuests() {
+      const out = [];
+      document.querySelectorAll('.extra-guest-row').forEach(row => {
+        const v = sel => (row.querySelector(sel)?.value || '').trim();
+        const cognome = v('.xg-surname');
+        const nome = v('.xg-name');
+        if (!cognome && !nome) return;
+        const cit = v('.xg-cit') || 'ITALIA';
+        out.push({
+          tipo_alloggiato: 'Membro Gruppo',
+          cognome: cognome || 'Ospite',
+          nome: nome || '-',
+          sesso: v('.xg-sex') || 'M',
+          data_nascita: v('.xg-dob'),
+          cittadinanza: cit,
+          stato_nascita: cit,
+          comune_nascita: v('.xg-birth')
+        });
+      });
+      return out;
+    }
+
+    // ── CODICI CIN / CIR / ROSS1000 (persistenti su server) ────────────────
+    const CODICI_MAP = {
+      caboare_a: { cin: 'cin_caboare_a', cir: 'cir_caboare_a', cod: 'cod_caboare_a' },
+      caboare_b: { cin: 'cin_caboare_b', cir: 'cir_caboare_b', cod: 'cod_caboare_b' },
+      albertina: { cin: 'cin_albertina', cir: 'cir_albertina', cod: 'cod_albertina' }
+    };
+
+    async function loadCodiciStrutture(showMsg) {
+      try {
+        const res = await fetch('/api/settings/codici?t=' + Date.now());
+        if (!res.ok) return;
+        const data = await res.json();
+        Object.entries(CODICI_MAP).forEach(([key, ids]) => {
+          const c = data[key] || {};
+          const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+          set(ids.cin, c.cin);
+          set(ids.cir, c.cir);
+          set(ids.cod, c.cod_ross);
+        });
+        const stamp = document.getElementById('codiciSavedAt');
+        if (stamp) stamp.textContent = 'Sincronizzato ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+        if (showMsg) showToast('✓ Codici ricaricati dal server');
+      } catch(e) { console.error('Errore caricamento codici:', e); }
+    }
+
+    async function saveCodiciStrutture() {
+      const btn = document.getElementById('btnSaveCodici');
+      const payload = {};
+      Object.entries(CODICI_MAP).forEach(([key, ids]) => {
+        const get = id => (document.getElementById(id)?.value || '').trim().toUpperCase();
+        payload[key] = { cin: get(ids.cin), cir: get(ids.cir), cod_ross: get(ids.cod) };
+      });
+
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ Salvataggio...'; }
+      try {
+        const res = await fetch('/api/settings/codici', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok && data.status === 'ok') {
+          showToast('✓ ' + data.message);
+          await loadCodiciStrutture(false);
+        } else {
+          alert('Errore durante il salvataggio dei codici');
+        }
+      } catch(e) {
+        alert('Errore di rete durante il salvataggio');
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = '💾 Salva Codici'; }
+      }
+    }
+
+    // Maiuscolo automatico + salvataggio con Enter
+    document.addEventListener('input', e => {
+      if (e.target.classList?.contains('codice-input')) {
+        const pos = e.target.selectionStart;
+        e.target.value = e.target.value.toUpperCase();
+        e.target.setSelectionRange(pos, pos);
+      }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.target.classList?.contains('codice-input')) {
+        e.preventDefault();
+        saveCodiciStrutture();
+      }
+    });
 
     // ── GESTIONE SCHEDE ENTITÀ ─────────────────────────────────────────────
     const ENTITY_FIELDS = {
@@ -1348,6 +1529,7 @@
       switchEntityTab(saved);
       loadLiveGuests();
       loadWebServiceSettings();
+      loadCodiciStrutture(false);
     });
     setInterval(loadLiveGuests, 4000);
   </script>

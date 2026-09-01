@@ -178,6 +178,17 @@ def delete_ospite(group_id: str):
     save_ospiti_list(ospiti)
     return {"status": "ok", "remaining": len(ospiti)}
 
+
+def cod_ross_for_apt(apt: str) -> str:
+    """Restituisce il codice struttura ROSS1000 configurato per l'appartamento."""
+    a = (apt or "").lower()
+    codici = load_codici()
+    if "caboare-a" in a or "ccb-a" in a:
+        return codici["caboare_a"].get("cod_ross") or "Z04845"
+    if "caboare-b" in a or "ccb-b" in a:
+        return codici["caboare_b"].get("cod_ross") or "Z12267"
+    return codici["albertina"].get("cod_ross") or ""
+
 # ── Export Alloggiati Web (.txt conforme Questura) ────────────────────────────
 def format_alloggiati_line(tipo, arrivo, permanenza, cognome, nome, sesso, data_nasc, com_nasc, prov_nasc, stato_nasc, cittadinanza, tipo_doc="", num_doc="", rilascio_doc=""):
     cod_tipo = "16"
@@ -293,7 +304,7 @@ def export_ross1000_txt(group_id: str = None):
     lines = []
     for g in target_groups:
         apt = g.get("apt", "")
-        cod_struttura = "Z04845" if "caboare-a" in apt else ("Z12267" if "caboare-b" in apt else "Z00000")
+        cod_struttura = cod_ross_for_apt(apt)
         arr = g.get("arrival_date", "")
         dep = g.get("departure_date", "")
         lead = g.get("lead_guest", {})
@@ -319,7 +330,7 @@ def export_ross1000_csv():
     
     for g in ospiti:
         apt = g.get("apt", "")
-        cod_struttura = "Z04845" if "caboare-a" in apt else ("Z12267" if "caboare-b" in apt else "Z00000")
+        cod_struttura = cod_ross_for_apt(apt)
         arr = g.get("arrival_date", "")
         dep = g.get("departure_date", "")
         
@@ -439,6 +450,72 @@ def serve_guide(prop: str = "caboare-a"):
 @app.get("/prezzi.json")
 def serve_prezzi():
     return FileResponse(PREZZI_FILE)
+
+
+# ── Codici Ministeriali CIN / CIR / ROSS1000 (persistenti) ────────────────────
+CODICI_FILE = os.path.join(os.path.dirname(__file__), "codici_strutture.json")
+
+DEFAULT_CODICI = {
+    "caboare_a": {
+        "nome": "Corte Cà Boare · Apt A (Sub 1)",
+        "entity": "caboare",
+        "cin": "IT023052B4Q2BSNY8G",
+        "cir": "023052-LOC-00300",
+        "cod_ross": "Z04845"
+    },
+    "caboare_b": {
+        "nome": "Corte Cà Boare · Apt B (Sub 2)",
+        "entity": "caboare",
+        "cin": "IT023052C23TVFPRG9",
+        "cir": "023052-LOC-00432",
+        "cod_ross": "Z12267"
+    },
+    "albertina": {
+        "nome": "Casa Albertina",
+        "entity": "albertina",
+        "cin": "",
+        "cir": "",
+        "cod_ross": ""
+    }
+}
+
+def load_codici():
+    data = {}
+    if os.path.exists(CODICI_FILE):
+        try:
+            with open(CODICI_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception:
+            data = {}
+    merged = {}
+    for key, default in DEFAULT_CODICI.items():
+        merged[key] = {**default, **(data.get(key) or {})}
+    return merged
+
+def save_codici(payload):
+    current = load_codici()
+    for key in DEFAULT_CODICI.keys():
+        if key in payload and isinstance(payload[key], dict):
+            incoming = payload[key]
+            for field in ("cin", "cir", "cod_ross"):
+                if field in incoming:
+                    current[key][field] = str(incoming[field] or "").strip().upper()
+    with open(CODICI_FILE, "w", encoding="utf-8") as f:
+        json.dump(current, f, ensure_ascii=False, indent=2)
+    return current
+
+@app.get("/api/settings/codici")
+def get_codici_strutture():
+    return Response(
+        content=json.dumps(load_codici(), ensure_ascii=False),
+        media_type="application/json",
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+    )
+
+@app.post("/api/settings/codici")
+async def save_codici_strutture(req: dict):
+    saved = save_codici(req)
+    return {"status": "ok", "message": "Codici CIN, CIR e ROSS1000 salvati con successo", "codici": saved}
 
 # ── API Trasmissione Automatica ROSS1000 & Questura WebService ─────────────
 # Due entità gestionali separate con credenziali telematiche indipendenti:
