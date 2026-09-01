@@ -20,6 +20,60 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# ── Directory dati persistente ────────────────────────────────────────────────
+# Railway ha filesystem EFIMERO: ogni deploy azzera i file scritti a runtime.
+# Impostando la variabile DATA_DIR su un Volume montato (es. /data) i dati
+# sopravvivono ai riavvii e ai deploy.
+BASE_DIR = os.path.dirname(__file__)
+DATA_DIR = os.environ.get("DATA_DIR", BASE_DIR)
+
+try:
+    os.makedirs(DATA_DIR, exist_ok=True)
+    _probe = os.path.join(DATA_DIR, ".write_test")
+    with open(_probe, "w") as _f:
+        _f.write("ok")
+    os.remove(_probe)
+    PERSISTENT_STORAGE = DATA_DIR != BASE_DIR
+except Exception as _e:
+    print(f"[AVVISO] DATA_DIR '{DATA_DIR}' non scrivibile ({_e}), uso {BASE_DIR}")
+    DATA_DIR = BASE_DIR
+    PERSISTENT_STORAGE = False
+
+def data_path(filename: str) -> str:
+    """Percorso di un file dati, con migrazione automatica dal repo al volume."""
+    target = os.path.join(DATA_DIR, filename)
+    if PERSISTENT_STORAGE and not os.path.exists(target):
+        seed = os.path.join(BASE_DIR, filename)
+        if os.path.exists(seed):
+            try:
+                import shutil
+                shutil.copy2(seed, target)
+                print(f"[MIGRAZIONE] {filename} copiato nel volume persistente")
+            except Exception as e:
+                print(f"[AVVISO] migrazione {filename} fallita: {e}")
+    return target
+
+print(f"[STORAGE] DATA_DIR={DATA_DIR} · persistente={PERSISTENT_STORAGE}")
+
+@app.get("/api/storage-status")
+def storage_status():
+    """Diagnostica: indica se i dati sopravvivono ai deploy."""
+    files = {}
+    for name in ("ospiti.json", "codici_strutture.json", "settings_ross1000.json"):
+        p = os.path.join(DATA_DIR, name)
+        files[name] = {
+            "exists": os.path.exists(p),
+            "size": os.path.getsize(p) if os.path.exists(p) else 0
+        }
+    return {
+        "data_dir": DATA_DIR,
+        "persistent": PERSISTENT_STORAGE,
+        "warning": None if PERSISTENT_STORAGE else
+                   "Filesystem EFIMERO: i dati si azzerano a ogni deploy. Monta un Railway Volume e imposta DATA_DIR.",
+        "files": files
+    }
+
 # ── Cache ─────────────────────────────────────────────────────────────────────
 _cache: dict = {}
 _cal_cache: dict = {}
@@ -76,8 +130,8 @@ def fetch_booked_dates(apt_key: str) -> list:
         return []
 
 # ── Database Ospiti & Check-in (ROSS1000 & Alloggiati Web) ───────────────────
-PREZZI_FILE = os.path.join(os.path.dirname(__file__), "prezzi.json")
-OSPITI_FILE = os.path.join(os.path.dirname(__file__), "ospiti.json")
+PREZZI_FILE = data_path("prezzi.json")
+OSPITI_FILE = data_path("ospiti.json")
 
 def load_ospiti():
     if os.path.exists(OSPITI_FILE):
@@ -190,7 +244,7 @@ def cod_ross_for_apt(apt: str) -> str:
         return codici["caboare_a"].get("cod_ross") or "Z04845"
     if "caboare-b" in a or "ccb-b" in a:
         return codici["caboare_b"].get("cod_ross") or "Z12267"
-    return codici["albertina"].get("cod_ross") or ""
+    return codici["albertina"].get("cod_ross") or "Z10218"
 
 # ── Export Alloggiati Web (.txt conforme Questura) ────────────────────────────
 def format_alloggiati_line(tipo, arrivo, permanenza, cognome, nome, sesso, data_nasc, com_nasc, prov_nasc, stato_nasc, cittadinanza, tipo_doc="", num_doc="", rilascio_doc=""):
@@ -461,7 +515,7 @@ import hmac, hashlib, base64, secrets as _secrets
 from fastapi import Request
 from fastapi.responses import RedirectResponse, JSONResponse
 
-SECRET_FILE = os.path.join(os.path.dirname(__file__), ".session_secret")
+SECRET_FILE = data_path(".session_secret")
 
 def _get_secret() -> bytes:
     env = os.environ.get("ADMIN_SESSION_SECRET")
@@ -567,7 +621,7 @@ def check_session(request: Request):
     return {"authenticated": verify_token(request.cookies.get("mc_session", ""))}
 
 # ── Codici Ministeriali CIN / CIR / ROSS1000 (persistenti) ────────────────────
-CODICI_FILE = os.path.join(os.path.dirname(__file__), "codici_strutture.json")
+CODICI_FILE = data_path("codici_strutture.json")
 
 DEFAULT_CODICI = {
     "caboare_a": {
@@ -587,9 +641,11 @@ DEFAULT_CODICI = {
     "albertina": {
         "nome": "Casa Albertina",
         "entity": "albertina",
-        "cin": "",
-        "cir": "",
-        "cod_ross": ""
+        # Dati ufficiali ROSS1000 · intestazione CLAUDIO MARCHESINI
+        # Via Santa Maria 3/a - Negrar di Valpolicella - Locazioni Turistiche
+        "cin": os.environ.get("ALBERTINA_CIN", "IT023052C2PBFKEC7"),
+        "cir": os.environ.get("ALBERTINA_CIR", "023052-LOC-00407"),
+        "cod_ross": os.environ.get("ALBERTINA_COD_ROSS", "Z10218")
     }
 }
 
@@ -635,7 +691,7 @@ async def save_codici_strutture(req: dict):
 # Due entità gestionali separate con credenziali telematiche indipendenti:
 #   · caboare   → Corte Cà Boare Apt A + Apt B
 #   · albertina → Casa Albertina
-SETTINGS_FILE = os.path.join(os.path.dirname(__file__), "settings_ross1000.json")
+SETTINGS_FILE = data_path("settings_ross1000.json")
 
 ENTITIES = {
     "caboare": {
@@ -669,7 +725,7 @@ DEFAULT_SETTINGS = {
         "alloggiati_user": "", "alloggiati_pass": "", "questura_ws_key": "",
         "ross_mode": "spid_manual", "ross_user": "", "ross_pass": "",
         "ross_spid_holder": "", "send_mode": "direct_alloggiati",
-        "cod_struttura": "Z00000"
+        "cod_struttura": "Z10218"
     }
 }
 

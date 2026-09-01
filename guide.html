@@ -2265,7 +2265,7 @@
       
       const logoWrap = document.getElementById('propLogoWrap');
       if (LOGOS[prop.logo]) {
-        logoWrap.innerHTML = `<img src="${LOGOS[prop.logo]}" alt="${prop.name}" class="logo-img">`;
+        logoWrap.innerHTML = `<img loading="lazy" decoding="async" src="${LOGOS[prop.logo]}" alt="${prop.name}" class="logo-img">`;
       } else {
         logoWrap.innerHTML = `<span class="logo-monogram">Ṁ</span>`;
       }

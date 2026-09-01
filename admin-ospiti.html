@@ -501,6 +501,11 @@
     </div>
   </header>
 
+  <div id="storageWarning" style="display:none; margin:0 auto 18px; max-width:1320px; padding:14px 16px; border-radius:12px; background:rgba(224,166,60,0.12); border:1px solid rgba(224,166,60,0.45); font-size:12px; line-height:1.65; color:#ffd48a;">
+    <strong style="display:block; margin-bottom:4px;">⚠️ Archiviazione temporanea attiva</strong>
+    <span style="color:var(--text-soft);">I dati inseriti (codici, credenziali, registrazioni) <strong>vengono azzerati a ogni aggiornamento del sito</strong>. Per renderli permanenti serve attivare un Volume su Railway. <a href="#" onclick="showStorageHelp(); return false;" style="color:#ffd48a; font-weight:600;">Come fare →</a></span>
+  </div>
+
   <div class="container">
     
     <!-- STATS (CALCOLATE IN TEMPO REALE DAL DATABASE) -->
@@ -881,7 +886,7 @@
       </div>
 
       <div style="margin-top:14px; padding:11px 14px; border-radius:10px; background:rgba(0,0,0,0.3); border:1px solid var(--border); font-size:11px; color:var(--text-muted); line-height:1.6;">
-        💾 I codici vengono salvati sul server e restano memorizzati anche dopo il refresh o la chiusura del browser. Il Codice Struttura ROSS1000 viene usato automaticamente negli export.
+        💾 I codici vengono salvati sul server e restano memorizzati dopo il refresh. <span id="codiciPersistNote"></span> Il Codice Struttura ROSS1000 viene usato automaticamente negli export.
       </div>
     </div>
 
@@ -1464,6 +1469,33 @@
       return out;
     }
 
+
+    // ── DIAGNOSTICA ARCHIVIAZIONE ──────────────────────────────────────────
+    async function checkStorage() {
+      try {
+        const res = await fetch('/api/storage-status?t=' + Date.now());
+        if (!res.ok) return;
+        const s = await res.json();
+        const el = document.getElementById('storageWarning');
+        if (el) el.style.display = s.persistent ? 'none' : 'block';
+        window._storageInfo = s;
+      } catch(e) {}
+    }
+
+    function showStorageHelp() {
+      alert(
+        'RENDERE PERMANENTI I DATI\n\n' +
+        'Railway ricrea il server a ogni deploy, cancellando i file salvati.\n\n' +
+        'Come risolvere (2 minuti):\n\n' +
+        '1. Apri Railway → il tuo servizio\n' +
+        '2. Tab "Settings" → sezione "Volumes"\n' +
+        '3. Premi "New Volume", punto di mount: /data\n' +
+        '4. Tab "Variables" → aggiungi:  DATA_DIR = /data\n' +
+        '5. Premi "Deploy" per applicare\n\n' +
+        'Al primo avvio i dati esistenti verranno copiati automaticamente nel volume e da quel momento non si perderanno più.'
+      );
+    }
+
     // ── CODICI CIN / CIR / ROSS1000 (persistenti su server) ────────────────
     const CODICI_MAP = {
       caboare_a: { cin: 'cin_caboare_a', cir: 'cir_caboare_a', cod: 'cod_caboare_a' },
@@ -1484,6 +1516,10 @@
           set(ids.cir, c.cir);
           set(ids.cod, c.cod_ross);
         });
+        const note = document.getElementById('codiciPersistNote');
+        if (note && window._storageInfo && !window._storageInfo.persistent) {
+          note.innerHTML = '<strong style="color:#ffd48a;">Attenzione: si azzerano al prossimo aggiornamento del sito (vedi avviso in alto).</strong>';
+        }
         const stamp = document.getElementById('codiciSavedAt');
         if (stamp) stamp.textContent = 'Sincronizzato ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
         if (showMsg) showToast('✓ Codici ricaricati dal server');
@@ -1777,6 +1813,7 @@
       loadLiveGuests();
       loadWebServiceSettings();
       loadCodiciStrutture(false);
+      checkStorage();
     });
     setInterval(loadLiveGuests, 4000);
   </script>
