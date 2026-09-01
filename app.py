@@ -441,21 +441,21 @@ def serve_prezzi():
     return FileResponse(PREZZI_FILE)
 
 # ── API Trasmissione Automatica ROSS1000 & Questura WebService ─────────────
-# Due entità gestionali separate:
-#   · caboare   → Corte Cà Boare Apt A + Apt B (Lorenzo e fratelli)
-#   · albertina → Casa Albertina (proprietà del padre)
+# Due entità gestionali separate con credenziali telematiche indipendenti:
+#   · caboare   → Corte Cà Boare Apt A + Apt B
+#   · albertina → Casa Albertina
 SETTINGS_FILE = os.path.join(os.path.dirname(__file__), "settings_ross1000.json")
 
 ENTITIES = {
     "caboare": {
         "label": "Corte Cà Boare (Apt A + Apt B)",
-        "owner": "Lorenzo Marchesini e fratelli",
+        "owner": "Unità Ricettiva · Gestione Autonoma",
         "apts": ["caboare-a", "caboare-b", "ccb-a", "ccb-b"],
         "codes": {"caboare-a": "Z04845", "caboare-b": "Z12267"}
     },
     "albertina": {
         "label": "Casa Albertina",
-        "owner": "Proprietà familiare (padre)",
+        "owner": "Unità Ricettiva · Gestione Autonoma",
         "apts": ["albertina", "elisabetta"],
         "codes": {"albertina": "Z00000"}
     }

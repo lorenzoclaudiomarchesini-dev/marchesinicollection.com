@@ -580,7 +580,7 @@
         <div>
           <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:700;">Automazione WebService & API</div>
           <h3 class="panel-title" style="color:#fff; font-size:19px; margin-top:2px;">Accessi ROSS1000 & Questura per Proprietà</h3>
-          <p class="panel-subtitle">Ogni struttura ha titolarità e credenziali telematiche indipendenti. Seleziona la scheda per configurarla.</p>
+          <p class="panel-subtitle">Ogni unità ricettiva dispone di credenziali telematiche indipendenti. Seleziona la scheda per configurarla.</p>
         </div>
       </div>
 
@@ -588,11 +588,11 @@
       <div class="entity-tabs">
         <button class="entity-tab active" id="tab-caboare" onclick="switchEntityTab('caboare')">
           <span class="et-name"><span class="et-dot" id="dot-caboare"></span>🍷 Corte Cà Boare · A + B</span>
-          <span class="et-owner">Lorenzo & Fratelli · Z04845 / Z12267</span>
+          <span class="et-owner">Cod. Struttura Z04845 · Z12267</span>
         </button>
         <button class="entity-tab" id="tab-albertina" onclick="switchEntityTab('albertina')">
           <span class="et-name"><span class="et-dot" id="dot-albertina"></span>🏡 Casa Albertina</span>
-          <span class="et-owner">Proprietà del Padre · Z00000</span>
+          <span class="et-owner">Cod. Struttura Z00000</span>
         </button>
       </div>
 
@@ -603,7 +603,7 @@
             <div class="cin-prop-name">🔑 ROSS1000 Veneto · Cà Boare</div>
             <div class="field-group">
               <label>Username Portale ROSS1000</label>
-              <input type="text" class="field-input" id="cb_ross_user" placeholder="es. caboare_lorenzo" autocomplete="off">
+              <input type="text" class="field-input" id="cb_ross_user" placeholder="Username ROSS1000" autocomplete="off">
             </div>
             <div class="field-group">
               <label>Password / Token ROSS1000</label>
@@ -618,11 +618,11 @@
             <div class="cin-prop-name">🛡️ Alloggiati Web · Cà Boare</div>
             <div class="field-group">
               <label>Utente Alloggiati Web (Questura)</label>
-              <input type="text" class="field-input" id="cb_questura_user" placeholder="es. VR0004512" autocomplete="off">
+              <input type="text" class="field-input" id="cb_questura_user" placeholder="Codice utente Alloggiati Web" autocomplete="off">
             </div>
             <div class="field-group">
               <label>WS-KEY (Chiave WebService Polizia)</label>
-              <input type="text" class="field-input" id="cb_questura_ws_key" placeholder="es. A9B8C7D6E5F4G3H2" autocomplete="off">
+              <input type="text" class="field-input" id="cb_questura_ws_key" placeholder="Chiave WS-KEY" autocomplete="off">
             </div>
             <div class="field-group">
               <label>Modalità Invio</label>
@@ -649,7 +649,7 @@
             <div class="cin-prop-name" style="color:#9fc9ec;">🔑 ROSS1000 Veneto · Albertina</div>
             <div class="field-group">
               <label>Username Portale ROSS1000</label>
-              <input type="text" class="field-input" id="ab_ross_user" placeholder="es. albertina_marchesini" autocomplete="off">
+              <input type="text" class="field-input" id="ab_ross_user" placeholder="Username ROSS1000" autocomplete="off">
             </div>
             <div class="field-group">
               <label>Password / Token ROSS1000</label>
@@ -664,11 +664,11 @@
             <div class="cin-prop-name" style="color:#9fc9ec;">🛡️ Alloggiati Web · Albertina</div>
             <div class="field-group">
               <label>Utente Alloggiati Web (Questura)</label>
-              <input type="text" class="field-input" id="ab_questura_user" placeholder="es. VR0009988" autocomplete="off">
+              <input type="text" class="field-input" id="ab_questura_user" placeholder="Codice utente Alloggiati Web" autocomplete="off">
             </div>
             <div class="field-group">
               <label>WS-KEY (Chiave WebService Polizia)</label>
-              <input type="text" class="field-input" id="ab_questura_ws_key" placeholder="es. Z1Y2X3W4V5U6T7S8" autocomplete="off">
+              <input type="text" class="field-input" id="ab_questura_ws_key" placeholder="Chiave WS-KEY" autocomplete="off">
             </div>
             <div class="field-group">
               <label>Modalità Invio</label>
@@ -689,7 +689,7 @@
       </div>
 
       <div style="margin-top:16px; padding:12px 14px; border-radius:10px; background:rgba(0,0,0,0.3); border:1px solid var(--border); font-size:11px; color:var(--text-muted); line-height:1.6;">
-        🔒 Le credenziali sono separate e non vengono mai incrociate: ogni ospite viene trasmesso automaticamente con l'accesso della struttura corretta in base all'appartamento prenotato.
+        🔒 Le credenziali di ciascuna unità ricettiva sono separate e non vengono mai incrociate: ogni ospite viene trasmesso automaticamente con l'accesso della struttura corretta in base all'appartamento prenotato.
       </div>
     </div>
 
@@ -971,7 +971,7 @@
               <div class="guest-mobile-header">
                 <div>
                   <div style="font-size:11px; color:var(--gold); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">${g.apt_name || g.apt}</div>
-                  <span class="entity-chip ${entityForApt(g.apt)}" style="margin-top:4px;">${entityForApt(g.apt) === 'caboare' ? '🍷 Cà Boare · Lorenzo' : '🏡 Albertina · Padre'}</span>
+                  <span class="entity-chip ${entityForApt(g.apt)}" style="margin-top:4px;">${entityForApt(g.apt) === 'caboare' ? '🍷 Corte Cà Boare' : '🏡 Casa Albertina'}</span>
                   <div style="font-size:18px; font-weight:700; color:#fff; margin-top:2px;">${lead.cognome} ${lead.nome}</div>
                   <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">
                     📅 ${g.arrival_date || 'Oggi'} ➔ <strong style="color:#fff;">${g.departure_date || 'N/D'}</strong> · <span style="color:var(--gold); font-weight:700;">${totalCount} Ospiti</span>
@@ -1297,7 +1297,7 @@
     }
 
     async function sendAllToRoss1000() {
-      if (!confirm('Trasmettere TUTTI gli ospiti? Ogni struttura userà automaticamente le proprie credenziali separate.')) return;
+      if (!confirm('Trasmettere tutti gli ospiti? Ogni unità ricettiva utilizzerà automaticamente le proprie credenziali.')) return;
       showToast('🚀 Trasmissione cumulativa in corso...');
       await postSend({});
     }
