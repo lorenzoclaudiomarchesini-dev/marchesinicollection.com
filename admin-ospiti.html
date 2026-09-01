@@ -413,6 +413,75 @@
       .entity-tab { min-width: 100%; }
     }
 
+
+    /* ══════════════════════════════════
+       ROSS1000 · CARICAMENTO ASSISTITO
+    ══════════════════════════════════ */
+    .ross-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .ross-step {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 11px 13px;
+    }
+    .ross-step-num {
+      width: 22px; height: 22px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: rgba(255,212,138,0.16);
+      border: 1px solid rgba(255,212,138,0.45);
+      color: #ffd48a;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ross-step-txt {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .ross-step-txt strong { color: #fff; font-weight: 600; }
+    .ross-step-txt a { color: #ffd48a; text-decoration: none; font-weight: 600; }
+
+    .pending-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      background: rgba(255,212,138,0.13);
+      border: 1px solid rgba(255,212,138,0.4);
+      color: #ffd48a;
+    }
+    .pending-badge.none {
+      background: var(--green-bg);
+      border-color: rgba(37,211,102,0.4);
+      color: var(--green);
+    }
+
+    .svc-toggle {
+      margin-top: 10px;
+      font-size: 10px;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 4px 0;
+      font-family: inherit;
+    }
+    .svc-toggle:hover { color: var(--gold); }
+
   </style>
 </head>
 <body>
@@ -625,50 +694,61 @@
             </div>
           </div>
 
-          <!-- ROSS1000 — SPID/CIE -->
-          <div class="cin-box" style="border-color:var(--border-gold);">
-            <div class="cin-prop-name" style="color:var(--border-gold);">🔑 ROSS1000 Veneto · Accesso</div>
-            <div class="field-group">
-              <label>Modalità di Accesso al Portale</label>
-              <select class="field-input" id="cb_ross_mode" onchange="toggleRossMode('cb')">
-                <option value="spid_manual" selected>🪪 SPID / CIE — Caricamento file assistito</option>
-                <option value="service_account">⚙️ Utenza tecnica dedicata (se rilasciata)</option>
-              </select>
+          <!-- ROSS1000 — CARICAMENTO ASSISTITO -->
+          <div class="cin-box" style="border-color:rgba(255,212,138,0.3);">
+            <div class="cin-prop-name" style="color:#ffd48a;">🏛️ ROSS1000 · Caricamento Movimenti</div>
+
+            <div style="font-size:11px; color:var(--text-muted); line-height:1.6; margin-bottom:10px;">
+              L'accesso a ROSS1000 avviene con <strong style="color:#fff;">SPID / CIE</strong>, che per legge è personale e non delegabile a un software.<br>
+              Il portale però ti prepara il file con <strong style="color:#fff;">tutti gli ospiti già compilati</strong>: a te resta solo l'upload.
             </div>
 
-            <div id="cb_spid_box" style="background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:10px; padding:12px; margin-top:8px;">
-              <div style="font-size:11px; color:#ffd48a; font-weight:700; margin-bottom:6px;">🪪 Accesso con identità digitale</div>
-              <div style="font-size:10px; color:var(--text-muted); line-height:1.6;">
-                SPID e CIE sono legati a una <strong style="color:#fff;">persona fisica</strong> e non possono essere delegati a un software: per legge richiedono autenticazione a due fattori sul tuo dispositivo.<br><br>
-                Il portale prepara il <strong style="color:#fff;">file conforme al tracciato ROSS1000</strong>: ti basta accedere con SPID e caricarlo nella sezione <em>Upload</em>. Tempo richiesto: circa 30 secondi.
+            <div style="margin:12px 0;">
+              <span class="pending-badge" id="pending-caboare">⏳ Nessun movimento in attesa</span>
+            </div>
+
+            <div class="ross-steps">
+              <div class="ross-step">
+                <span class="ross-step-num">1</span>
+                <span class="ross-step-txt">Premi <strong>🪪 File per ROSS1000</strong> qui sotto: scarica il CSV con tutti i movimenti da dichiarare.</span>
               </div>
-              <div class="field-group" style="margin-top:10px; margin-bottom:0;">
-                <label>Intestatario SPID (promemoria)</label>
-                <input type="text" class="field-input" id="cb_ross_spid_holder" placeholder="Nome del titolare abilitato" autocomplete="off">
+              <div class="ross-step">
+                <span class="ross-step-num">2</span>
+                <span class="ross-step-txt">Accedi con SPID su <a href="https://veneto.ross1000.it" target="_blank">veneto.ross1000.it ↗</a> e vai in <strong>Movimenti → Upload</strong>. Carica il file.</span>
+              </div>
+              <div class="ross-step">
+                <span class="ross-step-num">3</span>
+                <span class="ross-step-txt">Le date passano da <strong>verde</strong> a <strong>rosso</strong> = trasmesse. Torna qui e conferma: lo stato diventa <strong>✓ Caricato</strong>.</span>
               </div>
             </div>
 
-            <div id="cb_svc_box" style="display:none; margin-top:8px;">
+            <div style="font-size:10px; color:var(--text-muted); margin-top:10px; line-height:1.5;">Strutture: <strong style="color:var(--gold);">Z04845</strong> (Apt A) · <strong style="color:var(--gold);">Z12267</strong> (Apt B)</div>
+
+            <button type="button" class="svc-toggle" onclick="toggleSvcBox('cb')">
+              Hai un'utenza tecnica ROSS1000? Configura l'invio automatico
+            </button>
+
+            <div id="cb_svc_box" style="display:none; margin-top:10px; padding-top:10px; border-top:1px solid var(--border);">
+              <div style="font-size:10px; color:var(--text-muted); line-height:1.55; margin-bottom:10px;">
+                Alcune Regioni rilasciano su richiesta un'utenza <em>applicativa</em> per struttura (non SPID), utilizzabile dai gestionali. Se la ottieni dall'assistenza ROSS1000, inseriscila qui e la trasmissione diventerà automatica.
+              </div>
+              <input type="hidden" id="cb_ross_mode" value="spid_manual">
               <div class="field-group">
-                <label>Username Utenza Tecnica ROSS1000</label>
-                <input type="text" class="field-input" id="cb_ross_user" placeholder="Username tecnico" autocomplete="off">
+                <label>Username Utenza Tecnica</label>
+                <input type="text" class="field-input" id="cb_ross_user" placeholder="Username applicativo" autocomplete="off">
               </div>
               <div class="field-group">
                 <label>Password Utenza Tecnica</label>
-                <input type="password" class="field-input" id="cb_ross_pass" placeholder="Password tecnica" autocomplete="new-password">
+                <input type="password" class="field-input" id="cb_ross_pass" placeholder="Password applicativa" autocomplete="new-password">
               </div>
-              <div style="font-size:10px; color:var(--text-muted); line-height:1.5;">
-                Da richiedere all'assistenza ROSS1000 come utenza applicativa per struttura.
-              </div>
+              <input type="hidden" id="cb_ross_spid_holder" value="">
             </div>
-
-            <div style="font-size:10px; color:var(--text-muted); margin-top:8px; line-height:1.5;">Strutture: <strong style="color:var(--gold);">Z04845</strong> (Apt A) · <strong style="color:var(--gold);">Z12267</strong> (Apt B)</div>
           </div>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;">
           <button class="btn-action-gold" onclick="saveEntitySettings('caboare')">💾 Salva Credenziali</button>
-          <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendEntityToRoss1000('caboare')">🛡️ Invia a Questura</button>
-          <button class="btn-action-gold" style="background:#ffd48a;" onclick="downloadRossPackage('caboare')">🪪 File per ROSS1000 (SPID)</button>
+          <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendEntityToRoss1000('caboare')">🛡️ Invia a Questura (auto)</button>
+          <button class="btn-action-gold" style="background:#ffd48a;" onclick="downloadRossPackage('caboare')">🪪 File per ROSS1000</button>
           <a href="https://veneto.ross1000.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri ROSS1000</a>
           <a href="https://alloggiatiweb.poliziadistato.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri Alloggiati Web</a>
         </div>
@@ -701,50 +781,61 @@
             </div>
           </div>
 
-          <!-- ROSS1000 — SPID/CIE -->
+          <!-- ROSS1000 — CARICAMENTO ASSISTITO -->
           <div class="cin-box" style="border-color:rgba(120,170,220,0.3);">
-            <div class="cin-prop-name" style="color:rgba(120,170,220,1);">🔑 ROSS1000 Veneto · Accesso</div>
-            <div class="field-group">
-              <label>Modalità di Accesso al Portale</label>
-              <select class="field-input" id="ab_ross_mode" onchange="toggleRossMode('ab')">
-                <option value="spid_manual" selected>🪪 SPID / CIE — Caricamento file assistito</option>
-                <option value="service_account">⚙️ Utenza tecnica dedicata (se rilasciata)</option>
-              </select>
+            <div class="cin-prop-name" style="color:#ffd48a;">🏛️ ROSS1000 · Caricamento Movimenti</div>
+
+            <div style="font-size:11px; color:var(--text-muted); line-height:1.6; margin-bottom:10px;">
+              L'accesso a ROSS1000 avviene con <strong style="color:#fff;">SPID / CIE</strong>, che per legge è personale e non delegabile a un software.<br>
+              Il portale però ti prepara il file con <strong style="color:#fff;">tutti gli ospiti già compilati</strong>: a te resta solo l'upload.
             </div>
 
-            <div id="ab_spid_box" style="background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:10px; padding:12px; margin-top:8px;">
-              <div style="font-size:11px; color:#ffd48a; font-weight:700; margin-bottom:6px;">🪪 Accesso con identità digitale</div>
-              <div style="font-size:10px; color:var(--text-muted); line-height:1.6;">
-                SPID e CIE sono legati a una <strong style="color:#fff;">persona fisica</strong> e non possono essere delegati a un software: per legge richiedono autenticazione a due fattori sul tuo dispositivo.<br><br>
-                Il portale prepara il <strong style="color:#fff;">file conforme al tracciato ROSS1000</strong>: ti basta accedere con SPID e caricarlo nella sezione <em>Upload</em>. Tempo richiesto: circa 30 secondi.
+            <div style="margin:12px 0;">
+              <span class="pending-badge" id="pending-albertina">⏳ Nessun movimento in attesa</span>
+            </div>
+
+            <div class="ross-steps">
+              <div class="ross-step">
+                <span class="ross-step-num">1</span>
+                <span class="ross-step-txt">Premi <strong>🪪 File per ROSS1000</strong> qui sotto: scarica il CSV con tutti i movimenti da dichiarare.</span>
               </div>
-              <div class="field-group" style="margin-top:10px; margin-bottom:0;">
-                <label>Intestatario SPID (promemoria)</label>
-                <input type="text" class="field-input" id="ab_ross_spid_holder" placeholder="Nome del titolare abilitato" autocomplete="off">
+              <div class="ross-step">
+                <span class="ross-step-num">2</span>
+                <span class="ross-step-txt">Accedi con SPID su <a href="https://veneto.ross1000.it" target="_blank">veneto.ross1000.it ↗</a> e vai in <strong>Movimenti → Upload</strong>. Carica il file.</span>
+              </div>
+              <div class="ross-step">
+                <span class="ross-step-num">3</span>
+                <span class="ross-step-txt">Le date passano da <strong>verde</strong> a <strong>rosso</strong> = trasmesse. Torna qui e conferma: lo stato diventa <strong>✓ Caricato</strong>.</span>
               </div>
             </div>
 
-            <div id="ab_svc_box" style="display:none; margin-top:8px;">
+            <div style="font-size:10px; color:var(--text-muted); margin-top:10px; line-height:1.5;">Struttura: <strong style="color:#9fc9ec;">Z00000</strong> (Casa Albertina)</div>
+
+            <button type="button" class="svc-toggle" onclick="toggleSvcBox('ab')">
+              Hai un'utenza tecnica ROSS1000? Configura l'invio automatico
+            </button>
+
+            <div id="ab_svc_box" style="display:none; margin-top:10px; padding-top:10px; border-top:1px solid var(--border);">
+              <div style="font-size:10px; color:var(--text-muted); line-height:1.55; margin-bottom:10px;">
+                Alcune Regioni rilasciano su richiesta un'utenza <em>applicativa</em> per struttura (non SPID), utilizzabile dai gestionali. Se la ottieni dall'assistenza ROSS1000, inseriscila qui e la trasmissione diventerà automatica.
+              </div>
+              <input type="hidden" id="ab_ross_mode" value="spid_manual">
               <div class="field-group">
-                <label>Username Utenza Tecnica ROSS1000</label>
-                <input type="text" class="field-input" id="ab_ross_user" placeholder="Username tecnico" autocomplete="off">
+                <label>Username Utenza Tecnica</label>
+                <input type="text" class="field-input" id="ab_ross_user" placeholder="Username applicativo" autocomplete="off">
               </div>
               <div class="field-group">
                 <label>Password Utenza Tecnica</label>
-                <input type="password" class="field-input" id="ab_ross_pass" placeholder="Password tecnica" autocomplete="new-password">
+                <input type="password" class="field-input" id="ab_ross_pass" placeholder="Password applicativa" autocomplete="new-password">
               </div>
-              <div style="font-size:10px; color:var(--text-muted); line-height:1.5;">
-                Da richiedere all'assistenza ROSS1000 come utenza applicativa per struttura.
-              </div>
+              <input type="hidden" id="ab_ross_spid_holder" value="">
             </div>
-
-            <div style="font-size:10px; color:var(--text-muted); margin-top:8px; line-height:1.5;">Struttura: <strong style="color:#9fc9ec;">Z00000</strong> (Casa Albertina)</div>
           </div>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;">
           <button class="btn-action-gold" style="background:#9fc9ec; color:#0d0b09;" onclick="saveEntitySettings('albertina')">💾 Salva Credenziali</button>
-          <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendEntityToRoss1000('albertina')">🛡️ Invia a Questura</button>
-          <button class="btn-action-gold" style="background:#ffd48a;" onclick="downloadRossPackage('albertina')">🪪 File per ROSS1000 (SPID)</button>
+          <button class="btn-action-gold" style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendEntityToRoss1000('albertina')">🛡️ Invia a Questura (auto)</button>
+          <button class="btn-action-gold" style="background:#ffd48a;" onclick="downloadRossPackage('albertina')">🪪 File per ROSS1000</button>
           <a href="https://veneto.ross1000.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri ROSS1000</a>
           <a href="https://alloggiatiweb.poliziadistato.it" target="_blank" class="btn-outline-white" style="text-decoration:none;">↗ Apri Alloggiati Web</a>
         </div>
@@ -984,6 +1075,7 @@
 
     function renderGuestTable(groups) {
       updateStatsCards(groups);
+      updatePendingBadges(groups);
       const tbody = document.getElementById('guestTableBody');
       const mobileContainer = document.getElementById('guestMobileCards');
 
@@ -1464,12 +1556,37 @@
 
     const MASK_TOKEN = '********';
 
+    function toggleSvcBox(prefix) {
+      const box = document.getElementById(prefix + '_svc_box');
+      if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+    }
+
     function toggleRossMode(prefix) {
-      const mode = document.getElementById(prefix + '_ross_mode')?.value;
-      const spid = document.getElementById(prefix + '_spid_box');
-      const svc = document.getElementById(prefix + '_svc_box');
-      if (spid) spid.style.display = mode === 'spid_manual' ? 'block' : 'none';
-      if (svc) svc.style.display = mode === 'service_account' ? 'block' : 'none';
+      // L'utenza tecnica si mostra solo se già configurata
+      const user = document.getElementById(prefix + '_ross_user')?.value;
+      const box = document.getElementById(prefix + '_svc_box');
+      if (box && user) box.style.display = 'block';
+    }
+
+    function updatePendingBadges(groups) {
+      const counts = { caboare: 0, albertina: 0 };
+      (groups || []).forEach(g => {
+        const st = g.ross1000_status || '';
+        if (!st.includes('Caricato') && !st.includes('Trasmesso')) {
+          counts[entityForApt(g.apt)]++;
+        }
+      });
+      Object.entries(counts).forEach(([ent, n]) => {
+        const el = document.getElementById('pending-' + ent);
+        if (!el) return;
+        if (n > 0) {
+          el.textContent = '⏳ ' + n + (n === 1 ? ' gruppo da caricare' : ' gruppi da caricare');
+          el.classList.remove('none');
+        } else {
+          el.textContent = '✓ Tutti i movimenti caricati';
+          el.classList.add('none');
+        }
+      });
     }
 
     async function loadWebServiceSettings() {
@@ -1526,7 +1643,7 @@
       const payload = {
         entity: entity,
         alloggiati_user: get(p + '_alloggiati_user'),
-        ross_mode: get(p + '_ross_mode') || 'spid_manual',
+        ross_mode: get(p + '_ross_user') ? 'service_account' : 'spid_manual',
         ross_user: get(p + '_ross_user'),
         ross_spid_holder: get(p + '_ross_spid_holder'),
         send_mode: 'direct_alloggiati'
@@ -1559,7 +1676,7 @@
     function downloadRossPackage(entity) {
       window.open('/api/ross1000-package?entity=' + entity, '_blank');
       setTimeout(() => {
-        if (confirm('File ROSS1000 scaricato.\n\nDopo averlo caricato su veneto.ross1000.it (accesso SPID → sezione Upload), vuoi segnare questi movimenti come CARICATI?')) {
+        if (confirm('✓ File scaricato.\n\nOra: accedi con SPID su veneto.ross1000.it → Movimenti → Upload → carica il file.\n\nL\'hai già caricato? Premi OK per segnare i movimenti come completati.')) {
           markRossUploaded(entity);
         }
       }, 1200);
