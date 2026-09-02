@@ -876,6 +876,86 @@
       border-color: var(--white);
     }
 
+
+    /* ══════════════════════════════════════════════════
+       RIFINITURA MOBILE · iPhone (fino a 640px)
+       Corregge padding eccessivi e testi troppo piccoli
+    ══════════════════════════════════════════════════ */
+    @media (max-width: 640px) {
+
+      /* ── SPAZIATURE SEZIONI ──
+         Erano 120px verticali / 64px laterali: troppo su schermo piccolo */
+      .intro,
+      .location-section,
+      .booking-section,
+      .features-section    { padding: 64px 22px !important; }
+      .prop-info           { padding: 44px 22px !important; }
+      .prop-section        { padding: 44px 20px !important; }
+      .coming-row          { padding: 48px 22px !important; }
+      .gallery-label       { padding: 56px 22px 26px !important; }
+      #reviews             { padding: 64px 22px !important; }
+      #territorio          { padding-top: 64px !important; }
+      #territorio > div:first-child { padding: 0 22px 40px !important; }
+      footer               { padding: 48px 22px calc(20px + env(safe-area-inset-bottom)) !important; }
+
+      /* ── LEGGIBILITÀ TESTI ──
+         Alza il minimo tipografico: 8-9px sono illeggibili su iPhone */
+      .label,
+      .footer-brand-sub,
+      .footer-col h4       { font-size: 10px !important; letter-spacing: 2px !important; }
+      .footer-copy,
+      .footer-ig           { font-size: 11px !important; }
+      .footer-col a,
+      .footer-col p,
+      .footer-desc         { font-size: 13px !important; line-height: 1.7 !important; }
+      .prop-meta,
+      .prop-label          { font-size: 11px !important; }
+      .hero-location       { font-size: 11px !important; letter-spacing: 2px !important; }
+      .hero-scroll span    { font-size: 10px !important; }
+
+      /* Testi di corpo più comodi da leggere */
+      .intro p,
+      .location-text p,
+      .prop-desc           { font-size: 15px !important; line-height: 1.8 !important; }
+
+      /* ── TITOLI PROPORZIONATI ── */
+      .intro h2            { font-size: 28px !important; line-height: 1.25 !important; }
+      .prop-name           { font-size: 30px !important; }
+
+      /* ── AREE TOCCABILI (minimo Apple: 44px) ── */
+      .btn-light,
+      .btn-dark,
+      .btn-outline,
+      .nav-book,
+      button[type="submit"],
+      .booking-card button { min-height: 46px !important; }
+
+      /* ── GALLERIA ── */
+      .gallery-strip       { grid-template-columns: repeat(2,1fr) !important; gap: 3px !important; }
+
+      /* ── FORM PRENOTAZIONE ── */
+      .booking-card        { padding: 22px 18px !important; }
+      .form-grid           { grid-template-columns: 1fr !important; gap: 12px !important; }
+      input, select, textarea { font-size: 16px !important; }   /* evita zoom Safari */
+
+      /* ── CALENDARIO ── */
+      .cal-grid            { gap: 2px !important; }
+      .cal-day             { font-size: 13px !important; }
+    }
+
+    /* ── iPhone SE / 13 mini e schermi molto stretti ── */
+    @media (max-width: 400px) {
+      .intro,
+      .location-section,
+      .booking-section,
+      .features-section    { padding: 56px 18px !important; }
+      #reviews             { padding: 56px 18px !important; }
+      .hero-title          { font-size: 36px !important; }
+      .intro h2            { font-size: 25px !important; }
+      .prop-name           { font-size: 26px !important; }
+      .gallery-strip       { grid-template-columns: 1fr 1fr !important; }
+    }
+
   </style>
 </head>
 <body>
