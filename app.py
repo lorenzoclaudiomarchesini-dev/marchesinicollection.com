@@ -485,7 +485,10 @@ for folder in ["CCB-A", "CCB-B", "Casa Albertina", "Casa Albertina 2", "FOTO CCB
 
 @app.get("/")
 def serve_index():
-    return FileResponse(os.path.join(os.path.dirname(__file__), "index.html"))
+    return FileResponse(
+        os.path.join(os.path.dirname(__file__), "index.html"),
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache", "Expires": "0"}
+    )
 
 @app.get("/admin")
 def serve_admin():
