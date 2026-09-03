@@ -2442,6 +2442,83 @@
       const verified = rev.querySelector('.reviews-verified'); if (verified) verified.textContent = t.reviews_verified;
       rev.querySelectorAll('.reviews-nav span').forEach(s => s.textContent = t.reviews_scroll);
       const bLink = rev.querySelector('a[href*="booking.com"]'); if (bLink) bLink.textContent = t.reviews_link;
+
+      // Traduzione di tutti i 12 testi delle recensioni (Corte Cà Boare + Casa Albertina)
+      const revTexts = {
+        it: {
+          ccb: [
+            { text: "Dalle foto era bello, ma non mi aspettavo una casa così ben fatta. Si capisce subito che è stato ristrutturato con cura. La cucina ha tutto quello che serve, compresa la macchina del caffè con le capsule già a disposizione — piccolo dettaglio, grande differenza. Pulizia impeccabile. Ci tornerò senz'altro.", author: "Lorenzo", origin: "Italia · Lug 2026" },
+            { text: "Il nostro soggiorno è stato meraviglioso! Un ringraziamento speciale va a Simone e al suo team, persone estremamente gentili, calorose e disponibili. Ci hanno dato tanti consigli preziosi sulla zona e su cosa visitare. Consigliamo questo alloggio a tutti senza alcuna esitazione.", author: "Katarzyna", origin: "Polonia · Ago 2026" },
+            { text: "Viaggiando spesso da sola, tengo molto a sentirmi a mio agio. Qui mi sono sentita subito bene: l'appartamento è incantevole, pulito, curato, silenzioso. Si nota che chi lo ha arredato ci ha messo gusto e attenzione. Simone è stato gentile e presente al punto giusto. Tornerò.", author: "Bakhshi", origin: "Italia · Lug 2026" },
+            { text: "Tranquillo, bello, funzionale, cosa chiedere di più? L'appartamento è silenzioso, pulito e arredato con tanto gusto. I bagni sono moderni e spaziosi. Si trova vicino alla città, alle cantine, ai trekking. Valpolicella che scoperta! Rapporto qualità-prezzo decisamente onesto.", author: "Luciomau", origin: "Italia · Lug 2026" },
+            { text: "Abbiamo passato due giorni fantastici. Pulizia impeccabile e tutto nuovo e curato in ogni dettaglio — si vede che ci tengono tantissimo. La differenza la fanno i proprietari, super gentili e disponibilissimi. Ci hanno fatto sentire a casa. Consigliatissimo al 100%.", author: "Michele", origin: "Italia · Lug 2026" },
+            { text: "La nostra famiglia ha trascorso una settimana in questo splendido appartamento. Simone ci ha dato ottimi suggerimenti. L'alloggio è molto pulito e arredato in stile moderno. Il proprietario è molto gentile e facilmente reperibile.", author: "Jakob", origin: "Germania · Ago 2026" }
+          ],
+          ca: [
+            { text: "I proprietari sono stati incredibilmente gentili e disponibili; ci hanno persino permesso di fare il check-in in anticipo. L'appartamento è perfettamente attrezzato e si trova in una posizione molto tranquilla. La splendida area esterna invita al relax. Ci siamo sentiti completamente a nostro agio!", author: "Petre", origin: "Germania · Ago 2026" },
+            { text: "Un soggiorno perfetto che vi riporterà alla mente bei ricordi. Un caloroso benvenuto. Albertina e la sua famiglia sono molto amichevoli. Casa molto ben attrezzata, pulita e ben posizionata. I piccoli dettagli da parte degli host sono stati molto apprezzati. Niente... tutto era perfetto!", author: "Daniel", origin: "Canada · Set 2025" },
+            { text: "Posizione perfetta per visitare Verona e la sponda veneta del Lago di Garda restando nel relax. Appartamento dotato di tutto, letto molto comodo, cucina fornita, tranquillità massima. Proprietari gentilissimi ma discreti allo stesso tempo.", author: "Alberto", origin: "Italia · Set 2025" },
+            { text: "Si trova in una splendida zona della Valpolicella, a soli 15 minuti dal centro di Verona. Il luogo ideale per godersi sia la città sia il suo spettacolare paesaggio. I padroni di casa sono stati molto cordiali e disponibili. Tutto è andato benissimo.", author: "Claudia", origin: "Spagna · Set 2025" },
+            { text: "Appartamento spazioso e ben attrezzato, cucina fornita con numerosi elettrodomestici, tutto molto pulito e ordinato. Ottima posizione tranquilla. La signora Albertina è stata molto gentile e accogliente, ci siamo sentiti davvero a casa!", author: "Marta", origin: "Italia · Ott 2025" },
+            { text: "Casa meravigliosa! Proprietari gentilissimi! L'appartamento su due piani è molto pulito e confortevole, ben attrezzato. Un grande vantaggio è la posizione: una base ideale per esplorare i dintorni. Ci tornerei volentieri!", author: "Anna & Iwona", origin: "Polonia · Ago 2026" }
+          ]
+        },
+        en: {
+          ccb: [
+            { text: "From the photos it looked great, but I didn't expect such a masterfully crafted home. You immediately notice the meticulous restoration. The kitchen has everything needed, including the Nespresso machine with complimentary pods — a small detail that makes a big difference. Spotless cleanliness. I will definitely return.", author: "Lorenzo", origin: "Italy · Jul 2026" },
+            { text: "Our stay was simply wonderful! Special thanks to Simone and his team, who were exceptionally kind, warm, and helpful. They shared fantastic local recommendations on where to go and what to see. We wholeheartedly recommend this property to anyone.", author: "Katarzyna", origin: "Poland · Aug 2026" },
+            { text: "Traveling alone often, feeling comfortable is essential to me. Here I felt at home immediately: the apartment is enchanting, sparkling clean, peaceful and silent. It's clear that whoever styled it did so with immense taste and care. Simone was kind and attentive. I'll be back.", author: "Bakhshi", origin: "Italy · Jul 2026" },
+            { text: "Peaceful, beautiful, functional — what more could you ask for? The apartment is quiet, clean and tastefully furnished. The bathrooms are modern and spacious. Close to the city, wineries, and hiking trails. Valpolicella was such a discovery! Honest and fair value for money.", author: "Luciomau", origin: "Italy · Jul 2026" },
+            { text: "We spent two fantastic days. Impeccable cleanliness, everything brand new and cared for down to the last detail. What truly sets it apart are the owners: super kind and extraordinarily welcoming. They made us feel right at home. 100% recommended.", author: "Michele", origin: "Italy · Jul 2026" },
+            { text: "Our family spent a wonderful week in this gorgeous apartment. Simone gave us great local tips. The home is sparkling clean and designed in a sleek modern style. The host is very courteous and easily reachable.", author: "Jakob", origin: "Germany · Aug 2026" }
+          ],
+          ca: [
+            { text: "The hosts were incredibly kind and helpful; they even allowed us to check in early. The apartment is fully equipped and located in a very peaceful area. The beautiful outdoor garden invites total relaxation. We felt completely at ease!", author: "Petre", origin: "Germany · Aug 2026" },
+            { text: "A perfect stay bringing back wonderful memories. A warm and heartfelt welcome. Albertina and her family are delightfully friendly. Well-equipped, spotless, and ideally located home. The little welcoming touches were greatly appreciated. Everything was perfection!", author: "Daniel", origin: "Canada · Sep 2025" },
+            { text: "Perfect location to visit Verona and Lake Garda while enjoying absolute peace. The apartment has everything, very comfortable bed, fully stocked kitchen, total tranquility. Hosts were exceptionally courteous yet wonderfully discreet.", author: "Alberto", origin: "Italy · Sep 2025" },
+            { text: "Located in a stunning part of Valpolicella, only 15 minutes from Verona historic center. The ideal place to enjoy both the city and its spectacular scenery. The hosts were very welcoming and accommodating. Everything went smoothly.", author: "Claudia", origin: "Spain · Sep 2025" },
+            { text: "Spacious and well-appointed apartment, kitchen stocked with numerous appliances, everything sparkling clean and tidy. Wonderful quiet location. Mrs. Albertina was very kind and welcoming, we truly felt at home!", author: "Marta", origin: "Italy · Oct 2025" },
+            { text: "Wonderful home! Super kind hosts! The two-story apartment is spotless, comfortable, and well equipped. A huge plus is the location: an ideal base to explore the region. Would gladly return!", author: "Anna & Iwona", origin: "Poland · Aug 2026" }
+          ]
+        },
+        de: {
+          ccb: [
+            { text: "Auf den Fotos sah es schön aus, aber ich hatte kein so perfekt gestaltetes Haus erwartet. Man spürt sofort die liebevolle Renovierung. Die Küche bietet alles, inklusive Kaffeemaschine mit Kapseln — kleine Details, großer Unterschied. Makellose Sauberkeit. Ich komme definitiv wieder.", author: "Lorenzo", origin: "Italien · Jul 2026" },
+            { text: "Unser Aufenthalt war einfach wunderbar! Ein ganz besonderer Dank geht an Simone und sein Team, die extrem herzlich, hilfsbereit und freundlich waren. Sie gaben uns tolle Ausflugstipps für die Region. Wir können diese Unterkunft uneingeschränkt empfehlen.", author: "Katarzyna", origin: "Polen · Aug 2026" },
+            { text: "Da ich oft alleine reise, ist mir Wohlfühlen besonders wichtig. Hier habe ich mich sofort zu Hause gefühlt: charmant, blitzsauber, gepflegt und ruhig. Man merkt den guten Geschmack der Einrichtung. Simone war stets freundlich und aufmerksam. Ich komme wieder.", author: "Bakhshi", origin: "Italien · Jul 2026" },
+            { text: "Ruhig, schön, funktional — was will man mehr? Das Apartment ist leise, sauber und mit viel Geschmack eingerichtet. Die Badezimmer sind modern und großzügig. Nahe der Stadt, Weingütern und Wanderwegen. Valpolicella war eine echte Entdeckung! Faires Preis-Leistungs-Verhältnis.", author: "Luciomau", origin: "Italien · Jul 2026" },
+            { text: "Wir haben zwei fantastische Tage verbracht. Makellose Sauberkeit und alles neu und bis ins Detail gepflegt. Den Unterschied machen die Gastgeber: super herzlich und hilfsbereit. Man fühlt sich sofort zuhause. Zu 100% empfehlenswert.", author: "Michele", origin: "Italien · Jul 2026" },
+            { text: "Unsere Familie hat eine wunderschöne Woche in diesem herrlichen Apartment verbracht. Simone gab uns hervorragende Empfehlungen. Die Unterkunft ist sehr sauber und modern eingerichtet. Der Gastgeber ist sehr freundlich und gut erreichbar.", author: "Jakob", origin: "Deutschland · Aug 2026" }
+          ],
+          ca: [
+            { text: "Die Gastgeber waren unglaublich freundlich und hilfsbereit; wir durften sogar früher einchecken. Das Apartment ist perfekt ausgestattet und liegt in einer sehr ruhigen Gegend. Der schöne Außenbereich lädt zum Entspannen ein. Wir haben uns rundum wohlgefühlt!", author: "Petre", origin: "Deutschland · Aug 2026" },
+            { text: "Ein perfekter Aufenthalt voller schöner Erinnerungen. Ein herzlicher Empfang durch Albertina und ihre Familie. Sehr gut ausgestattet, sauber und ideal gelegen. Die kleinen Aufmerksamkeiten der Gastgeber waren wunderbar. Alles war perfekt!", author: "Daniel", origin: "Kanada · Sep 2025" },
+            { text: "Perfekte Lage, um Verona und den Gardasee zu besuchen und gleichzeitig absolute Ruhe zu genießen. Apartment mit allem ausgestattet, sehr bequemes Bett, vollständige Küche. Gastgeber sehr zuvorkommend und diskret.", author: "Alberto", origin: "Italien · Sep 2025" },
+            { text: "In einer herrlichen Gegend des Valpolicella, nur 15 Minuten vom Zentrum von Verona entfernt. Der ideale Ort für Stadt und Natur. Die Gastgeber waren sehr herzlich und hilfsbereit. Alles lief reibungslos.", author: "Claudia", origin: "Spanien · Sep 2025" },
+            { text: "Geräumiges und bestens ausgestattetes Apartment, Küche mit vielen Elektrogeräten, alles sehr sauber und ordentlich. Ruhige Lage. Frau Albertina war sehr herzlich, wir haben uns wie zu Hause gefühlt!", author: "Marta", origin: "Italien · Okt 2025" },
+            { text: "Wunderschönes Haus! Sehr freundliche Gastgeber! Das Apartment auf zwei Etagen ist sehr sauber, komfortabel und gut ausgestattet. Die Lage ist ideal für Ausflüge. Wir kommen gerne wieder!", author: "Anna & Iwona", origin: "Polen · Aug 2026" }
+          ]
+        }
+      };
+
+      const cData = revTexts[lang] || revTexts.it;
+      const ccbBoxes = document.querySelectorAll('#grid-ccb > div');
+      cData.ccb.forEach((item, i) => {
+        if (ccbBoxes[i]) {
+          const p = ccbBoxes[i].querySelector('p'); if (p) p.textContent = item.text;
+          const auth = ccbBoxes[i].querySelector('div[style*="font-weight:400"]'); if (auth) auth.textContent = item.author;
+          const orig = ccbBoxes[i].querySelector('div[style*="letter-spacing:1px"]'); if (orig) orig.textContent = item.origin;
+        }
+      });
+
+      const caBoxes = document.querySelectorAll('#grid-ca > div');
+      cData.ca.forEach((item, i) => {
+        if (caBoxes[i]) {
+          const p = caBoxes[i].querySelector('p'); if (p) p.textContent = item.text;
+          const auth = caBoxes[i].querySelector('div[style*="font-weight:400"]'); if (auth) auth.textContent = item.author;
+          const orig = caBoxes[i].querySelector('div[style*="letter-spacing:1px"]'); if (orig) orig.textContent = item.origin;
+        }
+      });
     }
 
     // 6. Features Esperienza
