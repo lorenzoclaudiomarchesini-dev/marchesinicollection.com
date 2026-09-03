@@ -1964,6 +1964,7 @@
 
 
   // ── LINGUA / I18N ───────────────────────────────────────────────────────
+    // ── LINGUA / I18N COMPLETO ──────────────────────────────────────────────────
   const TRANSLATIONS = {
     it: {
       nav: ['Le Strutture', 'Galleria', 'Recensioni', 'Dove Siamo', 'Instagram', 'Prenota'],
@@ -1976,39 +1977,237 @@
       intro_label: 'La nostra storia',
       intro_title: 'Dimore di charme<br>nel cuore della <em>Valpolicella</em>',
       intro_text: "Tre proprietà curate nei minimi dettagli, immerse nella campagna veronese. Un'ospitalità autentica che coniuga il comfort contemporaneo con l'anima rurale del territorio, a pochi minuti da Verona e dalle grandi cantine dell'Amarone.",
+      
+      // Strutture Home
+      prop_ccb_sub: 'Due appartamenti · 4 e 5 posti',
+      prop_ccb_desc: "Un antico rustico veronese sapientemente ristrutturato. La corte interna, i soffitti con travi a vista e i materiali naturali creano un'atmosfera unica nel cuore della Valpolicella.",
+      prop_ccb_f1: 'Appartamento A · King Size 210×180 · 2 bagni · 4 posti',
+      prop_ccb_f2: 'Appartamento B · Queen Size 200×160 · 2 bagni · 5 posti',
+      prop_ccb_f3: 'Casa Clima RRI · Wi-Fi fibra · Classe A++',
+      prop_ccb_btn: 'Scopri e prenota',
+      
+      prop_ca_sub: 'Casa indipendente · 4 posti',
+      prop_ca_desc: 'Una dimora indipendente con giardino privato e atmosfera raccolta. Ideale per famiglie e coppie che cercano privacy, tranquillità e il calore autentico di una casa vera nel verde di Arbizzano.',
+      prop_ca_f1: 'Camera matrimoniale · Queen Size 200×160 · 1 bagno',
+      prop_ca_f2: 'Giardino privato · Climatizzazione a pavimento',
+      prop_ca_f3: 'Garage privato disponibile · Wi-Fi fibra · Classe A++',
+      prop_ca_btn: 'Scopri e prenota',
+      
+      coming_tag: 'In arrivo',
+      coming_addr: 'Via S. Maria 5 · Arbizzano di Negrar · Verona',
+      gallery_label: 'Galleria',
+      gallery_title: 'Scorci di <em>Marchesini Collection</em>',
+
+      // Territorio
+      territorio_label: 'Il territorio',
+      territorio_title: 'La <em>Valpolicella</em> e dintorni',
+      territorio_text: 'Una terra di vini leggendari, ville storiche, colline che cambiano colore ad ogni stagione e un lago che sembra un mare.',
+      terr_v_tag: 'Ville storiche',
+      terr_v_title: 'Villa Rizzardi<br>Villa Bertani<br>Villa Giona',
+      terr_v_desc: "Dimore nobiliari circondate da vigneti e giardini all'italiana. Tesori nascosti della Valpolicella, a pochi minuti da noi.",
+      terr_a_tag: 'Architettura',
+      terr_a_title: 'Palazzo<br>Montanari',
+      terr_a_desc: 'Un palazzo storico che racconta secoli di storia locale, nel cuore della campagna veronese.',
+      terr_n_tag: 'Natura',
+      terr_n_title: 'Lessinia<br>& Lago di Garda',
+      terr_n_desc: "L'altopiano della Lessinia per trekking e natura, il Lago di Garda a 30 minuti per le giornate di sole e relax.",
+      terr_w_tag: 'Vino',
+      terr_w_title: 'Vigneti<br>& Cantine',
+      terr_w_desc: 'Amarone, Ripasso, Valpolicella Classico. I vigneti iniziano fuori dalla nostra porta. Le cantine migliori a 5 minuti.',
+      terr_quote: 'Dove andare davvero? Chiedetelo a noi.',
+      terr_quote_sub: 'I nostri suggerimenti personalizzati sono inclusi nel soggiorno.',
+
+      // Recensioni
       reviews_label: 'Ospiti',
       reviews_title: 'Cosa dicono di <em>noi</em>',
       reviews_verified: 'Verificato su Booking.com',
       reviews_scroll: 'Scorri',
+      reviews_link: 'Leggi tutte le recensioni su Booking.com',
+      reviews_cat_ccb: 'Corte Cà Boare · Valutazioni per categoria',
+      reviews_cat_ca: 'Casa Albertina · Valutazioni per categoria',
+      cat_staff: 'Staff',
+      cat_clean: 'Pulizia',
+      cat_pos: 'Posizione',
+      cat_serv: 'Servizi',
+      cat_comf: 'Comfort',
+      cat_val: 'Qualità/Prezzo',
+
+      // Features Esperienza
+      feat_label: "L'esperienza",
+      feat_title: 'Perché scegliere<br><em>Marchesini Collection</em>',
+      feat1_title: 'Cuore del<br>Valpolicella',
+      feat1_desc: "A pochi minuti dalle più rinomate cantine di Amarone e dai colli veronesi, patrimonio vinicolo d'eccellenza.",
+      feat2_title: 'Spazi<br>autentici',
+      feat2_desc: 'Appartamenti curati nei minimi dettagli, che coniugano il comfort contemporaneo con il fascino rurale veneto.',
+      feat3_title: 'Posizione<br>strategica',
+      feat3_desc: "10 minuti da Verona e dall'Arena, 30 minuti dal Lago di Garda, 15 minuti dall'aeroporto.",
+      feat4_title: 'Prenotazione<br>diretta',
+      feat4_desc: 'Senza commissioni di piattaforma. Tariffe migliori, massima flessibilità e contatto diretto con noi.',
+
+      // Dove siamo
+      loc_label: 'Dove siamo',
+      loc_title: 'Arbizzano di Negrar<br>nel cuore della <em>Valpolicella</em>',
+      loc_text: "Immerso nelle dolci colline della Valpolicella, a soli 10 minuti dal centro di Verona e dalla sua Arena. Un punto di partenza ideale per esplorare il Lago di Garda, le cantine dell'Amarone e le meraviglie del Nordest italiano.",
+      dist1: 'Centro storico di Verona',
+      dist2: 'Cantine Valpolicella & Amarone',
+      dist3: 'Lago di Garda',
+      dist4: 'Aeroporto Verona Villafranca',
+      dist5: 'Dolomiti UNESCO',
+      btn_gmaps: 'Apri su Google Maps',
+
+      // Booking
       booking_label: 'Prenota ora',
       booking_title: 'Richiedi <em>disponibilità</em>',
       booking_sub: 'Tariffe migliori · Nessuna commissione · Risposta entro 24 ore',
-      territorio_label: 'Il territorio',
-      territorio_title: 'La <em>Valpolicella</em> e dintorni',
-      territorio_text: 'Una terra di vini leggendari, ville storiche, colline che cambiano colore ad ogni stagione e un lago che sembra un mare.'
+      table_season: 'Stagione',
+      table_low: 'Bassa · Nov–Mar',
+      table_mid: 'Media · Apr, Mag, Ott',
+      table_high: 'Alta · Giu–Set',
+      table_note_ccb: 'Prezzi per notte · 1–2 ospiti · +10% per ogni ospite aggiuntivo',
+      table_note_ca: 'Prezzi per notte · 1–2 ospiti · +10% per ogni ospite aggiuntivo · Garage +€10/notte',
+      btn_send_req: 'Invia richiesta',
+      wa_title: 'Parla con <em>Simone</em>',
+      wa_sub: 'Disponibilità, prezzi, consigli sul territorio — risposta immediata',
+      wa_btn: 'Contatta Simone su WhatsApp',
+      wa_or_email: 'oppure scrivi a',
+
+      // Pagine Dettaglio Singole Strutture
+      back_btn: '← Torna alle strutture',
+      click_zoom: 'Clicca per ingrandire',
+      direct_book_note: 'Prenotazione diretta · nessuna commissione',
+      tab_apt_a: 'Appartamento A · 4 posti',
+      tab_apt_b: 'Appartamento B · 5 posti',
+      caboare_page_desc: "Un antico rustico veronese sapientemente ristrutturato, che conserva l'anima autentica della campagna veneta pur offrendo tutti i comfort moderni. La corte interna, i soffitti con travi a vista e i materiali naturali creano un'atmosfera unica nel cuore della Valpolicella.",
+      albertina_page_desc: 'Una dimora indipendente immersa nel verde di Arbizzano, con giardino privato e atmosfera raccolta. Ideale per famiglie e coppie che cercano privacy, tranquillità e il calore autentico di una casa vera, a soli 10 minuti da Verona.',
+
+      // Footer
+      footer_desc: "Appartamenti di charme nel cuore della Valpolicella, a pochi minuti da Verona, dal Lago di Garda e dalle cantine dell'Amarone.",
+      footer_props_title: 'Le strutture',
+      footer_contacts_title: 'Contatti',
+      footer_copy: '© 2026 Marchesini Collection · Tutti i diritti riservati'
     },
+
     en: {
       nav: ['Our Properties', 'Gallery', 'Reviews', 'Location', 'Instagram', 'Book Now'],
       navMobile: ['Our Properties', 'Gallery', 'Location', 'Book Now'],
       hero_location: 'Arbizzano di Negrar · Valpolicella · Verona',
       hero_title: 'Marchesini<br><em>Collection</em>',
-      btn_scopri: 'Discover our properties',
+      btn_scopri: 'Discover properties',
       btn_prenota: 'Book now',
       hero_scroll: 'Scroll',
       intro_label: 'Our story',
       intro_title: 'Charming residences<br>in the heart of <em>Valpolicella</em>',
       intro_text: 'Three properties cared for in every detail, nestled in the Veronese countryside. Authentic hospitality blending contemporary comfort with the rural soul of the territory, just minutes from Verona and the great Amarone wineries.',
+      
+      // Strutture Home
+      prop_ccb_sub: 'Two apartments · Sleeps 4 & 5',
+      prop_ccb_desc: 'An ancient Veronese farmhouse masterfully restored. The internal courtyard, exposed beam ceilings and natural materials create a unique atmosphere in the heart of Valpolicella.',
+      prop_ccb_f1: 'Apartment A · King Size 210×180 · 2 bathrooms · Sleeps 4',
+      prop_ccb_f2: 'Apartment B · Queen Size 200×160 · 2 bathrooms · Sleeps 5',
+      prop_ccb_f3: 'Casa Clima RRI · High-speed Fiber Wi-Fi · Class A++',
+      prop_ccb_btn: 'Explore & Book',
+      
+      prop_ca_sub: 'Independent house · Sleeps 4',
+      prop_ca_desc: 'An independent residence with a private garden and intimate atmosphere. Ideal for families and couples seeking privacy, tranquility, and the genuine warmth of a true home in Arbizzano green hills.',
+      prop_ca_f1: 'Master bedroom · Queen Size 200×160 · 1 bathroom',
+      prop_ca_f2: 'Private garden · Underfloor climate control',
+      prop_ca_f3: 'Private garage available · High-speed Fiber Wi-Fi · Class A++',
+      prop_ca_btn: 'Explore & Book',
+      
+      coming_tag: 'Coming soon',
+      coming_addr: 'Via S. Maria 5 · Arbizzano di Negrar · Verona',
+      gallery_label: 'Gallery',
+      gallery_title: 'Glimpses of <em>Marchesini Collection</em>',
+
+      // Territorio
+      territorio_label: 'The territory',
+      territorio_title: '<em>Valpolicella</em> & surroundings',
+      territorio_text: 'A land of legendary wines, historic noble villas, rolling hills that shift colors with every season, and a lake that feels like a sea.',
+      terr_v_tag: 'Historic villas',
+      terr_v_title: 'Villa Rizzardi<br>Villa Bertani<br>Villa Giona',
+      terr_v_desc: 'Noble residences surrounded by vineyards and Italian gardens. Hidden gems of Valpolicella, just minutes away.',
+      terr_a_tag: 'Architecture',
+      terr_a_title: 'Palazzo<br>Montanari',
+      terr_a_desc: 'A historic palazzo reflecting centuries of local heritage in the heart of the Veronese countryside.',
+      terr_n_tag: 'Nature',
+      terr_n_title: 'Lessinia<br>& Lake Garda',
+      terr_n_desc: 'The Lessinia plateau for scenic trekking and Lake Garda 30 minutes away for sun-soaked days and relaxation.',
+      terr_w_tag: 'Wine',
+      terr_w_title: 'Vineyards<br>& Wineries',
+      terr_w_desc: 'Amarone, Ripasso, Valpolicella Classico. The vineyards begin right outside our door, with top wineries 5 minutes away.',
+      terr_quote: 'Wondering where to truly go? Ask us.',
+      terr_quote_sub: 'Our bespoke local recommendations are included in your stay.',
+
+      // Recensioni
       reviews_label: 'Guests',
       reviews_title: 'What they say <em>about us</em>',
       reviews_verified: 'Verified on Booking.com',
       reviews_scroll: 'Swipe',
-      booking_label: 'Book now',
+      reviews_link: 'Read all reviews on Booking.com',
+      reviews_cat_ccb: 'Corte Cà Boare · Category Ratings',
+      reviews_cat_ca: 'Casa Albertina · Category Ratings',
+      cat_staff: 'Staff',
+      cat_clean: 'Cleanliness',
+      cat_pos: 'Location',
+      cat_serv: 'Facilities',
+      cat_comf: 'Comfort',
+      cat_val: 'Value for Money',
+
+      // Features Esperienza
+      feat_label: 'The Experience',
+      feat_title: 'Why choose<br><em>Marchesini Collection</em>',
+      feat1_title: 'Heart of<br>Valpolicella',
+      feat1_desc: 'Minutes away from the most prestigious Amarone cellars and the rolling Veronese hills, a premier wine heritage.',
+      feat2_title: 'Authentic<br>Spaces',
+      feat2_desc: 'Apartments curated in every detail, blending contemporary luxury with authentic Venetian rural elegance.',
+      feat3_title: 'Strategic<br>Location',
+      feat3_desc: '10 mins to Verona & Arena, 30 mins to Lake Garda, 15 mins to Verona Villafranca Airport.',
+      feat4_title: 'Direct<br>Booking',
+      feat4_desc: 'Zero platform commissions. Guaranteed best rates, maximum flexibility and direct host contact.',
+
+      // Dove siamo
+      loc_label: 'Location',
+      loc_title: 'Arbizzano di Negrar<br>in the heart of <em>Valpolicella</em>',
+      loc_text: "Nestled in the gentle Valpolicella hills, just 10 minutes from Verona's historic center and Arena. An ideal hub to explore Lake Garda, Amarone cellars, and Northern Italy.",
+      dist1: 'Verona Historic Center',
+      dist2: 'Valpolicella & Amarone Wineries',
+      dist3: 'Lake Garda',
+      dist4: 'Verona Airport (VRN)',
+      dist5: 'UNESCO Dolomites',
+      btn_gmaps: 'Open in Google Maps',
+
+      // Booking
+      booking_label: 'Book Now',
       booking_title: 'Check <em>availability</em>',
-      booking_sub: 'Best rates · No commission · Reply within 24 hours',
-      territorio_label: 'The territory',
-      territorio_title: '<em>Valpolicella</em> and surroundings',
-      territorio_text: 'A land of legendary wines, historic villas, hills that change colour with every season and a lake that looks like a sea.'
+      booking_sub: 'Best rates guaranteed · No fees · Fast reply within 24h',
+      table_season: 'Season',
+      table_low: 'Low · Nov–Mar',
+      table_mid: 'Mid · Apr, May, Oct',
+      table_high: 'High · Jun–Sep',
+      table_note_ccb: 'Rates per night · 1–2 guests · +10% per additional guest',
+      table_note_ca: 'Rates per night · 1–2 guests · +10% per additional guest · Garage +€10/night',
+      btn_send_req: 'Send inquiry',
+      wa_title: 'Chat with <em>Simone</em>',
+      wa_sub: 'Availability, pricing, tailored travel advice — instant response',
+      wa_btn: 'Message Simone on WhatsApp',
+      wa_or_email: 'or write to',
+
+      // Pagine Dettaglio Singole Strutture
+      back_btn: '← Back to all properties',
+      click_zoom: 'Click image to expand',
+      direct_book_note: 'Direct booking · zero commissions',
+      tab_apt_a: 'Apartment A · Sleeps 4',
+      tab_apt_b: 'Apartment B · Sleeps 5',
+      caboare_page_desc: 'An ancient Veronese farmhouse masterfully restored, preserving the authentic soul of the Venetian countryside while offering every modern luxury. The private courtyard, exposed beams, and natural textures create an incomparable haven in Valpolicella.',
+      albertina_page_desc: 'An independent residence surrounded by the greenery of Arbizzano, with private garden and serene ambiance. Ideal for families and couples seeking privacy, tranquility, and the genuine feel of a true home 10 minutes from Verona.',
+
+      // Footer
+      footer_desc: 'Charming boutique residences in the heart of Valpolicella, minutes from Verona, Lake Garda, and legendary Amarone wineries.',
+      footer_props_title: 'Our Properties',
+      footer_contacts_title: 'Contacts',
+      footer_copy: '© 2026 Marchesini Collection · All rights reserved'
     },
+
     de: {
       nav: ['Unterkünfte', 'Galerie', 'Bewertungen', 'Lage', 'Instagram', 'Buchen'],
       navMobile: ['Unterkünfte', 'Galerie', 'Lage', 'Buchen'],
@@ -2020,16 +2219,114 @@
       intro_label: 'Unsere Geschichte',
       intro_title: 'Charmante Residenzen<br>im Herzen der <em>Valpolicella</em>',
       intro_text: 'Drei sorgfältig gepflegte Immobilien inmitten der Weinberge bei Verona. Authentische Gastfreundschaft, die modernen Komfort mit der ländlichen Seele des Gebiets verbindet – nur wenige Minuten von Verona und den großen Amarone-Weingütern.',
+      
+      // Strutture Home
+      prop_ccb_sub: 'Zwei Apartments · 4 und 5 Plätze',
+      prop_ccb_desc: 'Ein antikes veronesisches Landhaus, meisterhaft restauriert. Der Innenhof, Holzbalkendecken und Naturmaterialien schaffen eine unvergleichliche Atmosphäre im Herzen des Valpolicella.',
+      prop_ccb_f1: 'Apartment A · King Size 210×180 · 2 Bäder · 4 Plätze',
+      prop_ccb_f2: 'Apartment B · Queen Size 200×160 · 2 Bäder · 5 Plätze',
+      prop_ccb_f3: 'KlimaHaus RRI · Glasfaser-WLAN · Klasse A++',
+      prop_ccb_btn: 'Entdecken & Buchen',
+      
+      prop_ca_sub: 'Freistehendes Haus · 4 Plätze',
+      prop_ca_desc: 'Ein unabhängiges Anwesen mit privatem Garten und behaglicher Atmosphäre. Ideal für Familien und Paare, die Ruhe, Privatsphäre und authentische Wärme im Grünen suchen.',
+      prop_ca_f1: 'Doppelzimmer · Queen Size 200×160 · 1 Bad',
+      prop_ca_f2: 'Privater Garten · Fußbodenklimatisierung',
+      prop_ca_f3: 'Private Garage verfügbar · Glasfaser-WLAN · Klasse A++',
+      prop_ca_btn: 'Entdecken & Buchen',
+      
+      coming_tag: 'Demnächst',
+      coming_addr: 'Via S. Maria 5 · Arbizzano di Negrar · Verona',
+      gallery_label: 'Galerie',
+      gallery_title: 'Einblicke in die <em>Marchesini Collection</em>',
+
+      // Territorio
+      territorio_label: 'Die Region',
+      territorio_title: 'Die <em>Valpolicella</em> und Umgebung',
+      territorio_text: 'Ein Land legendärer Weine, historischer Villen, Hügel, die in jeder Jahreszeit ihre Farbe wechseln, und ein See, der wie ein Meer wirkt.',
+      terr_v_tag: 'Historische Villen',
+      terr_v_title: 'Villa Rizzardi<br>Villa Bertani<br>Villa Giona',
+      terr_v_desc: 'Herrschaftliche Anwesen umgeben von Weinbergen und italienischen Gärten. Verborgene Schätze des Valpolicella in unmittelbarer Nähe.',
+      terr_a_tag: 'Architektur',
+      terr_a_title: 'Palazzo<br>Montanari',
+      terr_a_desc: 'Ein historischer Palast, der von Jahrhunderten lokaler Geschichte im Herzen der Region erzählt.',
+      terr_n_tag: 'Natur',
+      terr_n_title: 'Lessinia<br>& Gardasee',
+      terr_n_desc: 'Das Hochplateau der Lessinia für Wanderungen und der Gardasee in 30 Minuten für sonnige Tage und Entspannung.',
+      terr_w_tag: 'Weinbau',
+      terr_w_title: 'Weinberge<br>& Weingüter',
+      terr_w_desc: 'Amarone, Ripasso, Valpolicella Classico. Die Weinberge beginnen direkt vor unserer Haustür. Spitzenweingüter in 5 Minuten.',
+      terr_quote: 'Wohin lohnt es sich wirklich? Fragen Sie uns.',
+      terr_quote_sub: 'Unsere persönlichen Empfehlungen sind in Ihrem Aufenthalt inbegriffen.',
+
+      // Recensioni
       reviews_label: 'Gäste',
       reviews_title: 'Was unsere <em>Gäste sagen</em>',
       reviews_verified: 'Verifiziert auf Booking.com',
       reviews_scroll: 'Wischen',
+      reviews_link: 'Alle Bewertungen auf Booking.com lesen',
+      reviews_cat_ccb: 'Corte Cà Boare · Bewertungen nach Kategorie',
+      reviews_cat_ca: 'Casa Albertina · Bewertungen nach Kategorie',
+      cat_staff: 'Personal',
+      cat_clean: 'Sauberkeit',
+      cat_pos: 'Lage',
+      cat_serv: 'Ausstattung',
+      cat_comf: 'Komfort',
+      cat_val: 'Preis-Leistung',
+
+      // Features Esperienza
+      feat_label: 'Das Erlebnis',
+      feat_title: 'Warum <em>Marchesini Collection</em> wählen',
+      feat1_title: 'Herz des<br>Valpolicella',
+      feat1_desc: 'Wenige Minuten von den berühmtesten Amarone-Kellern und den sanften Hügeln Veronas entfernt.',
+      feat2_title: 'Authentische<br>Räume',
+      feat2_desc: 'Liebevoll gestaltete Apartments, die zeitgenössischen Komfort mit venezianischem Landhaus-Charme vereinen.',
+      feat3_title: 'Strategische<br>Lage',
+      feat3_desc: '10 Minuten nach Verona & zur Arena, 30 Minuten zum Gardasee, 15 Minuten zum Flughafen Verona.',
+      feat4_title: 'Direkt-<br>buchung',
+      feat4_desc: 'Keine Plattform-Gebühren. Garantiert beste Preise, volle Flexibilität und direkter Kontakt mit uns.',
+
+      // Dove siamo
+      loc_label: 'Lage',
+      loc_title: 'Arbizzano di Negrar<br>im Herzen der <em>Valpolicella</em>',
+      loc_text: 'Eingebettet in die sanften Hügel des Valpolicella, nur 10 Minuten vom Zentrum von Verona und der Arena entfernt. Ein idealer Ausgangspunkt, um den Gardasee und Venetien zu erkunden.',
+      dist1: 'Historisches Zentrum von Verona',
+      dist2: 'Valpolicella & Amarone Weingüter',
+      dist3: 'Gardasee',
+      dist4: 'Flughafen Verona Villafranca',
+      dist5: 'UNESCO Dolomiten',
+      btn_gmaps: 'In Google Maps öffnen',
+
+      // Booking
       booking_label: 'Jetzt buchen',
       booking_title: 'Verfügbarkeit <em>anfragen</em>',
-      booking_sub: 'Beste Preise · Keine Provision · Antwort innerhalb 24 Stunden',
-      territorio_label: 'Die Region',
-      territorio_title: 'Die <em>Valpolicella</em> und Umgebung',
-      territorio_text: 'Ein Land legendärer Weine, historischer Villen, Hügel, die in jeder Jahreszeit ihre Farbe wechseln, und ein See, der wie ein Meer wirkt.'
+      booking_sub: 'Beste Preise garantiert · Keine Gebühren · Schnelle Antwort in 24h',
+      table_season: 'Saison',
+      table_low: 'Nebensaison · Nov–Mär',
+      table_mid: 'Zwischensaison · Apr, Mai, Okt',
+      table_high: 'Hauptsaison · Jun–Sep',
+      table_note_ccb: 'Preise pro Nacht · 1–2 Gäste · +10% pro weiterem Gast',
+      table_note_ca: 'Preise pro Nacht · 1–2 Gäste · +10% pro weiterem Gast · Garage +€10/Nacht',
+      btn_send_req: 'Anfrage senden',
+      wa_title: 'Sprechen Sie mit <em>Simone</em>',
+      wa_sub: 'Verfügbarkeit, Preise, Reisetipps — sofortige Antwort',
+      wa_btn: 'Simone auf WhatsApp kontaktieren',
+      wa_or_email: 'oder schreiben Sie an',
+
+      // Pagine Dettaglio Singole Strutture
+      back_btn: '← Zurück zur Übersicht',
+      click_zoom: 'Klicken zum Vergrößern',
+      direct_book_note: 'Direktbuchung · keine Vermittlungsgebühren',
+      tab_apt_a: 'Apartment A · 4 Plätze',
+      tab_apt_b: 'Apartment B · 5 Plätze',
+      caboare_page_desc: 'Ein antikes veronesisches Landhaus, meisterhaft restauriert, das die authentische Seele der venezianischen Landschaft bewahrt und modernsten Komfort bietet. Innenhof, Holzbalkendecken und natürliche Materialien schaffen eine unvergleichliche Atmosphäre.',
+      albertina_page_desc: 'Ein unabhängiges Anwesen im Grünen von Arbizzano mit privatem Garten und ruhiger Atmosphäre. Ideal für Familien und Paare, die Ruhe, Privatsphäre und die echte Wärme eines Zuhauses 10 Minuten von Verona suchen.',
+
+      // Footer
+      footer_desc: 'Charmante Residenzen im Herzen des Valpolicella, wenige Minuten von Verona, dem Gardasee und renommierten Amarone-Weingütern entfernt.',
+      footer_props_title: 'Unterkünfte',
+      footer_contacts_title: 'Kontakt',
+      footer_copy: '© 2026 Marchesini Collection · Alle Rechte vorbehalten'
     }
   };
 
@@ -2049,77 +2346,163 @@
     try { localStorage.setItem('mc_lang', lang); } catch(e) {}
     document.documentElement.setAttribute('lang', lang);
 
-    // Stato pulsanti (desktop + mobile)
+    // Stato pulsanti
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('lang-' + lang)?.classList.add('active');
     document.querySelectorAll('.mobile-lang-row button').forEach(b => b.classList.remove('active'));
     document.getElementById('mlang-' + lang)?.classList.add('active');
     moveLangIndicator(lang);
 
-    // Navbar desktop
+    // Helper selettori
+    const set = (sel, val, isHtml) => {
+      document.querySelectorAll(sel).forEach(el => {
+        if (isHtml) el.innerHTML = val; else el.textContent = val;
+      });
+    };
+
+    // 1. Navbar desktop & mobile
     const navLinks = document.querySelectorAll('.nav-links a');
     t.nav.forEach((txt, i) => { if (navLinks[i]) navLinks[i].textContent = txt; });
-
-    // Menu mobile
     const mLinks = document.querySelectorAll('.mobile-menu > a');
     t.navMobile.forEach((txt, i) => { if (mLinks[i]) mLinks[i].textContent = txt; });
 
-    // Hero
-    const set = (sel, val, isHtml) => {
-      const el = document.querySelector(sel);
-      if (!el) return;
-      if (isHtml) el.innerHTML = val; else el.textContent = val;
-    };
+    // 2. Hero & Intro
     set('.hero-location', t.hero_location);
     set('.hero-title', t.hero_title, true);
     const heroBtns = document.querySelectorAll('.hero-ctas button');
     if (heroBtns[0]) heroBtns[0].textContent = t.btn_scopri;
     if (heroBtns[1]) heroBtns[1].textContent = t.btn_prenota;
     set('.hero-scroll span', t.hero_scroll);
-
-    // Intro
     set('.intro .label', t.intro_label);
     set('.intro h2', t.intro_title, true);
     set('.intro p', t.intro_text);
 
-    // Recensioni
-    const rev = document.getElementById('reviews');
-    if (rev) {
-      const revLabel = rev.querySelector('.label');
-      if (revLabel) revLabel.textContent = t.reviews_label;
-      const revTitle = rev.querySelector('h2');
-      if (revTitle) revTitle.innerHTML = t.reviews_title;
-      const verified = rev.querySelector('.reviews-verified');
-      if (verified) verified.textContent = t.reviews_verified;
-      rev.querySelectorAll('.reviews-nav span').forEach(s => s.textContent = t.reviews_scroll);
+    // 3. Strutture Cards (Home)
+    const propRows = document.querySelectorAll('.property-row');
+    if (propRows[0]) {
+      const p1 = propRows[0];
+      const addr = p1.querySelector('.prop-address'); if (addr) addr.textContent = t.prop_ccb_sub;
+      const desc = p1.querySelector('.prop-desc'); if (desc) desc.textContent = t.prop_ccb_desc;
+      const feats = p1.querySelectorAll('.prop-feature');
+      if (feats[0]) feats[0].innerHTML = `<div class="prop-feature-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>${t.prop_ccb_f1}`;
+      if (feats[1]) feats[1].innerHTML = `<div class="prop-feature-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>${t.prop_ccb_f2}`;
+      if (feats[2]) feats[2].innerHTML = `<div class="prop-feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>${t.prop_ccb_f3}`;
+      const cta = p1.querySelector('.prop-cta'); if (cta) cta.textContent = t.prop_ccb_btn;
+    }
+    if (propRows[1]) {
+      const p2 = propRows[1];
+      const addr = p2.querySelector('.prop-address'); if (addr) addr.textContent = t.prop_ca_sub;
+      const desc = p2.querySelector('.prop-desc'); if (desc) desc.textContent = t.prop_ca_desc;
+      const feats = p2.querySelectorAll('.prop-feature');
+      if (feats[0]) feats[0].innerHTML = `<div class="prop-feature-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>${t.prop_ca_f1}`;
+      if (feats[1]) feats[1].innerHTML = `<div class="prop-feature-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>${t.prop_ca_f2}`;
+      if (feats[2]) feats[2].innerHTML = `<div class="prop-feature-icon"><svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>${t.prop_ca_f3}`;
+      const cta = p2.querySelector('.prop-cta'); if (cta) cta.textContent = t.prop_ca_btn;
     }
 
-    // Territorio
+    set('.coming-tag', t.coming_tag);
+    set('.coming-addr', t.coming_addr);
+    set('.gallery-label .label', t.gallery_label);
+    set('.gallery-label h2', t.gallery_title, true);
+
+    // 4. Territorio
     const terr = document.getElementById('territorio');
     if (terr) {
-      const tl = terr.querySelector('.label');
-      if (tl) tl.textContent = t.territorio_label;
-      const th = terr.querySelector('h2');
-      if (th) th.innerHTML = t.territorio_title;
-      const tp = terr.querySelector('p');
-      if (tp) tp.textContent = t.territorio_text;
+      set('#territorio .label', t.territorio_label);
+      set('#territorio h2', t.territorio_title, true);
+      const tp = terr.querySelector('p'); if (tp) tp.textContent = t.territorio_text;
+      
+      const tcols = terr.querySelectorAll('.dark-box, div[style*="background:var(--dark)"] div[style*="display:grid"] > div');
+      if (tcols && tcols.length >= 4) {
+        if (tcols[0].children[0]) tcols[0].children[0].textContent = t.terr_v_tag;
+        if (tcols[0].children[1]) tcols[0].children[1].innerHTML = t.terr_v_title;
+        if (tcols[0].children[2]) tcols[0].children[2].textContent = t.terr_v_desc;
+
+        if (tcols[1].children[0]) tcols[1].children[0].textContent = t.terr_a_tag;
+        if (tcols[1].children[1]) tcols[1].children[1].innerHTML = t.terr_a_title;
+        if (tcols[1].children[2]) tcols[1].children[2].textContent = t.terr_a_desc;
+
+        if (tcols[2].children[0]) tcols[2].children[0].textContent = t.terr_n_tag;
+        if (tcols[2].children[1]) tcols[2].children[1].innerHTML = t.terr_n_title;
+        if (tcols[2].children[2]) tcols[2].children[2].textContent = t.terr_n_desc;
+
+        if (tcols[3].children[0]) tcols[3].children[0].textContent = t.terr_w_tag;
+        if (tcols[3].children[1]) tcols[3].children[1].innerHTML = t.terr_w_title;
+        if (tcols[3].children[2]) tcols[3].children[2].textContent = t.terr_w_desc;
+      }
+      const quoteP = terr.querySelector('p[style*="font-family:var(--serif)"]'); if (quoteP) quoteP.textContent = t.terr_quote;
+      const quoteSub = terr.querySelector('p[style*="color:rgba(255,255,255,0.25)"]'); if (quoteSub) quoteSub.textContent = t.terr_quote_sub;
     }
 
-    // Booking
-    const bh = document.querySelector('.booking-header');
-    if (bh) {
-      const bl = bh.querySelector('.label');
-      if (bl) bl.textContent = t.booking_label;
-      const bt = bh.querySelector('h2');
-      if (bt) bt.innerHTML = t.booking_title;
-      const bs = bh.querySelector('p');
-      if (bs) bs.textContent = t.booking_sub;
+    // 5. Recensioni
+    const rev = document.getElementById('reviews');
+    if (rev) {
+      const revLabel = rev.querySelector('.label'); if (revLabel) revLabel.textContent = t.reviews_label;
+      const revTitle = rev.querySelector('h2'); if (revTitle) revTitle.innerHTML = t.reviews_title;
+      const verified = rev.querySelector('.reviews-verified'); if (verified) verified.textContent = t.reviews_verified;
+      rev.querySelectorAll('.reviews-nav span').forEach(s => s.textContent = t.reviews_scroll);
+      const bLink = rev.querySelector('a[href*="booking.com"]'); if (bLink) bLink.textContent = t.reviews_link;
     }
+
+    // 6. Features Esperienza
+    set('.features-header .label', t.feat_label);
+    set('.features-header h2', t.feat_title, true);
+    const feats = document.querySelectorAll('.features-grid .feature');
+    if (feats.length >= 4) {
+      if (feats[0].querySelector('h3')) feats[0].querySelector('h3').innerHTML = t.feat1_title;
+      if (feats[0].querySelector('p')) feats[0].querySelector('p').textContent = t.feat1_desc;
+      if (feats[1].querySelector('h3')) feats[1].querySelector('h3').innerHTML = t.feat2_title;
+      if (feats[1].querySelector('p')) feats[1].querySelector('p').textContent = t.feat2_desc;
+      if (feats[2].querySelector('h3')) feats[2].querySelector('h3').innerHTML = t.feat3_title;
+      if (feats[2].querySelector('p')) feats[2].querySelector('p').textContent = t.feat3_desc;
+      if (feats[3].querySelector('h3')) feats[3].querySelector('h3').innerHTML = t.feat4_title;
+      if (feats[3].querySelector('p')) feats[3].querySelector('p').textContent = t.feat4_desc;
+    }
+
+    // 7. Dove siamo
+    set('.location-text .label', t.loc_label);
+    set('.location-text h2', t.loc_title, true);
+    const locP = document.querySelector('.location-text > p'); if (locP) locP.textContent = t.loc_text;
+    const distItems = document.querySelectorAll('.distance-item');
+    if (distItems.length >= 5) {
+      distItems[0].querySelector('.distance-place').textContent = t.dist1;
+      distItems[1].querySelector('.distance-place').textContent = t.dist2;
+      distItems[2].querySelector('.distance-place').textContent = t.dist3;
+      distItems[3].querySelector('.distance-place').textContent = t.dist4;
+      distItems[4].querySelector('.distance-place').textContent = t.dist5;
+    }
+    const mapBtn = document.querySelector('.map-wrap a'); if (mapBtn) mapBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>${t.btn_gmaps}`;
+
+    // 8. Booking & Form
+    set('.booking-header .label', t.booking_label);
+    set('.booking-header h2', t.booking_title, true);
+    const bs = document.querySelector('.booking-header p'); if (bs) bs.textContent = t.booking_sub;
+    set('.bc-btn', t.btn_send_req);
+    set('.form-title', t.wa_title, true);
+    set('.form-sub', t.wa_sub);
+    const waLink = document.querySelector('a[href*="wa.me"]'); if (waLink) waLink.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>${t.wa_btn}`;
+
+    // 9. Pagine Dettaglio (Corte Cà Boare / Casa Albertina)
+    set('.back-btn', t.back_btn);
+    const aptTabs = document.querySelectorAll('.apt-tab');
+    if (aptTabs[0]) aptTabs[0].textContent = t.tab_apt_a;
+    if (aptTabs[1]) aptTabs[1].textContent = t.tab_apt_b;
+    const ccbDescP = document.querySelector('#caboare .prop-section p'); if (ccbDescP) ccbDescP.textContent = t.caboare_page_desc;
+    const caDescP = document.querySelector('#albertina .prop-section p'); if (caDescP) caDescP.textContent = t.albertina_page_desc;
+    set('.apt-book-card > p', t.direct_book_note);
+
+    // 10. Footer
+    set('.footer-desc', t.footer_desc);
+    const footCols = document.querySelectorAll('.footer-col h4');
+    if (footCols[0]) footCols[0].textContent = t.footer_props_title;
+    if (footCols[1]) footCols[1].textContent = t.footer_contacts_title;
+    set('.footer-copy', t.footer_copy);
 
     if (typeof closeMobileMenu === 'function' && document.querySelector('.mobile-menu.open')) {
       closeMobileMenu();
     }
   }
+
 
   function initLang() {
     let saved = 'it';
