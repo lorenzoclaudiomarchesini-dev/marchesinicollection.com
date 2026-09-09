@@ -576,9 +576,9 @@
     <div class="panel-card" style="background: linear-gradient(145deg, rgba(26,23,21,0.98) 0%, rgba(18,16,14,0.98) 100%);">
       <div class="panel-header" style="border-bottom: 1px solid var(--border); padding-bottom:12px;">
         <div>
-          <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:700;">Link Ufficiali Self Check-in</div>
+          <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--gold); font-weight:700;">Link Guida & Self Check-in</div>
           <h3 class="panel-title" style="color:#fff; font-size:18px; margin-top:2px;">I 3 Link Diretti per i Tuoi Ospiti</h3>
-          <p class="panel-subtitle">Invia questo link al cliente prima dell'arrivo: compilerà i dati per sbloccare la guida.</p>
+          <p class="panel-subtitle">Invia questo link al cliente: potrà consultare subito la guida della casa (Wi-Fi, arrivo, territorio) ed effettuare il check-in online.</p>
         </div>
       </div>
 
@@ -1013,7 +1013,7 @@
     }
 
     function copyPropertyLink(url, name) {
-      const msg = `Gentile Ospite, benvenuto a ${name}!\nPer completare la registrazione obbligatoria dei presenti e accedere alle credenziali Wi-Fi e alla guida della casa, puoi effettuare il check-in rapido qui:\n${url}`;
+      const msg = `Gentile Ospite, benvenuto a ${name}!\nQui trovi la guida digitale completa della casa (Wi-Fi, come arrivare, servizi ed esperienze sul territorio) e puoi effettuare comodamente il check-in online prima del tuo arrivo:\n${url}`;
       navigator.clipboard.writeText(msg).then(() => {
         showToast('Link per ' + name + ' copiato! Pronto da inviare.');
       });

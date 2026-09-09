@@ -387,18 +387,18 @@
 
     
     
-    /* GATED CONTAINER */
+    /* GATED CONTAINER - LIBERO / ACCESSIBILE */
     .locked-gated-section { transition: all 0.3s; }
     .locked-gated-section.is-locked {
-      display: none !important;
+      display: block;
     }
 
-    /* GATE OVERLAY BANNER */
+    /* GATE BANNER - PROMEMORIA NON BLOCCANTE */
     .gate-lock-banner {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(247, 242, 233, 0.98) 100%);
       border: 1.5px solid var(--gold);
       border-radius: 24px;
-      padding: 24px 20px;
+      padding: 20px 20px;
       margin: 8px 18px 20px;
       text-align: center;
       box-shadow: 0 12px 36px rgba(179, 147, 102, 0.18);
@@ -977,15 +977,15 @@
       <div class="gate-icon-circle">
         <svg viewBox="0 0 24 24" style="width:22px; height:22px; stroke:currentColor; stroke-width:1.5; fill:none;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
-      <div class="gate-title" id="txtGateTitle">Primo Step: Registrazione Documenti</div>
-      <p class="gate-desc" id="txtGateDesc">Per accedere al Wi-Fi, codici, servizi e dettagli della dimora è necessario completare il check-in online rapido a norma di legge.</p>
+      <div class="gate-title" id="txtGateTitle">Check-in Online & Documenti</div>
+      <p class="gate-desc" id="txtGateDesc">Registra i tuoi documenti in anticipo per velocizzare l'arrivo a norma di legge. Puoi consultare la guida e i servizi della dimora in qualsiasi momento.</p>
       <button class="btn-gate-action" onclick="openModal('checkin_vip')">
-        <span id="txtGateBtn">📸 Completa Check-in VIP</span>
+        <span id="txtGateBtn">📸 Effettua Check-in Online</span>
       </button>
     </div>
 
     <!-- GATED LOCKED CONTENT (STEP 2: UNLOCKED AFTER CHECKIN) -->
-    <div class="locked-gated-section is-locked" id="gatedContentSection">
+    <div class="locked-gated-section" id="gatedContentSection">
     <!-- APPLE WALLET PASS BUTTON -->
     <div class="wallet-badge-container">
       <button class="wallet-add-btn" onclick="openModal('wallet')">
@@ -1384,10 +1384,10 @@
         
     const GATE_I18N = {
       it: {
-        title: "Primo Step: Registrazione Documenti",
-        desc: "Per accedere al Wi-Fi, codici, servizi e dettagli della dimora è necessario completare il check-in online rapido a norma di legge.",
-        btn: "📸 Completa Check-in VIP",
-        unlocked: "✓ Check-in VIP Registrato · Accesso Completo Attivo",
+        title: "Check-in Online & Documenti",
+        desc: "Registra i tuoi documenti in anticipo per velocizzare l'arrivo a norma di legge. Puoi consultare la guida e tutti i servizi della dimora liberamente.",
+        btn: "📸 Effettua Check-in Online",
+        unlocked: "✓ Check-in Online Completato · Registrazione Attiva",
         modalTitle: "Check-in Online & Documenti",
         modalDesc: "Fotografa il tuo documento per completare la registrazione ufficiale in 30 secondi. Dati crittografati e conformi a Questura & ISTAT.",
         promptTitle: "Inquadra Passaporto o Carta d'Identità",
@@ -1399,10 +1399,10 @@
         btnConfirm: "✓ Conferma & Invia Registrazione"
       },
       en: {
-        title: "Step 1: Guest Registration",
-        desc: "To access Wi-Fi, entry codes, residence amenities and local guides, please complete the quick official online check-in.",
-        btn: "📸 Complete VIP Check-in",
-        unlocked: "✓ VIP Check-in Completed · Full Access Granted",
+        title: "Online Check-in & Registration",
+        desc: "Register your ID details in advance for official police requirements. Feel free to explore the house guide, Wi-Fi, and amenities anytime.",
+        btn: "📸 Complete Online Check-in",
+        unlocked: "✓ Online Check-in Completed · Guest Registered",
         modalTitle: "Online Check-in & Documents",
         modalDesc: "Photograph your passport or ID to complete official registration in 30 seconds. Encrypted and compliant with police authorities.",
         promptTitle: "Capture Passport or National ID",
@@ -1414,10 +1414,10 @@
         btnConfirm: "✓ Confirm & Complete Check-in"
       },
       fr: {
-        title: "Étape 1 : Enregistrement des Hôtes",
-        desc: "Pour accéder au Wi-Fi, aux codes d'entrée et aux services de la demeure, veuillez compléter l'enregistrement officiel rapide.",
-        btn: "📸 Compléter le Check-in VIP",
-        unlocked: "✓ Check-in VIP Validé · Accès Complet Débloqué",
+        title: "Enregistrement en Ligne & Pièce d'Identité",
+        desc: "Enregistrez vos documents à l'avance pour la conformité légale. Vous pouvez consulter librement le Wi-Fi, la maison et les adresses locales.",
+        btn: "📸 Compléter le Check-in en Ligne",
+        unlocked: "✓ Check-in Validé · Enregistrement Terminé",
         modalTitle: "Enregistrement en Ligne & Pièce d'Identité",
         modalDesc: "Photographiez votre passeport ou carte d'identité pour compléter l'enregistrement en 30 secondes en toute sécurité.",
         promptTitle: "Cadrez votre Passeport ou Carte d'Identité",
@@ -1429,10 +1429,10 @@
         btnConfirm: "✓ Confirmer l'Enregistrement"
       },
       de: {
-        title: "Schritt 1: Offizielle Registrierung",
-        desc: "Um Zugang zu WLAN, Zugangscodes, Annehmlichkeiten und Guides zu erhalten, führen Sie bitte den schnellen Online-Check-in durch.",
-        btn: "📸 VIP Check-in Durchführen",
-        unlocked: "✓ VIP Check-in Erledigt · Vollständiger Zugang Aktiv",
+        title: "Online Check-in & Registrierung",
+        desc: "Registrieren Sie Ihre Ausweisdaten vorab für die gesetzliche Meldung. Alle Infos zu WLAN, Haus und Region stehen Ihnen jederzeit frei zur Verfügung.",
+        btn: "📸 Online-Check-in Durchführen",
+        unlocked: "✓ Check-in Erledigt · Registrierung Aktiv",
         modalTitle: "Online Check-in & Ausweisdokumente",
         modalDesc: "Fotografieren Sie Ihren Reisepass oder Personalausweis für die gesetzliche Gästemeldung in 30 Sekunden.",
         promptTitle: "Reisepass oder Personalausweis erfassen",
@@ -1444,10 +1444,10 @@
         btnConfirm: "✓ Bestätigen & Check-in Abschließen"
       },
       es: {
-        title: "Paso 1: Registro de Huéspedes",
-        desc: "Para acceder al Wi-Fi, códigos de entrada, comodidades y guías, complete el registro oficial obligatorio en línea.",
-        btn: "📸 Completar Check-in VIP",
-        unlocked: "✓ Check-in VIP Completado · Acceso Completo Activo",
+        title: "Check-in Online y Registro",
+        desc: "Registre sus documentos con antelación para agilizar su llegada según la ley. Puede consultar la guía, Wi-Fi y comodidades libremente.",
+        btn: "📸 Realizar Check-in Online",
+        unlocked: "✓ Check-in Online Completado · Registro Activo",
         modalTitle: "Check-in Online y Documentos",
         modalDesc: "Fotografíe su pasaporte o documento de identidad para completar el registro oficial en 30 segundos de forma segura.",
         promptTitle: "Encuadre su Pasaporte o Documento",
@@ -1459,10 +1459,10 @@
         btnConfirm: "✓ Confirmar y Finalizar Registro"
       },
       ru: {
-        title: "Шаг 1: Регистрация гостей",
-        desc: "Для доступа к Wi-Fi, кодам доступа, удобствам и путеводителю пройдите быструю официальную онлайн-регистрацию.",
-        btn: "📸 Пройти VIP Check-in",
-        unlocked: "✓ VIP Check-in пройден · Полный доступ открыт",
+        title: "Онлайн Check-in и Регистрация",
+        desc: "Зарегистрируйте документы заранее для соблюдения правил. Все разделы гида, Wi-Fi и услуги доступны вам в любое время.",
+        btn: "📸 Пройти Онлайн Check-in",
+        unlocked: "✓ Check-in пройден · Регистрация активна",
         modalTitle: "Онлайн Check-in и Документы",
         modalDesc: "Сфотографируйте паспорт или удостоверение личности для официальной регистрации за 30 секунд.",
         promptTitle: "Сфотографируйте паспорт или ID-карту",
@@ -1474,10 +1474,10 @@
         btnConfirm: "✓ Подтвердить и завершить Check-in"
       },
       pt: {
-        title: "Passo 1: Registo de Hóspedes",
-        desc: "Para aceder ao Wi-Fi, códigos de entrada, comodidades e guias da residência, conclua o registo oficial online.",
-        btn: "📸 Concluir Check-in VIP",
-        unlocked: "✓ Check-in VIP Concluído · Acesso Total Ativo",
+        title: "Check-in Online & Registo",
+        desc: "Registe os seus documentos com antecedência para agilizar a sua chegada conforme a lei. Pode consultar o Wi-Fi e todo o guia livremente.",
+        btn: "📸 Concluir Check-in Online",
+        unlocked: "✓ Check-in Online Concluído · Registo Ativo",
         modalTitle: "Check-in Online e Documentos",
         modalDesc: "Fotografe o seu passaporte ou cartão de cidadão para concluir o registo oficial em 30 segundos.",
         promptTitle: "Enquadre o Passaporte ou Documento de Identidade",
@@ -2500,7 +2500,7 @@
       localStorage.setItem('guest_profile_' + currentProp, JSON.stringify(registeredGuest));
       localStorage.setItem('full_checkin_payload_' + currentProp, JSON.stringify(payload));
       unlockGuestExperience();
-      alert('✓ Check-in completato con successo! I tuoi dati sono stati registrati e la guida è ora sbloccata.');
+      alert('✓ Check-in completato con successo! I tuoi dati sono stati registrati regolarmente.');
       closeModal();
     }
 
@@ -2579,8 +2579,8 @@
             <div style="width:48px; height:48px; border-radius:50%; background:rgba(197, 168, 128, 0.12); margin:0 auto 10px; display:flex; align-items:center; justify-content:center;">
               <svg viewBox="0 0 24 24" style="width:24px; height:24px; stroke:var(--gold); stroke-width:1.5; fill:none;"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="M15 8h2M15 12h2M7 16h10"/></svg>
             </div>
-            <h4 style="font-family:var(--serif); font-size:20px; font-weight:500; color:var(--dark); margin-bottom:4px;">Check-in Online Obbligatorio</h4>
-            <p style="font-size:11px; color:var(--mid); line-height:1.5;">Compilazione richiesta per adempimento di legge (Questura Alloggiati Web & Regione Veneto ROSS1000). Al termine riceverai subito i codici di accesso.</p>
+            <h4 style="font-family:var(--serif); font-size:20px; font-weight:500; color:var(--dark); margin-bottom:4px;">Check-in Online & Documenti</h4>
+            <p style="font-size:11px; color:var(--mid); line-height:1.5;">Compilazione rapida richiesta per adempimento di legge (Questura Alloggiati Web & Regione Veneto ROSS1000). Puoi completarla in qualsiasi momento prima dell'arrivo.</p>
           </div>
 
           <!-- SEZIONE PRENOTAZIONE & NUMERO OSPITI -->
@@ -2694,7 +2694,7 @@
           <!-- BOTTONE INVIO CHECK-IN -->
           <div style="margin-top:16px;">
             <button type="button" class="btn-action-sm" style="width:100%; justify-content:center; padding:16px; font-size:13px; font-weight:600; background:#25D366; color:#fff; cursor:pointer; border-radius:var(--radius-pill); box-shadow:0 6px 20px rgba(37,211,102,0.3);" onclick="submitFullGuestCheckin()">
-              ✓ Registra Ospiti & Sblocca Guida
+              ✓ Invia Registrazione Check-in
             </button>
             <div style="font-size:10px; color:var(--mid); text-align:center; margin-top:8px;">I dati vengono trasmessi in modo cifrato direttamente al database della struttura.</div>
           </div>
