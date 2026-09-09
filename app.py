@@ -177,10 +177,6 @@ async def submit_guest_checkin(request_body: dict):
     elif "elisabetta" in apt_code:
         apt_display = "Casa Elisabetta"
 
-    existing_ids = {o.get("id") for o in ospiti}
-    group_id = f"GRP-{int(datetime.now().timestamp())}-{uuid.uuid4().hex[:6].upper()}"
-    while group_id in existing_ids:
-        group_id = f"GRP-{int(datetime.now().timestamp())}-{uuid.uuid4().hex[:6].upper()}"
     arrival = request_body.get("arrival_date") or datetime.now().strftime("%d/%m/%Y")
     departure = request_body.get("departure_date") or ""
     num_guests = int(request_body.get("num_guests", 1))
@@ -203,6 +199,38 @@ async def submit_guest_checkin(request_body: dict):
         "comune_rilascio": request_body.get("comune_rilascio", "")
     }
 
+    doc_num = (lead.get("numero_documento") or "").strip().upper()
+    surname = (lead.get("cognome") or "").strip().upper()
+    name = (lead.get("nome") or "").strip().upper()
+
+    # DEDUP: se l'ospite è già presente nel database (stesso documento o stesso cognome/nome e date), aggiorna senza duplicare
+    for existing in ospiti:
+        ex_lead = existing.get("lead_guest", {})
+        ex_doc = (ex_lead.get("numero_documento") or "").strip().upper()
+        ex_surname = (ex_lead.get("cognome") or "").strip().upper()
+        ex_name = (ex_lead.get("nome") or "").strip().upper()
+        ex_apt = existing.get("apt", "")
+        
+        doc_match = doc_num and ex_doc and (doc_num == ex_doc)
+        name_match = surname and name and (surname == ex_surname) and (name == ex_name) and (ex_apt == apt_code)
+
+        if doc_match or name_match:
+            existing["apt"] = apt_code
+            existing["apt_name"] = apt_display
+            existing["num_guests"] = num_guests
+            existing["arrival_date"] = arrival
+            existing["departure_date"] = departure
+            existing["lead_guest"] = lead
+            existing["additional_guests"] = request_body.get("additional_guests", [])
+            existing["updated_at"] = datetime.now().strftime("%d/%m/%Y, %H:%M")
+            save_ospiti_list(ospiti)
+            return {"status": "ok", "message": "Registrazione aggiornata", "group": existing, "total_groups": len(ospiti)}
+
+    existing_ids = {o.get("id") for o in ospiti}
+    group_id = f"GRP-{int(datetime.now().timestamp())}-{uuid.uuid4().hex[:6].upper()}"
+    while group_id in existing_ids:
+        group_id = f"GRP-{int(datetime.now().timestamp())}-{uuid.uuid4().hex[:6].upper()}"
+
     other_guests = request_body.get("additional_guests", [])
 
     entry = {
@@ -222,6 +250,23 @@ async def submit_guest_checkin(request_body: dict):
     ospiti.insert(0, entry)
     save_ospiti_list(ospiti)
     return {"status": "ok", "group": entry, "total_groups": len(ospiti)}
+
+@app.post("/api/admin/clean-duplicates")
+def clean_duplicate_guests():
+    """Rimuove duplicati lasciando una sola registrazione per ospite/gruppo."""
+    ospiti = load_ospiti()
+    seen = set()
+    cleaned = []
+    for g in ospiti:
+        lead = g.get("lead_guest", {})
+        doc = (lead.get("numero_documento") or "").strip().upper()
+        name_key = f"{lead.get('cognome','')}_{lead.get('nome','')}_{g.get('apt','')}_{g.get('arrival_date','')}".upper()
+        key = doc if doc else name_key
+        if key not in seen:
+            seen.add(key)
+            cleaned.append(g)
+    save_ospiti_list(cleaned)
+    return {"status": "ok", "removed": len(ospiti) - len(cleaned), "total": len(cleaned)}
 
 @app.post("/api/admin/reset-ospiti")
 def reset_ospiti_database():
@@ -707,7 +752,7 @@ ENTITIES = {
         "label": "Casa Albertina",
         "owner": "Unità Ricettiva · Gestione Autonoma",
         "apts": ["albertina", "elisabetta"],
-        "codes": {"albertina": "Z00000"}
+        "codes": {"albertina": "Z10218"}
     }
 }
 

@@ -537,6 +537,7 @@
         </div>
         <div style="display:flex; gap:8px;">
           <button class="btn-outline-white" style="font-size:11px; padding:6px 12px;" onclick="loadLiveGuests()">🔄 Aggiorna</button>
+          <button class="btn-outline-white" style="font-size:11px; padding:6px 12px; color:var(--gold); border-color:rgba(197,168,128,0.4);" onclick="cleanDuplicates()">🧹 Rimuovi Duplicati</button>
           <button class="btn-outline-white" style="font-size:11px; padding:6px 12px; color:#e74c3c; border-color:rgba(231,76,60,0.3);" onclick="clearAllTestData()">🗑️ Reset</button>
         </div>
       </div>
@@ -881,7 +882,7 @@
           <div class="cin-prop-name" style="color:#9fc9ec;">Casa Albertina</div>
           <div class="field-group"><label>CIN (Codice Identificativo Nazionale)</label><input type="text" class="field-input codice-input" id="cin_albertina" placeholder="IT0230520000000000" autocapitalize="characters" spellcheck="false"></div>
           <div class="field-group"><label>CIR (Codice Regione)</label><input type="text" class="field-input codice-input" id="cir_albertina" placeholder="023052-LOC-00000" autocapitalize="characters" spellcheck="false"></div>
-          <div class="field-group"><label>Codice Struttura ROSS1000</label><input type="text" class="field-input codice-input" id="cod_albertina" placeholder="Z00000" autocapitalize="characters" spellcheck="false"></div>
+          <div class="field-group"><label>Codice Struttura ROSS1000</label><input type="text" class="field-input codice-input" id="cod_albertina" placeholder="Z10218" autocapitalize="characters" spellcheck="false"></div>
         </div>
       </div>
 
@@ -1065,6 +1066,19 @@
       if (elTax) elTax.textContent = `${totalTax} €`;
     }
 
+    async function cleanDuplicates() {
+      try {
+        const res = await fetch('/api/admin/clean-duplicates', { method: 'POST' });
+        if (res.ok) {
+          const data = await res.json();
+          showToast(`✓ Pulizia completata: rimossi ${data.removed} duplicati.`);
+          loadLiveGuests();
+        }
+      } catch (e) {
+        alert('Errore durante la pulizia duplicati.');
+      }
+    }
+
     async function clearAllTestData() {
       if (!confirm('Vuoi azzerare tutte le registrazioni e ripartire da zero?')) return;
       try {
@@ -1130,7 +1144,8 @@
                   <button class="btn-action-gold" style="padding:6px 12px; font-size:10px; background:linear-gradient(135deg, #25D366 0%, #128C7E 100%); color:#fff;" onclick="sendGuestToRoss1000('${g.id}')">🚀 Invia ROSS1000</button>
                   <button class="btn-action-gold" style="padding:6px 12px; font-size:10px;" onclick="openGuestDetailModal(${idx})">📋 Scheda (${totalCount})</button>
                   <button class="btn-table-action" onclick="copyGuestDataFormatted(${idx})">📋 Copia</button>
-                  <button class="btn-table-action" onclick="downloadQuesturaTxt('${g.id}')">📄 .txt</button>
+                  <a href="/api/export/alloggiati-txt?group_id=${g.id}" target="_blank" class="btn-table-action" style="text-decoration:none;">📄 Questura (.txt)</a>
+                  <a href="/api/ross1000-package?group_id=${g.id}" target="_blank" class="btn-table-action" style="text-decoration:none; background:rgba(255,212,138,0.15); color:#ffd48a;">📊 ROSS1000 (.csv)</a>
                   <button class="btn-table-action" style="color:#e74c3c; border-color:rgba(231,76,60,0.3);" onclick="deleteGuest('${g.id}')">✕</button>
                 </div>
               </td>
@@ -1174,8 +1189,14 @@
                 <button class="btn-action-gold" style="padding:10px; font-size:11px; justify-content:center;" onclick="openGuestDetailModal(${idx})">
                   📋 Scheda (${totalCount})
                 </button>
+                <a href="/api/export/alloggiati-txt?group_id=${g.id}" target="_blank" class="btn-table-action" style="padding:10px; font-size:11px; text-decoration:none; text-align:center;">
+                  📄 Questura
+                </a>
+                <a href="/api/ross1000-package?group_id=${g.id}" target="_blank" class="btn-table-action" style="padding:10px; font-size:11px; text-decoration:none; text-align:center; background:rgba(255,212,138,0.15); color:#ffd48a;">
+                  📊 ROSS1000
+                </a>
                 <button class="btn-table-action" style="padding:10px; font-size:11px; justify-content:center;" onclick="copyGuestDataFormatted(${idx})">
-                  📋 Copia Dati
+                  📋 Copia
                 </button>
               </div>
             </div>

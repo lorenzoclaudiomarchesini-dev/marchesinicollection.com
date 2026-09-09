@@ -2528,18 +2528,7 @@
       }
       updateWelcomeTitleUI();
 
-      // Auto-resync silenzioso verso il backend se presente payload in locale
-      const savedFull = localStorage.getItem('full_checkin_payload_' + currentProp);
-      if (savedFull) {
-        try {
-          const p = JSON.parse(savedFull);
-          await fetch('/api/guest-checkin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(p)
-          });
-        } catch(e) {}
-      }
+      // Auto-resync rimosso per evitare duplicazioni; i dati sono memorizzati sul server persistente
     }
 
     function _old_completeVipCheckin() {
