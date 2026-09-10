@@ -292,42 +292,125 @@ def cod_ross_for_apt(apt: str) -> str:
     return codici["albertina"].get("cod_ross") or "Z10218"
 
 # ── Export Alloggiati Web (.txt conforme Questura) ────────────────────────────
+# ── Export Alloggiati Web (.txt conforme Questura - 168 caratteri fissi) ───────
 def format_alloggiati_line(tipo, arrivo, permanenza, cognome, nome, sesso, data_nasc, com_nasc, prov_nasc, stato_nasc, cittadinanza, tipo_doc="", num_doc="", rilascio_doc=""):
+    """
+    Tracciato Record Ufficiale Alloggiati Web (Polizia di Stato):
+    Pos  1-2   (2):  Tipo alloggiato (16=Singolo, 17=Capofamiglia, 18=Capogruppo, 19=Familiare, 20=Membro)
+    Pos  3-12  (10): Data arrivo (DD/MM/YYYY)
+    Pos 13-14  (2):  Permanenza in giorni (01-30)
+    Pos 15-64  (50): Cognome (uppercase, spazi a destra)
+    Pos 65-94  (30): Nome (uppercase, spazi a destra)
+    Pos 95     (1):  Sesso (1=M, 2=F)
+    Pos 96-105 (10): Data nascita (DD/MM/YYYY)
+    Pos 106-114(9):  Comune/Stato nascita (Codice ISTAT 9 cifre o codice luogo Questura)
+    Pos 115-116(2):  Provincia nascita (sigla 2 lettere o 2 spazi se estero)
+    Pos 117-125(9):  Stato nascita (100000100 per Italia o codice stato)
+    Pos 126-134(9):  Stato cittadinanza (100000100 per Italia o codice stato)
+    Pos 135-139(5):  Tipo documento (IDENT, PASSP, PATEN solo capo/singolo; 5 spazi per membri)
+    Pos 140-159(20): Numero documento (solo capo/singolo; 20 spazi per membri)
+    Pos 160-168(9):  Luogo rilascio documento (solo capo/singolo; 9 spazi per membri)
+    TOTALE ESATTO = 168 caratteri per riga (fine riga CRLF \r\n)
+    """
+    # 1. Tipo alloggiato (2 car)
     cod_tipo = "16"
-    if tipo == "Capogruppo": cod_tipo = "18"
-    elif tipo == "Capofamiglia": cod_tipo = "17"
-    elif "Membro" in tipo or "Ospite" in tipo: cod_tipo = "20"
-    
-    arr_str = str(arrivo).replace("-", "/").replace(".", "/")
+    t_upper = (tipo or "").upper()
+    is_capo = False
+    if "GRUPPO" in t_upper and "MEMBRO" not in t_upper:
+        cod_tipo = "18"
+        is_capo = True
+    elif "FAMIGLIA" in t_upper and "MEMBRO" not in t_upper and "FAMILIARE" not in t_upper:
+        cod_tipo = "17"
+        is_capo = True
+    elif "MEMBRO" in t_upper or "OSPITE" in t_upper:
+        cod_tipo = "20"
+        is_capo = False
+    elif "SINGOLO" in t_upper:
+        cod_tipo = "16"
+        is_capo = True
+    else:
+        cod_tipo = "18"
+        is_capo = True
+    cod_tipo = cod_tipo.zfill(2)[:2]
+
+    # 2. Data arrivo (10 car)
+    arr_str = str(arrivo or "").replace("-", "/").replace(".", "/").strip()
     if len(arr_str) == 10 and arr_str[4] == "/":
-        parts = arr_str.split("/")
-        arr_str = f"{parts[2]}/{parts[1]}/{parts[0]}"
-    elif not arr_str or len(arr_str) < 8:
+        p = arr_str.split("/")
+        arr_str = f"{p[2]}/{p[1]}/{p[0]}"
+    elif len(arr_str) != 10:
         arr_str = datetime.now().strftime("%d/%m/%Y")
-    
-    dob_str = str(data_nasc).replace("-", "/").replace(".", "/")
-    if len(dob_str) == 10 and dob_str[4] == "/":
-        parts = dob_str.split("/")
-        dob_str = f"{parts[2]}/{parts[1]}/{parts[0]}"
-    elif not dob_str or len(dob_str) < 8:
-        dob_str = "01/01/1990"
+    arr_str = arr_str.ljust(10)[:10]
 
-    perm = str(permanenza or "1").zfill(2)[:2]
+    # 3. Permanenza (2 car)
+    perm_val = int(permanenza or 1)
+    if perm_val < 1: perm_val = 1
+    if perm_val > 30: perm_val = 30
+    perm = str(perm_val).zfill(2)[:2]
+
+    # 4. Cognome (50 car)
     cogn = (cognome or "").upper().ljust(50)[:50]
-    nom = (nome or "").upper().ljust(30)[:30]
-    sex = "1" if sesso == "M" else "2"
-    
-    com_n = (com_nasc or "").upper().ljust(30)[:30]
-    prov_n = (prov_nasc or "VR").upper().ljust(2)[:2]
-    stato_n = (stato_nasc or "ITALIA").upper().ljust(30)[:30]
-    cit = (cittadinanza or "ITALIA").upper().ljust(30)[:30]
-    
-    t_doc = "IDENT" if "IDENTIT" in (tipo_doc or "").upper() else ("PASSP" if "PASS" in (tipo_doc or "").upper() else "PATEN")
-    t_doc = t_doc.ljust(5)[:5]
-    n_doc = (num_doc or "").upper().replace(" ", "").ljust(20)[:20]
-    ril_doc = (rilascio_doc or "COMUNE").upper().ljust(30)[:30]
 
-    return f"{cod_tipo}{arr_str}{perm}{cogn}{nom}{sex}{dob_str}{com_n}{prov_n}{stato_n}{cit}{t_doc}{n_doc}{ril_doc}"
+    # 5. Nome (30 car)
+    nom = (nome or "").upper().ljust(30)[:30]
+
+    # 6. Sesso (1 car: 1=M, 2=F)
+    sex_str = str(sesso or "M").upper().strip()
+    sex = "2" if (sex_str.startswith("F") or sex_str == "2") else "1"
+
+    # 7. Data nascita (10 car)
+    dob_str = str(data_nasc or "").replace("-", "/").replace(".", "/").strip()
+    if len(dob_str) == 10 and dob_str[4] == "/":
+        p = dob_str.split("/")
+        dob_str = f"{p[2]}/{p[1]}/{p[0]}"
+    elif len(dob_str) != 10:
+        dob_str = "01/01/1990"
+    dob_str = dob_str.ljust(10)[:10]
+
+    # 8. Comune / Luogo nascita (9 car)
+    com_val = (com_nasc or "").upper().strip()
+    com_n = com_val.ljust(9)[:9]
+
+    # 9. Provincia nascita (2 car)
+    prov_val = (prov_nasc or "").upper().strip()
+    prov_n = prov_val.ljust(2)[:2]
+
+    # 10. Stato nascita (9 car - default Italia 100000100)
+    st_nasc_val = (stato_nasc or "").upper().strip()
+    if not st_nasc_val or st_nasc_val in ("ITALIA", "ITALY", "IT"):
+        stato_n = "100000100"
+    elif st_nasc_val.isdigit() and len(st_nasc_val) == 9:
+        stato_n = st_nasc_val
+    else:
+        stato_n = st_nasc_val.ljust(9)[:9]
+
+    # 11. Cittadinanza (9 car - default Italia 100000100)
+    cit_val = (cittadinanza or "").upper().strip()
+    if not cit_val or cit_val in ("ITALIA", "ITALY", "IT"):
+        cit = "100000100"
+    elif cit_val.isdigit() and len(cit_val) == 9:
+        cit = cit_val
+    else:
+        cit = cit_val.ljust(9)[:9]
+
+    # 12, 13, 14. Documento: obbligatorio SOLO per Capo/Singolo. Per membri del gruppo: SPAZI VUOTI
+    if is_capo:
+        td = (tipo_doc or "").upper().strip()
+        if "IDENT" in td: t_doc = "IDENT"
+        elif "PASS" in td: t_doc = "PASSP"
+        elif "PATEN" in td: t_doc = "PATEN"
+        else: t_doc = "IDENT"
+        t_doc = t_doc.ljust(5)[:5]
+        n_doc = (num_doc or "").upper().replace(" ", "").ljust(20)[:20]
+        ril_doc = (rilascio_doc or "").upper().strip().ljust(9)[:9]
+    else:
+        t_doc = " " * 5
+        n_doc = " " * 20
+        ril_doc = " " * 9
+
+    line = f"{cod_tipo}{arr_str}{perm}{cogn}{nom}{sex}{dob_str}{com_n}{prov_n}{stato_n}{cit}{t_doc}{n_doc}{ril_doc}"
+    assert len(line) == 168, f"Errore dimensione riga: {len(line)} invece di 168"
+    return line
 
 @app.get("/api/export/alloggiati-txt")
 def export_alloggiati_txt(group_id: str = None):
@@ -397,58 +480,13 @@ def export_alloggiati_txt(group_id: str = None):
 # ── Export ROSS1000 TXT / CSV ────────────────────────────────────────────────
 @app.get("/api/export/ross1000-txt")
 def export_ross1000_txt(group_id: str = None):
-    ospiti = load_ospiti()
-    if group_id:
-        target_groups = [g for g in ospiti if g.get("id") == group_id]
-    else:
-        target_groups = ospiti
-
-    lines = []
-    for g in target_groups:
-        apt = g.get("apt", "")
-        cod_struttura = cod_ross_for_apt(apt)
-        arr = g.get("arrival_date", "")
-        dep = g.get("departure_date", "")
-        lead = g.get("lead_guest", {})
-        lines.append(f"STRUTTURA: {cod_struttura} ({g.get('apt_name', apt)})")
-        lines.append(f"SOGGIORNO: Arrivo {arr} - Partenza {dep}")
-        lines.append(f"CAPOGRUPPO: {lead.get('cognome','')} {lead.get('nome','')} | Sesso: {lead.get('sesso','M')} | Nato: {lead.get('data_nascita','')} a {lead.get('comune_nascita', lead.get('stato_nascita','ITALIA'))} | Citt: {lead.get('cittadinanza','ITALIA')} | Doc: {lead.get('tipo_documento','')} N° {lead.get('numero_documento','')} (Rilascio: {lead.get('comune_rilascio', lead.get('stato_rilascio',''))}) | Residenza: {lead.get('comune_residenza','')} {lead.get('indirizzo_residenza','')}")
-        for idx, o in enumerate(g.get("additional_guests", []), 2):
-            lines.append(f"OSPITE {idx}: {o.get('cognome','')} {o.get('nome','')} | Sesso: {o.get('sesso','M')} | Nato: {o.get('data_nascita','')} a {o.get('comune_nascita', o.get('stato_nascita','ITALIA'))} | Citt: {o.get('cittadinanza','ITALIA')}")
-        lines.append("-" * 60)
-
-    lf = chr(10)
-    content = lf.join(lines)
-    return Response(
-        content=content,
-        media_type="text/plain; charset=utf-8",
-        headers={"Content-Disposition": f"attachment; filename=ross1000_riepilogo_{datetime.now().strftime('%Y%m%d_%H%M')}.txt"}
-    )
+    """Esporta il file conforme a ROSS1000 con separatore punto e virgola (.txt o .csv)"""
+    return ross1000_package(entity=None, group_id=group_id)
 
 @app.get("/api/export/ross1000-csv")
 def export_ross1000_csv():
-    ospiti = load_ospiti()
-    lines = ["CodiceStruttura,DataArrivo,DataPartenza,TipoAlloggiato,Cognome,Nome,Sesso,DataNascita,Cittadinanza,StatoNascita,ComuneNascita,StatoResidenza,ComuneResidenza"]
-    
-    for g in ospiti:
-        apt = g.get("apt", "")
-        cod_struttura = cod_ross_for_apt(apt)
-        arr = g.get("arrival_date", "")
-        dep = g.get("departure_date", "")
-        
-        lead = g.get("lead_guest", {})
-        lines.append(f"{cod_struttura},{arr},{dep},{lead.get('tipo_alloggiato','Capogruppo')},{lead.get('cognome','')},{lead.get('nome','')},{lead.get('sesso','M')},{lead.get('data_nascita','')},{lead.get('cittadinanza','ITALIA')},{lead.get('stato_nascita','ITALIA')},{lead.get('comune_nascita','')},{lead.get('stato_residenza','ITALIA')},{lead.get('comune_residenza','')}")
-        
-        for o in g.get("additional_guests", []):
-            lines.append(f"{cod_struttura},{arr},{dep},{o.get('tipo_alloggiato','Membro Gruppo')},{o.get('cognome','')},{o.get('nome','')},{o.get('sesso','M')},{o.get('data_nascita','')},{o.get('cittadinanza','ITALIA')},{o.get('stato_nascita','ITALIA')},{o.get('comune_nascita','')},ITALIA,")
-
-    lf = chr(10)
-    content = lf.join(lines)
-    return Response(
-        content=content,
-        media_type="text/csv; charset=utf-8",
-        headers={"Content-Disposition": f"attachment; filename=ross1000_movimenti_{datetime.now().strftime('%Y%m%d')}.csv"}
-    )
+    """Esporta il file conforme a ROSS1000 per tutte le strutture"""
+    return ross1000_package(entity=None, group_id=None)
 
 class ImportRequest(BaseModel):
     url: str
