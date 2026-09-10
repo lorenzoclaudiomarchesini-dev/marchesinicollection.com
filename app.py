@@ -291,7 +291,76 @@ def cod_ross_for_apt(apt: str) -> str:
         return codici["caboare_b"].get("cod_ross") or "Z12267"
     return codici["albertina"].get("cod_ross") or "Z10218"
 
-# ── Export Alloggiati Web (.txt conforme Questura) ────────────────────────────
+# ── Mappatura Codici Ministeriali Alloggiati Web (Polizia di Stato) ────────────
+# Supporta nomi in Italiano, Inglese, Tedesco, Francese e codici ISO
+CODICI_STATI_ALLOGGIATI = {
+    # Italia
+    "ITALIA": "100000100", "ITALY": "100000100", "ITALIEN": "100000100", "IT": "100000100", "ITA": "100000100",
+    # Svizzera
+    "SVIZZERA": "100000240", "SCHWEIZ": "100000240", "SWITZERLAND": "100000240", "SUISSE": "100000240",
+    "SVIZZERA.": "100000240", "SCHWEIZ.": "100000240", "CH": "100000240", "CHE": "100000240", "CONFEDERAZIONE SVIZZERA": "100000240",
+    # Germania
+    "GERMANIA": "100000216", "DEUTSCHLAND": "100000216", "GERMANY": "100000216", "ALLEMAGNE": "100000216", "DE": "100000216", "DEU": "100000216",
+    # Austria
+    "AUSTRIA": "100000204", "ÖSTERREICH": "100000204", "OESTERREICH": "100000204", "AT": "100000204", "AUT": "100000204",
+    # Francia
+    "FRANCIA": "100000215", "FRANCE": "100000215", "FRANKREICH": "100000215", "FR": "100000215", "FRA": "100000215",
+    # Regno Unito
+    "REGNO UNITO": "100000219", "UNITED KINGDOM": "100000219", "UK": "100000219", "GREAT BRITAIN": "100000219", "GROSSBRITANNIEN": "100000219", "GB": "100000219", "GBR": "100000219",
+    # Stati Uniti
+    "STATI UNITI": "100000401", "UNITED STATES": "100000401", "USA": "100000401", "US": "100000401", "VEREINIGTE STAATEN": "100000401",
+    # Spagna
+    "SPAGNA": "100000238", "SPAIN": "100000238", "ESPANA": "100000238", "ESPAÑA": "100000238", "SPANIEN": "100000238", "ES": "100000238", "ESP": "100000238",
+    # Paesi Bassi / Olanda
+    "PAESI BASSI": "100000231", "NETHERLANDS": "100000231", "OLANDA": "100000231", "HOLLAND": "100000231", "NIEDERLANDE": "100000231", "NL": "100000231", "NLD": "100000231",
+    # Belgio
+    "BELGIO": "100000206", "BELGIUM": "100000206", "BELGIEN": "100000206", "BELGIQUE": "100000206", "BE": "100000206", "BEL": "100000206",
+    # Polonia
+    "POLONIA": "100000233", "POLAND": "100000233", "POLEN": "100000233", "PL": "100000233", "POL": "100000233",
+    # Svezia
+    "SVEZIA": "100000239", "SWEDEN": "100000239", "SCHWEDEN": "100000239", "SVERIGE": "100000239", "SE": "100000239", "SWE": "100000239",
+    # Norvegia
+    "NORVEGIA": "100000230", "NORWAY": "100000230", "NORWEGEN": "100000230", "NO": "100000230", "NOR": "100000230",
+    # Danimarca
+    "DANIMARCA": "100000212", "DENMARK": "100000212", "DAENEMARK": "100000212", "DÄNEMARK": "100000212", "DK": "100000212", "DNK": "100000212",
+    # Finlandia
+    "FINLANDIA": "100000214", "FINLAND": "100000214", "FINNLAND": "100000214", "FI": "100000214", "FIN": "100000214",
+    # Irlanda
+    "IRLANDA": "100000222", "IRELAND": "100000222", "IRLAND": "100000222", "IE": "100000222", "IRL": "100000222",
+    # Portogallo
+    "PORTOGALLO": "100000234", "PORTUGAL": "100000234", "PT": "100000234", "PRT": "100000234",
+    # Grecia
+    "GRECIA": "100000217", "GREECE": "100000217", "GRIECHENLAND": "100000217", "GR": "100000217", "GRC": "100000217",
+    # Repubblica Ceca
+    "REPUBBLICA CECA": "100000249", "CZECH REPUBLIC": "100000249", "CZECHIA": "100000249", "TSCHECHIEN": "100000249", "CZ": "100000249", "CZE": "100000249",
+    # Ungheria
+    "UNGHERIA": "100000245", "HUNGARY": "100000245", "UNGARN": "100000245", "HU": "100000245", "HUN": "100000245",
+    # Romania
+    "ROMANIA": "100000235", "RUMANIA": "100000235", "RUMAENIEN": "100000235", "RO": "100000235", "ROU": "100000235",
+    # Canada
+    "CANADA": "100000404", "CA": "100000404", "CAN": "100000404",
+    # Australia
+    "AUSTRALIA": "100000501", "AU": "100000501", "AUS": "100000501",
+    # Brasile
+    "BRASILE": "100000403", "BRAZIL": "100000403", "BRASILIEN": "100000403", "BR": "100000403", "BRA": "100000403",
+    # Giappone
+    "GIAPPONE": "100000315", "JAPAN": "100000315", "JP": "100000315", "JPN": "100000315",
+    # Lituania
+    "LITUANIA": "100000253", "LITHUANIA": "100000253", "LITAUEN": "100000253", "LT": "100000253", "LTU": "100000253",
+}
+
+def resolve_codice_stato(val: str) -> str:
+    """Restituisce il codice a 9 cifre ministeriale Alloggiati Web per lo stato specificato."""
+    s = (val or "").upper().strip()
+    if not s or s in ("ITALIA", "ITALY", "IT", "ITA"):
+        return "100000100"
+    if s.isdigit() and len(s) == 9:
+        return s
+    for k, code in CODICI_STATI_ALLOGGIATI.items():
+        if s == k or s.startswith(k + " ") or s.endswith(" " + k):
+            return code
+    return "100000100"
+
 # ── Export Alloggiati Web (.txt conforme Questura - 168 caratteri fissi) ───────
 def format_alloggiati_line(tipo, arrivo, permanenza, cognome, nome, sesso, data_nasc, com_nasc, prov_nasc, stato_nasc, cittadinanza, tipo_doc="", num_doc="", rilascio_doc=""):
     """
@@ -303,10 +372,10 @@ def format_alloggiati_line(tipo, arrivo, permanenza, cognome, nome, sesso, data_
     Pos 65-94  (30): Nome (uppercase, spazi a destra)
     Pos 95     (1):  Sesso (1=M, 2=F)
     Pos 96-105 (10): Data nascita (DD/MM/YYYY)
-    Pos 106-114(9):  Comune/Stato nascita (Codice ISTAT 9 cifre o codice luogo Questura)
-    Pos 115-116(2):  Provincia nascita (sigla 2 lettere o 2 spazi se estero)
-    Pos 117-125(9):  Stato nascita (100000100 per Italia o codice stato)
-    Pos 126-134(9):  Stato cittadinanza (100000100 per Italia o codice stato)
+    Pos 106-114(9):  Comune/Stato nascita (Codice ISTAT 9 cifre o codice stato estero a 9 cifre)
+    Pos 115-116(2):  Provincia nascita (sigla 2 lettere o 2 spazi se nato all'estero)
+    Pos 117-125(9):  Stato nascita (100000100 per Italia o codice stato a 9 cifre)
+    Pos 126-134(9):  Stato cittadinanza (100000100 per Italia o codice stato a 9 cifre)
     Pos 135-139(5):  Tipo documento (IDENT, PASSP, PATEN solo capo/singolo; 5 spazi per membri)
     Pos 140-159(20): Numero documento (solo capo/singolo; 20 spazi per membri)
     Pos 160-168(9):  Luogo rilascio documento (solo capo/singolo; 9 spazi per membri)
@@ -367,31 +436,23 @@ def format_alloggiati_line(tipo, arrivo, permanenza, cognome, nome, sesso, data_
         dob_str = "01/01/1990"
     dob_str = dob_str.ljust(10)[:10]
 
-    # 8. Comune / Luogo nascita (9 car)
-    com_val = (com_nasc or "").upper().strip()
-    com_n = com_val.ljust(9)[:9]
+    # 10. Stato nascita (9 car)
+    stato_n = resolve_codice_stato(stato_nasc)
 
-    # 9. Provincia nascita (2 car)
-    prov_val = (prov_nasc or "").upper().strip()
-    prov_n = prov_val.ljust(2)[:2]
+    # 11. Cittadinanza (9 car)
+    cit = resolve_codice_stato(cittadinanza)
 
-    # 10. Stato nascita (9 car - default Italia 100000100)
-    st_nasc_val = (stato_nasc or "").upper().strip()
-    if not st_nasc_val or st_nasc_val in ("ITALIA", "ITALY", "IT"):
-        stato_n = "100000100"
-    elif st_nasc_val.isdigit() and len(st_nasc_val) == 9:
-        stato_n = st_nasc_val
+    # 8. Comune / Luogo nascita (9 car) & 9. Provincia nascita (2 car)
+    # Se lo stato di nascita è estero (diverso da Italia 100000100):
+    # Luogo nascita = codice stato estero a 9 cifre, Provincia = 2 spazi vuoti
+    if stato_n != "100000100":
+        com_n = stato_n
+        prov_n = "  "
     else:
-        stato_n = st_nasc_val.ljust(9)[:9]
-
-    # 11. Cittadinanza (9 car - default Italia 100000100)
-    cit_val = (cittadinanza or "").upper().strip()
-    if not cit_val or cit_val in ("ITALIA", "ITALY", "IT"):
-        cit = "100000100"
-    elif cit_val.isdigit() and len(cit_val) == 9:
-        cit = cit_val
-    else:
-        cit = cit_val.ljust(9)[:9]
+        com_val = (com_nasc or "").upper().strip()
+        com_n = com_val.ljust(9)[:9]
+        prov_val = (prov_nasc or "VR").upper().strip()
+        prov_n = prov_val.ljust(2)[:2]
 
     # 12, 13, 14. Documento: obbligatorio SOLO per Capo/Singolo. Per membri del gruppo: SPAZI VUOTI
     if is_capo:
@@ -402,7 +463,13 @@ def format_alloggiati_line(tipo, arrivo, permanenza, cognome, nome, sesso, data_
         else: t_doc = "IDENT"
         t_doc = t_doc.ljust(5)[:5]
         n_doc = (num_doc or "").upper().replace(" ", "").ljust(20)[:20]
-        ril_doc = (rilascio_doc or "").upper().strip().ljust(9)[:9]
+        
+        # Rilascio: se rilasciato all'estero, usa codice stato
+        ril_raw = (rilascio_doc or "").upper().strip()
+        if ril_raw in CODICI_STATI_ALLOGGIATI or (stato_n != "100000100" and ("QUESTURA" not in ril_raw and "COMUNE" not in ril_raw)):
+            ril_doc = resolve_codice_stato(ril_raw if ril_raw in CODICI_STATI_ALLOGGIATI else stato_nasc)
+        else:
+            ril_doc = ril_raw.ljust(9)[:9]
     else:
         t_doc = " " * 5
         n_doc = " " * 20
