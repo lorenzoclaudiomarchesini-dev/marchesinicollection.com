@@ -2317,21 +2317,22 @@
 
     /* ── GESTIONE MODALE BOTTOM SHEET ── */
     function openModal(type) {
-      const prop = PROPERTIES[currentProp];
-      const lang = (I18N[currentLang].modals && I18N[currentLang].modals[type]) || {
-        eyebrow: "Apple Wallet",
-        title: "Digital Key Pass"
-      };
-      const gateT = GATE_I18N[currentLang] || GATE_I18N.it;
-      const backdrop = document.getElementById('modalBackdrop');
-      const eyebrow = document.getElementById('modalEyebrow');
-      const title = document.getElementById('modalTitle');
-      const body = document.getElementById('modalBody');
+      try {
+        const prop = PROPERTIES[currentProp];
+        const lang = (I18N[currentLang] && I18N[currentLang].modals && I18N[currentLang].modals[type]) || {
+          eyebrow: "Apple Wallet",
+          title: "Digital Key Pass"
+        };
+        const gateT = GATE_I18N[currentLang] || GATE_I18N.it;
+        const backdrop = document.getElementById('modalBackdrop');
+        const eyebrow = document.getElementById('modalEyebrow');
+        const title = document.getElementById('modalTitle');
+        const body = document.getElementById('modalBody');
 
-      eyebrow.textContent = lang.eyebrow || 'Check-in VIP';
-      title.textContent = lang.title || 'Digital Access';
+        if (eyebrow) eyebrow.textContent = lang.eyebrow || 'Check-in VIP';
+        if (title) title.textContent = lang.title || 'Digital Access';
 
-      let html = '';
+        let html = '';
 
             if (type === 'checkin_vip' || type === 'checkin') {
         eyebrow.textContent = "Self Check-in Ufficiale";
@@ -2746,10 +2747,13 @@
         `;
       }
 
-      body.innerHTML = html;
+      if (body) body.innerHTML = html;
       if (type === 'checkin_vip' || type === 'checkin') renderMultiGuestFields(document.getElementById('chkNumGuests')?.value || 2);
-      backdrop.classList.add('open');
+      if (backdrop) backdrop.classList.add('open');
       document.body.style.overflow = 'hidden';
+      } catch(err) {
+        console.error("openModal error:", err);
+      }
     }
 
     function closeModal() {
